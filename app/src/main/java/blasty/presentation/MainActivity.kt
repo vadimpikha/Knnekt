@@ -1,5 +1,7 @@
 package blasty.presentation
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -15,5 +17,9 @@ class MainActivity: AppCompatActivity(R.layout.activity_main) {
         lifecycleScope.launch {
             val (user, _) = ConnectycubeUsers.signIn(null).await()
         }
+    }
+
+    companion object {
+        fun intent(context: Context) = Intent(context, MainActivity::class.java)
     }
 }

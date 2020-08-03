@@ -27,6 +27,7 @@ android {
             it.resValue 'string', 'connectycube_auth_key', connectycube_auth_key
             it.resValue 'string', 'connectycube_auth_secret', connectycube_auth_secret
             it.resValue 'string', 'connectycube_account_key', connectycube_account_key
+            it.resValue 'string', 'firebase_project_id', firebase_project_id
         }
     }
     compileOptions {
@@ -39,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -48,8 +50,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
 
     implementation "com.connectycube:connectycube-android-sdk-chat:$connectycube_version"
     implementation "com.connectycube:connectycube-android-sdk-videochat:$connectycube_version"
