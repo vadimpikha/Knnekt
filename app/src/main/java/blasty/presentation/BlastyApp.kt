@@ -1,6 +1,7 @@
-package blasty
+package blasty.presentation
 
 import android.app.Application
+import blasty.R
 import com.connectycube.auth.session.ConnectycubeSettings
 import com.connectycube.core.LogLevel
 
