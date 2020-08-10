@@ -11,7 +11,7 @@ class StartViewModel(private val checkUserSignedInUseCase: CheckUserSignedInUseC
 
     val userStatus = liveData {
         val signed = checkUserSignedInUseCase()
-        if (!signed) {
+        if (signed) {
             emit(UserStatus.SIGNED_IN.asEvent())
         } else {
             emit(UserStatus.SIGNED_OUT.asEvent())

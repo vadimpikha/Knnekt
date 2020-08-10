@@ -1,5 +1,7 @@
 package blasty.presentation.start
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import blasty.R
@@ -29,6 +31,10 @@ class StartActivity : AppCompatActivity(R.layout.activity_start), KodeinAware {
                 UserStatus.WITHOUT_INFO -> TODO()
             }
         }
+    }
+
+    companion object {
+        fun intent(context: Context) = Intent(context, StartActivity::class.java)
     }
 
 }
