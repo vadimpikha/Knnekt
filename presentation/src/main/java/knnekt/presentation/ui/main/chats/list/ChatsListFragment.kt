@@ -1,9 +1,11 @@
-package knnekt.presentation.ui.main.chats
+package knnekt.presentation.ui.main.chats.list
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import knnekt.R
 import knnekt.databinding.FragmentChatsListBinding
 import knnekt.presentation.di.viewModelInstance
@@ -25,8 +27,11 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = this@ChatsListFragment.viewModel
         }
         binding.chatsRecycler.adapter = chatsAdapter
+        val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        binding.chatsRecycler.addItemDecoration(divider)
         onBindLiveData()
     }
 

@@ -6,9 +6,9 @@ package knnekt.domain.entity.internal
 </T> */
 sealed class Resource<out T> {
 
+    data class Loading<T>(val data: T?) : Resource<T>()
     data class Success<T>(val data: T) : Resource<T>()
     data class Error(val throwable: Throwable) : Resource<Nothing>()
-    object Loading : Resource<Nothing>()
 
     fun onSuccess(block: (T) -> Unit) {
         if (this is Success)
@@ -38,6 +38,6 @@ sealed class Resource<out T> {
 
         fun error(throwable: Throwable) = Resource.Error(throwable)
 
-        fun loading() = Resource.Loading
+        fun <T> loading(data: T?) = Resource.Loading(data)
     }
 }

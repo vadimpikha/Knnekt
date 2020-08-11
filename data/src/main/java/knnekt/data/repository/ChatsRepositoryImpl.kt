@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 class ChatsRepositoryImpl(
     private val localChatsDataSource: LocalChatsDataSource,
     private val remoteChatsDataSource: RemoteChatsDataSource
-): ChatsRepository {
+) : ChatsRepository {
 
     override fun getChats(limit: Int, skip: Int): Flow<Resource<List<Chat>>> {
         return networkBoundResource(

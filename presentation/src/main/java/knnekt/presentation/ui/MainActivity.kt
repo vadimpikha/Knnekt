@@ -5,16 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import knnekt.R
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity: AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        fab.onClick {
-//            FirebaseAuth.getInstance().signOut()
-//            startActivity(StartActivity.intent(this@MainActivity))
-//            finish()
-//        }
+        setSupportActionBar(toolbar)
     }
 
     companion object {
