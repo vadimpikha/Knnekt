@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/chatsListFragment">
+    <fragment
+        android:id="@+id/chatsListFragment"
+        android:name="knnekt.presentation.ui.main.chats.ChatsListFragment"
+        android:label="ChatsListFragment" />
+</navigation>
