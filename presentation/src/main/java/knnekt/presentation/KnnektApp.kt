@@ -1,6 +1,9 @@
 package knnekt.presentation
 
 import android.app.Application
+import com.connectycube.auth.session.ConnectycubeSession
+import com.connectycube.auth.session.ConnectycubeSessionManager
+import com.connectycube.auth.session.ConnectycubeSessionParameters
 import knnekt.presentation.di.PresentationLayerDi
 import com.connectycube.auth.session.ConnectycubeSettings
 import com.connectycube.core.LogLevel
@@ -45,6 +48,37 @@ class KnnektApp : Application(), KodeinAware {
             )
             accountKey = getString(R.string.connectycube_account_key)
             logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.NOTHING
+        }
+
+        ConnectycubeSessionManager.getInstance().apply {
+            addListener(
+                object : ConnectycubeSessionManager.SessionListener {
+
+                    override fun onSessionCreated(session: ConnectycubeSession) {
+                        println("onSessionCreated")
+                    }
+
+                    override fun onSessionUpdated(sessionParameters: ConnectycubeSessionParameters) {
+                        println("onSessionUpdated")
+                    }
+
+                    override fun onSessionDeleted() {
+                        println("onSessionDeleted")
+                    }
+
+                    override fun onSessionRestored(session: ConnectycubeSession) {
+                        println("onSessionRestored")
+                    }
+
+                    override fun onSessionExpired() {
+                        println("onSessionExpired")
+                    }
+
+                    override fun onProviderSessionExpired(provider: String) {
+                        println("onProviderSessionExpired")
+                    }
+                })
+            init(applicationContext)
         }
     }
 

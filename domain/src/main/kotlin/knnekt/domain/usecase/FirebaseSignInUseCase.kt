@@ -13,7 +13,8 @@ class FirebaseSignInUseCase(
 
     override suspend fun execute(params: Params): Either<Throwable, String?> {
         return Either.catch {
-            firebaseAuthService.signIn(params.verificationId, params.smsCode)
+            ""
+//            firebaseAuthService.signIn(params.verificationId, params.smsCode)
         }
     }
 

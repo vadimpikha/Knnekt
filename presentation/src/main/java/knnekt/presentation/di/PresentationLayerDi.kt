@@ -23,14 +23,10 @@ object PresentationLayerDi {
             )
         }
         bindViewModel<StartViewModel>() with provider {
-            StartViewModel(
-                instance()
-            )
+            StartViewModel(instance())
         }
         bindViewModel<ChatsListViewModel>() with provider {
-            ChatsListViewModel(
-                instance()
-            )
+            ChatsListViewModel(instance(), instance())
         }
     }
 

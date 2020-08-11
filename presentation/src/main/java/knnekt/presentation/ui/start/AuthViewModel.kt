@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import knnekt.domain.entity.internal.PhoneAuthStatus
+import knnekt.domain.usecase.ConnectycubeSignInUseCase
 import knnekt.domain.usecase.FirebaseSignInUseCase
+import knnekt.domain.usecase.SendConfirmCodeUseCase
 import knnekt.presentation.lifecycle.Event
 import knnekt.presentation.lifecycle.asEvent
 import kotlinx.coroutines.flow.collect
@@ -15,9 +17,9 @@ import kotlinx.coroutines.launch
  * So use it as activity VM ( by activityViewModelInstance() )
  */
 class AuthViewModel(
-    private val sendConfirmCodeUseCase: knnekt.domain.usecase.SendConfirmCodeUseCase,
-    private val firebaseSignInUseCase: knnekt.domain.usecase.FirebaseSignInUseCase,
-    private val connectycubeSignInUseCase: knnekt.domain.usecase.ConnectycubeSignInUseCase
+    private val sendConfirmCodeUseCase: SendConfirmCodeUseCase,
+    private val firebaseSignInUseCase: FirebaseSignInUseCase,
+    private val connectycubeSignInUseCase: ConnectycubeSignInUseCase
 ) : ViewModel() {
 
     val userPhone = MutableLiveData("")
@@ -33,14 +35,13 @@ class AuthViewModel(
 
     fun sendConfirmCode() {
         val phone = userPhone.value!!
-        if(phone.isEmpty()) return
+        if (phone.isEmpty()) return
 
         viewModelScope.launch {
             sendConfirmCodeUseCase.execute(phone).collect { status ->
                 when (status) {
                     is PhoneAuthStatus.Completed -> {
-                        smsCode.value = status.confirmCode
-                        signIn()
+                        connectycubeSignIn(status.token.orEmpty())
                     }
                     is PhoneAuthStatus.CodeSent -> {
                         verificationId = status.verificationId
@@ -54,11 +55,11 @@ class AuthViewModel(
 
     fun signIn() {
         val smsCode = smsCode.value.orEmpty()
-
         viewModelScope.launch {
-            firebaseSignInUseCase.execute(FirebaseSignInUseCase.Params(verificationId, smsCode)).fold(::onError) { token ->
-                connectycubeSignIn(token.orEmpty())
-            }
+            firebaseSignInUseCase.execute(FirebaseSignInUseCase.Params(verificationId, smsCode))
+                .fold(::onError) { token ->
+                    connectycubeSignIn(token.orEmpty())
+                }
         }
     }
 

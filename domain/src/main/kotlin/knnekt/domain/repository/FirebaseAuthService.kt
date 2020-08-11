@@ -9,6 +9,6 @@ interface FirebaseAuthService {
 
     fun sendVerificationCode(phone: String): Flow<PhoneAuthStatus>
 
-    suspend fun signIn(verificationId: String, smsCode: String): String?
+    suspend fun getIdTokenForCurrentUser(): String?
 
 }

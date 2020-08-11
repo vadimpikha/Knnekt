@@ -2,10 +2,14 @@ package knnekt.presentation.ui.start
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import knnekt.domain.usecase.CheckUserSignedInUseCase
+import knnekt.domain.usecase.RefreshSessionUseCase
 import knnekt.presentation.lifecycle.asEvent
 import knnekt.presentation.entity.UserStatus
 
-class StartViewModel(private val checkUserSignedInUseCase: knnekt.domain.usecase.CheckUserSignedInUseCase) : ViewModel() {
+class StartViewModel(
+    private val checkUserSignedInUseCase: CheckUserSignedInUseCase
+) : ViewModel() {
 
 
     val userStatus = liveData {
@@ -16,6 +20,5 @@ class StartViewModel(private val checkUserSignedInUseCase: knnekt.domain.usecase
             emit(UserStatus.SIGNED_OUT.asEvent())
         }
     }
-
 
 }

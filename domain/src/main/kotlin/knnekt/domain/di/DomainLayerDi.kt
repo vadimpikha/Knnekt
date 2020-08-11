@@ -13,6 +13,10 @@ object DomainLayerDi {
             CheckUserSignedInUseCase(instance())
         }
 
+        bind<RefreshSessionUseCase>() with provider {
+            RefreshSessionUseCase(instance(), instance(), instance())
+        }
+
         bind<SendConfirmCodeUseCase>() with provider {
             SendConfirmCodeUseCase(instance(), instance())
         }
