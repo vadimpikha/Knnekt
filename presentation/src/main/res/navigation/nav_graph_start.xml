@@ -3,22 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_start.xml"
-    app:startDestination="@id/sendCode">
+    app:startDestination="@id/signIn">
 
-    <fragment
-        android:id="@+id/sendCode"
-        android:name="knnekt.presentation.ui.start.SendConfirmCodeFragment"
-        android:label="login_fragment"
-        tools:layout="@layout/fragment_send_code" >
-        <action
-            android:id="@+id/action_loginFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
-        <action
-            android:id="@+id/sendCode_to_signIn"
-            app:destination="@id/signIn"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
-    </fragment>
     <fragment
         android:id="@+id/registrationFragment"
         android:name="knnekt.presentation.ui.start.RegistrationFragment"
@@ -26,8 +12,8 @@
         tools:layout="@layout/fragment_registration" />
     <fragment
         android:id="@+id/signIn"
-        android:name="knnekt.presentation.ui.start.SignInFragment"
-        android:label="SignInFragment" >
+        android:name="knnekt.presentation.ui.start.signin.SignInFragment"
+        android:label="SignInFragment">
         <action
             android:id="@+id/action_signIn_to_registrationFragment"
             app:destination="@id/registrationFragment" />

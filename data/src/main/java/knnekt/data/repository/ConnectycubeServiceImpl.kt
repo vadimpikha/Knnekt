@@ -22,4 +22,9 @@ class ConnectycubeServiceImpl(
             .await()
         return mapper.convert(user)
     }
+
+    override suspend fun signIn(login: String, password: String): User {
+        val (user, _) = ConnectycubeUsers.signIn(login, password).await()
+        return mapper.convert(user)
+    }
 }

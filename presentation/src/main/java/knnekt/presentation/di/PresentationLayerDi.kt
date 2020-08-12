@@ -17,8 +17,6 @@ object PresentationLayerDi {
         }
         bindViewModel<AuthViewModel>() with provider {
             AuthViewModel(
-                instance(),
-                instance(),
                 instance()
             )
         }
@@ -26,7 +24,7 @@ object PresentationLayerDi {
             StartViewModel(instance())
         }
         bindViewModel<ChatsListViewModel>() with provider {
-            ChatsListViewModel(instance(), instance())
+            ChatsListViewModel(instance())
         }
     }
 

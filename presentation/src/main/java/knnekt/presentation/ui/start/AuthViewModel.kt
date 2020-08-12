@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import knnekt.domain.entity.internal.PhoneAuthStatus
 import knnekt.domain.usecase.ConnectycubeSignInUseCase
+import knnekt.domain.usecase.ConnectycubeSignInUseCase.*
 import knnekt.domain.usecase.FirebaseSignInUseCase
 import knnekt.domain.usecase.SendConfirmCodeUseCase
 import knnekt.presentation.lifecycle.Event
@@ -17,55 +18,50 @@ import kotlinx.coroutines.launch
  * So use it as activity VM ( by activityViewModelInstance() )
  */
 class AuthViewModel(
-    private val sendConfirmCodeUseCase: SendConfirmCodeUseCase,
-    private val firebaseSignInUseCase: FirebaseSignInUseCase,
     private val connectycubeSignInUseCase: ConnectycubeSignInUseCase
 ) : ViewModel() {
 
-    val userPhone = MutableLiveData("")
-    val smsCode = MutableLiveData<String>(null)
-
     val toastEvent = MutableLiveData<Event<String>>()
-
     val userSignedInEvent = MutableLiveData<Event<Unit>>()
 
-    val codeSentEvent = MutableLiveData<Event<Unit>>()
+    val login = MutableLiveData("")
+    val password = MutableLiveData("")
 
-    private var verificationId: String = ""
 
-    fun sendConfirmCode() {
-        val phone = userPhone.value!!
-        if (phone.isEmpty()) return
-
-        viewModelScope.launch {
-            sendConfirmCodeUseCase.execute(phone).collect { status ->
-                when (status) {
-                    is PhoneAuthStatus.Completed -> {
-                        connectycubeSignIn(status.token.orEmpty())
-                    }
-                    is PhoneAuthStatus.CodeSent -> {
-                        verificationId = status.verificationId
-                        codeSentEvent.value = Unit.asEvent()
-                    }
-                    is PhoneAuthStatus.Failure -> onError(status.e)
-                }
-            }
-        }
-    }
+//    fun sendConfirmCode() {
+//
+//
+//        viewModelScope.launch {
+//            sendConfirmCodeUseCase.execute(phone).collect { status ->
+//                when (status) {
+//                    is PhoneAuthStatus.Completed -> {
+//                        connectycubeSignIn(status.token.orEmpty())
+//                    }
+//                    is PhoneAuthStatus.CodeSent -> {
+//                        verificationId = status.verificationId
+//                        codeSentEvent.value = Unit.asEvent()
+//                    }
+//                    is PhoneAuthStatus.Failure -> onError(status.e)
+//                }
+//            }
+//        }
+//    }
 
     fun signIn() {
-        val smsCode = smsCode.value.orEmpty()
-        viewModelScope.launch {
-            firebaseSignInUseCase.execute(FirebaseSignInUseCase.Params(verificationId, smsCode))
-                .fold(::onError) { token ->
-                    connectycubeSignIn(token.orEmpty())
-                }
-        }
-    }
+        val login = login.value!!
+        val password = password.value!!
+//        viewModelScope.launch {
+//            firebaseSignInUseCase.execute(FirebaseSignInUseCase.Params(login, password))
+//                .fold(::onError) { token ->
+//                    connectycubeSignIn(token.orEmpty())
+//                }
+//        }
 
-    suspend fun connectycubeSignIn(token: String) {
-        connectycubeSignInUseCase.execute(token).fold(::onError) { user ->
-            userSignedInEvent.value = Unit.asEvent()
+        viewModelScope.launch {
+            connectycubeSignInUseCase.execute(Credentials(login, password))
+                .fold(::onError) { user ->
+                    userSignedInEvent.value = Unit.asEvent()
+                }
         }
     }
 

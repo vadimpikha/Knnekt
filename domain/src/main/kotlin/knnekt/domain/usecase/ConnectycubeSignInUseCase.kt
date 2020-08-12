@@ -9,12 +9,14 @@ import knnekt.domain.repository.ConnectycubeService
 class ConnectycubeSignInUseCase(
     private val connectycubeService: ConnectycubeService,
     dispatchers:DispatchersProvider
-) : CoroutineUseCase<Either<Throwable, User>, String>(dispatchers) {
+) : CoroutineUseCase<Either<Throwable, User>, ConnectycubeSignInUseCase.Credentials>(dispatchers) {
 
 
-    override suspend fun execute(params: String): Either<Throwable, User> {
+    override suspend fun execute(params: Credentials): Either<Throwable, User> {
         return Either.catch {
-            connectycubeService.signIn(params)
+            connectycubeService.signIn(params.login, params.password)
         }
     }
+
+    data class Credentials(val login: String, val password: String)
 }

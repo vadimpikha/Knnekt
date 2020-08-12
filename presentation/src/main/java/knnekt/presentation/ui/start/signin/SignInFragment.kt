@@ -1,4 +1,4 @@
-package knnekt.presentation.ui.start
+package knnekt.presentation.ui.start.signin
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,8 @@ import knnekt.databinding.FragmentSignInBinding
 import knnekt.presentation.di.activityViewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
 import knnekt.presentation.ui.MainActivity
+import knnekt.presentation.ui.start.AuthViewModel
+import knnekt.presentation.util.onActionDone
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
 import org.kodein.di.KodeinAware
@@ -25,6 +27,10 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in), KodeinAware {
         with(binding) {
             viewModel = this@SignInFragment.viewModel
             lifecycleOwner = viewLifecycleOwner
+        }
+
+        binding.password.onActionDone {
+            viewModel.signIn()
         }
         onBindLiveData()
     }

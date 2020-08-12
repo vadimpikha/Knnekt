@@ -3,7 +3,6 @@ package knnekt.presentation.ui.start
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import knnekt.domain.usecase.CheckUserSignedInUseCase
-import knnekt.domain.usecase.RefreshSessionUseCase
 import knnekt.presentation.lifecycle.asEvent
 import knnekt.presentation.entity.UserStatus
 

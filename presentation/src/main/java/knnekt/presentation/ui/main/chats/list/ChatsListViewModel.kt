@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import knnekt.domain.entity.internal.Resource
 import knnekt.domain.usecase.FetchChatsUseCase
-import knnekt.domain.usecase.RefreshSessionUseCase
 import knnekt.presentation.entity.ChatItem
 import knnekt.presentation.lifecycle.Event
 import knnekt.presentation.lifecycle.asEvent
@@ -14,8 +13,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ChatsListViewModel(
-    private val fetchChatsUseCase: FetchChatsUseCase,
-    private val refreshSessionUseCase: RefreshSessionUseCase
+    private val fetchChatsUseCase: FetchChatsUseCase
 ) : ViewModel() {
 
     val chats = MutableLiveData<List<ChatItem>>()
@@ -29,7 +27,6 @@ class ChatsListViewModel(
 
     fun refresh() {
         viewModelScope.launch {
-            refreshSessionUseCase.execute()
             fetchChatsUseCase.execute(FetchChatsUseCase.Params(20, 0))
                 .collect { resource ->
                     when (resource) {
