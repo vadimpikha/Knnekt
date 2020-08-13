@@ -1,17 +1,18 @@
 package knnekt.presentation.ui.start.signin
 
 import android.os.Bundle
+import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import knnekt.R
 import knnekt.databinding.FragmentSignInBinding
 import knnekt.presentation.di.activityViewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
 import knnekt.presentation.ui.MainActivity
 import knnekt.presentation.ui.start.AuthViewModel
-import knnekt.presentation.util.onActionDone
-import knnekt.presentation.util.toast
-import knnekt.presentation.util.viewBinding
+import knnekt.presentation.util.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 
@@ -29,10 +30,22 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in), KodeinAware {
             lifecycleOwner = viewLifecycleOwner
         }
 
+        initViews()
+        onBindLiveData()
+    }
+
+    private fun initViews() {
         binding.password.onActionDone {
             viewModel.signIn()
         }
-        onBindLiveData()
+        binding.forgotPasswordLink.setOnClickListener {
+            toast("This feature not implemented yet")
+        }
+        binding.signUpLink.onClick(true) {
+            findNavController().navigate(R.id.action_signIn_to_registrationFragment)
+        }
+        binding.forgotPasswordLink.applySpan(UnderlineSpan())
+        binding.signUpLink.applySpan(UnderlineSpan())
     }
 
     private fun onBindLiveData() {

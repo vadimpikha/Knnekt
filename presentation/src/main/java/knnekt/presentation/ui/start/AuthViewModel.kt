@@ -1,5 +1,6 @@
 package knnekt.presentation.ui.start
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,7 +27,14 @@ class AuthViewModel(
 
     val login = MutableLiveData("")
     val password = MutableLiveData("")
-
+    val noData = MediatorLiveData<Boolean>().apply {
+        fun rebind() {
+            value = login.value.isNullOrEmpty() || password.value.isNullOrEmpty()
+        }
+        rebind()
+        addSource(login) { rebind() }
+        addSource(password) { rebind() }
+    }
 
 //    fun sendConfirmCode() {
 //

@@ -76,6 +76,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:enabled="@{!viewModel.noData}"
             android:onClick="@{() -> viewModel.signIn()}"
             android:text="@string/sign_in"
             app:layout_constraintBottom_toBottomOf="parent"

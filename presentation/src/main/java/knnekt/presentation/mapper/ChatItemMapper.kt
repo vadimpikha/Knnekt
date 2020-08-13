@@ -31,8 +31,8 @@ object ChatItemMapper : Mapper<Chat, ChatItem> {
     private fun createUnreadMsgsString(obj: Chat): String {
         return when (val count = obj.unreadMessageCount) {
             null, 0 -> ""
-            in 1..100 -> count.toString()
-            else -> "100+"
+            in 1..99 -> count.toString()
+            else -> "99+"
         }
     }
 
