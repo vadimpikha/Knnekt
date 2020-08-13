@@ -1,7 +1,9 @@
 package knnekt.presentation.util
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity

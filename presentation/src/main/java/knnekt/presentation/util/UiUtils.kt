@@ -3,12 +3,10 @@ package knnekt.presentation.util
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Insets
 import android.os.Build
 import android.util.TypedValue
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsets
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
@@ -69,6 +67,16 @@ fun Activity.configureDecorView() {
                 systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
     }
+
+    /*window?.setDecorFitsSystemWindows(false)
+    window?.insetsController?.setSystemBarsAppearance(
+        WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+        WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+    )
+    window?.insetsController?.setSystemBarsAppearance(
+        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+    )*/
 }
 
 val Context.isNightMode: Boolean

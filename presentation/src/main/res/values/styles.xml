@@ -4,6 +4,12 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/supernova</item>
         <item name="colorSecondary">@color/supernova</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="ItemTitleTextAppearance" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">19sp</item>
     </style>
 
     <style name="CircleImageView" parent="">
