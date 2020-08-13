@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import knnekt.presentation.entity.MessageItem
 import kotlinx.android.extensions.LayoutContainer
 
-class ChatMessagesAdapter : ListAdapter<MessageItem, ChatMessagesAdapter.ChatMessageViewHolder>(MessageDiff) {
+class ChatAdapter : ListAdapter<MessageItem, ChatAdapter.ChatMessageViewHolder>(MessageDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatMessageViewHolder {
         TODO("Not yet implemented")

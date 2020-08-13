@@ -12,17 +12,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import knnekt.R
 import knnekt.presentation.entity.ChatItem
+import knnekt.presentation.util.onClick
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_list.*
 import kotlin.properties.Delegates
 
-class ChatsAdapter : ListAdapter<ChatItem, ChatsAdapter.ChatViewHolder>(
-    ChatDiff
-) {
-
-    var chats: List<ChatItem> by Delegates.observable(emptyList()) { _, _, new ->
-        submitList(new)
-    }
+class ChatsListAdapter(
+    private val onClick: (ChatItem) -> Unit = {}
+) : ListAdapter<ChatItem, ChatsListAdapter.ChatViewHolder>(ChatDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -33,7 +30,11 @@ class ChatsAdapter : ListAdapter<ChatItem, ChatsAdapter.ChatViewHolder>(
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        holder.bind(chats[position])
+        val item = getItem(position)
+        holder.bind(item)
+        holder.itemView.onClick(true){
+            onClick.invoke(item)
+        }
     }
 
     class ChatViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),

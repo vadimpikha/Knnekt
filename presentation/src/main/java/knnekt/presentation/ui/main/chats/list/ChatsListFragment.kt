@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import knnekt.R
@@ -21,7 +22,14 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
     private val viewModel: ChatsListViewModel by viewModelInstance()
     private val binding by viewBinding(FragmentChatsListBinding::bind)
-    private val chatsAdapter by lazy { ChatsAdapter() }
+    private lateinit var chatsListAdapter: ChatsListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        chatsListAdapter = ChatsListAdapter(
+            onClick = { openChat(it.id) }
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,16 +37,19 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@ChatsListFragment.viewModel
         }
-        binding.chatsRecycler.adapter = chatsAdapter
+        binding.chatsRecycler.adapter = chatsListAdapter
         val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
         binding.chatsRecycler.addItemDecoration(divider)
         onBindLiveData()
     }
 
+    private fun openChat(id: String) {
+        val action = ChatsListFragmentDirections.chatsListToChat(id)
+        findNavController().navigate(action)
+    }
+
     private fun onBindLiveData() {
-        viewModel.chats.observe(viewLifecycleOwner) { chats ->
-            chatsAdapter.chats = chats
-        }
+        viewModel.chats.observe(viewLifecycleOwner, chatsListAdapter::submitList)
         viewModel.toastEvent.observeEvent(viewLifecycleOwner) { text ->
             toast(text)
         }

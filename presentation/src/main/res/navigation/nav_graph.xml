@@ -6,5 +6,19 @@
     <fragment
         android:id="@+id/chatsListFragment"
         android:name="knnekt.presentation.ui.main.chats.list.ChatsListFragment"
-        android:label="ChatsListFragment" />
+        android:label="ChatsListFragment" >
+        <action
+            android:id="@+id/chatsList_to_chat"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="knnekt.presentation.ui.main.chats.messages.ChatFragment"
+        android:label="ChatFragment" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 </navigation>
