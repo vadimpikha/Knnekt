@@ -18,4 +18,12 @@ class LocalChatsDataSourceImpl(
     override suspend fun saveChats(chats: List<knnekt.domain.entity.Chat>) {
         chatDao.insertAll(chats.map (mapper::convert2))
     }
+
+    override fun getChatById(id: String): Flow<knnekt.domain.entity.Chat> {
+        return chatDao.getChat(id).map { mapper.convert(it) }
+    }
+
+    override suspend fun updateChat(chat: knnekt.domain.entity.Chat) {
+        chatDao.update(mapper.convert2(chat))
+    }
 }

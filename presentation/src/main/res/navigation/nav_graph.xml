@@ -15,8 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="knnekt.presentation.ui.main.chats.messages.ChatFragment"
-        android:label="ChatFragment" >
+        android:name="knnekt.presentation.ui.main.chats.messages.ChatFragment">
         <argument
             android:name="id"
             app:argType="string" />

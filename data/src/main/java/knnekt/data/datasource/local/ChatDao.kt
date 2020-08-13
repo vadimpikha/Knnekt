@@ -22,10 +22,10 @@ interface ChatDao {
     suspend fun getChatSync(chatId: String): Chat?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(chat: Chat)
+    suspend fun insert(chat: Chat)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(chat: Chat)
+    suspend fun update(chat: Chat)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(chats: List<Chat>)

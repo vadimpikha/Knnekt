@@ -5,14 +5,17 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import knnekt.R
 import knnekt.databinding.FragmentChatsListBinding
 import knnekt.presentation.di.viewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
+import knnekt.presentation.util.setActionBar
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
+import kotlinx.android.synthetic.main.fragment_chats_list.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 
@@ -33,6 +36,8 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setActionBar(toolbar)
+        toolbar.setupWithNavController(findNavController())
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@ChatsListFragment.viewModel

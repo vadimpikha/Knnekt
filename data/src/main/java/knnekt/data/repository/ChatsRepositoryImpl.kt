@@ -21,4 +21,11 @@ class ChatsRepositoryImpl(
         )
     }
 
+    override fun getChatById(id: String): Flow<Resource<Chat>> {
+        return networkBoundResource(
+            query = { localChatsDataSource.getChatById(id) },
+            fetch = { remoteChatsDataSource.getChatById(id) },
+            saveFetchResult = { chat -> localChatsDataSource.updateChat(chat) }
+        )
+    }
 }

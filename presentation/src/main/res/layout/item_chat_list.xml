@@ -85,7 +85,7 @@
             android:paddingHorizontal="8.5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?attr/colorOnSecondary"
             android:gravity="center"
             android:background="@drawable/bg_unread_msg_badge"
             tools:text="99+" />

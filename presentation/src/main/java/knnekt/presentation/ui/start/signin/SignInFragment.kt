@@ -9,7 +9,7 @@ import knnekt.R
 import knnekt.databinding.FragmentSignInBinding
 import knnekt.presentation.di.activityViewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
-import knnekt.presentation.ui.MainActivity
+import knnekt.presentation.ui.main.MainActivity
 import knnekt.presentation.util.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein

@@ -13,7 +13,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.*
 import androidx.fragment.app.Fragment
 
@@ -175,3 +177,7 @@ private fun recordInitialPaddingForView(view: View) = InitialPadding(
 private fun recordInitialMarginForView(view: View) = InitialMargin(
     view.marginLeft, view.marginTop, view.marginRight, view.marginBottom
 )
+
+fun Fragment.setActionBar(toolbar: Toolbar) {
+    (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+}

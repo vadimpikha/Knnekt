@@ -2,6 +2,7 @@ package knnekt.presentation.di
 
 import androidx.lifecycle.ViewModelProvider
 import knnekt.presentation.ui.main.chats.list.ChatsListViewModel
+import knnekt.presentation.ui.main.chats.messages.ChatViewModel
 import knnekt.presentation.ui.start.signin.SignInViewModel
 import knnekt.presentation.ui.start.StartViewModel
 import org.kodein.di.Kodein
@@ -25,6 +26,9 @@ object PresentationLayerDi {
         }
         bindViewModel<ChatsListViewModel>() with provider {
             ChatsListViewModel(instance())
+        }
+        bindViewModel<ChatViewModel>() with provider {
+            ChatViewModel(instance())
         }
     }
 

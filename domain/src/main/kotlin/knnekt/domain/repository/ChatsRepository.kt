@@ -9,4 +9,6 @@ interface ChatsRepository {
 
     fun getChats(limit: Int, skip: Int): Flow<Resource<List<Chat>>>
 
+    fun getChatById(id: String): Flow<Resource<Chat>>
+
 }

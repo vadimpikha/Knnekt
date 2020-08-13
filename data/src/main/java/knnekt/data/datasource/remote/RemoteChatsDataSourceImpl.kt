@@ -20,4 +20,9 @@ class RemoteChatsDataSourceImpl(
         val (dialogs, _) = ConnectycubeRestChatService.getChatDialogs(null, request).await()
         return dialogs.map(mapper::convert)
     }
+
+    override suspend fun getChatById(id: String): Chat {
+        val (chat, _) = ConnectycubeRestChatService.getChatDialogById(id).await()
+        return mapper.convert(chat)
+    }
 }

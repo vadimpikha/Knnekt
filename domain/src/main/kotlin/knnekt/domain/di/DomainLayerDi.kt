@@ -17,6 +17,10 @@ object DomainLayerDi {
             SendConfirmCodeUseCase(instance(), instance())
         }
 
+        bind<GetChatByIdUseCase>() with provider {
+            GetChatByIdUseCase(instance(), instance())
+        }
+
         bind<FirebaseSignInUseCase>() with provider {
             FirebaseSignInUseCase(instance(), instance())
         }

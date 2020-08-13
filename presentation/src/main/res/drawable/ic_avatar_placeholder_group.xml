@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="?attr/colorButtonNormal"/>
+            <solid android:color="?attr/colorButtonNormal" />
             <padding
                 android:bottom="4dp"
                 android:left="4dp"
@@ -11,10 +11,9 @@
         </shape>
     </item>
     <item
-        android:drawable="@drawable/ic_group"
         android:bottom="4dp"
+        android:drawable="@drawable/ic_group"
         android:left="4dp"
         android:right="4dp"
-        android:top="4dp"
-        />
+        android:top="4dp" />
 </layer-list>

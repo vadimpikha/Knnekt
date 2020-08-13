@@ -1,11 +1,11 @@
 package knnekt.presentation.util
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -14,22 +14,37 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.observe
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import knnekt.R
+import knnekt.presentation.entity.ChatItem
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 
-@BindingAdapter("imageUri", "placeholder", requireAll = false)
-fun loadImageUri(imageView: ImageView, uri: String?, placeholder: Drawable?) {
-    Glide.with(imageView)
-        .load(uri?.toUri())
-        .apply {
-            if (imageView.drawable != null)
-                placeholder(imageView.drawable)
-            else
-                placeholder(placeholder)
-            fallback(placeholder)
-            error(placeholder)
-        }.into(imageView)
+@BindingAdapter("bindChat")
+fun Toolbar.bindChat(chat: ChatItem?) {
+    if(chat == null) return
+
+    val image = findViewById<ImageView>(R.id.chat_photo)
+    val onlineStatus = findViewById<TextView>(R.id.online_status)
+    val chatName = findViewById<TextView>(R.id.chat_name)
+
+    val placeholder = if (chat.isPrivate)
+        R.drawable.ic_avatar_placeholder
+    else
+        R.drawable.ic_avatar_placeholder_group
+
+    Glide.with(this)
+        .load(chat.photo)
+        .placeholder(placeholder)
+        .error(placeholder)
+        .apply(RequestOptions.circleCropTransform())
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(image)
+
+    chatName.text = chat.name
+//    onlineStatus.text = chat.name
 }
 
 @BindingAdapter(

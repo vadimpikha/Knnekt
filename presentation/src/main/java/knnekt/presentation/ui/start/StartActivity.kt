@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import knnekt.R
 import knnekt.presentation.di.viewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
-import knnekt.presentation.ui.MainActivity
+import knnekt.presentation.ui.main.MainActivity
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 
