@@ -15,10 +15,9 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            paddingTopSystemWindowInsets="@{true}"
-            android:background="@color/supernova"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

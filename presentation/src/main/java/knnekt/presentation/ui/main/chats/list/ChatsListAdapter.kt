@@ -3,6 +3,7 @@ package knnekt.presentation.ui.main.chats.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.item_chat_list.*
 import kotlin.properties.Delegates
 
 class ChatsListAdapter(
-    private val onClick: (ChatItem) -> Unit = {}
+    private val onClick: (ChatItem, View) -> Unit
 ) : ListAdapter<ChatItem, ChatsListAdapter.ChatViewHolder>(ChatDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
@@ -32,8 +33,8 @@ class ChatsListAdapter(
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
-        holder.itemView.onClick(true){
-            onClick.invoke(item)
+        holder.itemView.onClick(true) {
+            onClick.invoke(item, this)
         }
     }
 
@@ -44,9 +45,9 @@ class ChatsListAdapter(
         fun bind(chat: ChatItem) {
 
             val placeholder = if (chat.isPrivate)
-                    R.drawable.ic_avatar_placeholder
-                else
-                    R.drawable.ic_avatar_placeholder_group
+                R.drawable.ic_avatar_placeholder
+            else
+                R.drawable.ic_avatar_placeholder_group
 
             Glide.with(containerView)
                 .load(chat.photo)
@@ -61,6 +62,8 @@ class ChatsListAdapter(
             unread_messages_badge.text = chat.unreadMessageCount
             unread_messages_badge.isInvisible = chat.unreadMessageCount.isEmpty()
             last_message_time.text = chat.updatedAt
+
+            ViewCompat.setTransitionName(chat_photo, "avatar_${chat.id}")
         }
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,6 +17,7 @@ import knnekt.presentation.util.setActionBar
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
 import kotlinx.android.synthetic.main.fragment_chats_list.*
+import kotlinx.android.synthetic.main.item_chat_list.view.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 
@@ -30,7 +32,13 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chatsListAdapter = ChatsListAdapter(
-            onClick = { openChat(it.id) }
+            onClick = { chat, view ->
+                val extras = FragmentNavigatorExtras(
+                    view.chat_photo to "avatar_${chat.id}"
+                )
+                val action = ChatsListFragmentDirections.chatsListToChat(chat.id)
+                findNavController().navigate(action, extras)
+            }
         )
     }
 
@@ -46,11 +54,6 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
         binding.chatsRecycler.addItemDecoration(divider)
         onBindLiveData()
-    }
-
-    private fun openChat(id: String) {
-        val action = ChatsListFragmentDirections.chatsListToChat(id)
-        findNavController().navigate(action)
     }
 
     private fun onBindLiveData() {

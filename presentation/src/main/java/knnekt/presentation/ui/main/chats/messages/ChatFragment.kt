@@ -2,10 +2,12 @@ package knnekt.presentation.ui.main.chats.messages
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import androidx.transition.TransitionInflater
 import knnekt.R
 import knnekt.databinding.FragmentChatBinding
 import knnekt.presentation.di.viewModelInstance
@@ -28,6 +30,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null)
             viewModel.initChat(args.id)
+
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,7 +43,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@ChatFragment.viewModel
         }
+        initViews()
         bindLiveData()
+    }
+
+    private fun initViews() {
+        ViewCompat.setTransitionName(binding.chatPhoto, "avatar_${args.id}")
     }
 
     private fun bindLiveData() {
