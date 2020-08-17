@@ -1,5 +1,6 @@
 package knnekt.data.di
 
+import android.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import knnekt.data.datasource.local.AppDatabase
 import knnekt.data.datasource.local.LocalChatsDataSourceImpl
@@ -11,12 +12,14 @@ import knnekt.data.mapper.UserMapper
 import knnekt.data.repository.ChatsRepositoryImpl
 import knnekt.data.repository.ConnectycubeServiceImpl
 import knnekt.data.repository.FirebaseAuthServiceImpl
+import knnekt.data.repository.LocalPreferencesRepositoryImpl
 import knnekt.domain.datasource.local.LocalChatsDataSource
 import knnekt.domain.datasource.remote.RemoteChatsDataSource
 import knnekt.domain.dispatcher.DispatchersProvider
 import knnekt.domain.repository.ChatsRepository
 import knnekt.domain.repository.ConnectycubeService
 import knnekt.domain.repository.FirebaseAuthService
+import knnekt.domain.repository.LocalPreferencesRepository
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
@@ -38,6 +41,9 @@ object DataLayerDi {
         }
         bind<ChatsRepository>() with provider {
             ChatsRepositoryImpl(instance(), instance())
+        }
+        bind<LocalPreferencesRepository>() with singleton {
+            LocalPreferencesRepositoryImpl(PreferenceManager.getDefaultSharedPreferences(instance()))
         }
     }
 

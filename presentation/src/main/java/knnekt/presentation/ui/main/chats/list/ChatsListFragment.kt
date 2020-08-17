@@ -32,12 +32,9 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chatsListAdapter = ChatsListAdapter(
-            onClick = { chat, view ->
-                val extras = FragmentNavigatorExtras(
-                    view.chat_photo to "avatar_${chat.id}"
-                )
+            onClick = { chat ->
                 val action = ChatsListFragmentDirections.chatsListToChat(chat.id)
-                findNavController().navigate(action, extras)
+                findNavController().navigate(action)
             }
         )
     }

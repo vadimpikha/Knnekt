@@ -10,7 +10,8 @@ object UserMapper : Mapper<ConnectycubeUser, User> {
             fullName = obj.fullName,
             login = obj.login,
             phone = obj.phone,
-            avatar = obj.avatar
+            avatar = obj.avatar,
+            id = obj.id
         )
     }
 

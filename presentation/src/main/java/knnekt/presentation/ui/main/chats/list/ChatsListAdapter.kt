@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.item_chat_list.*
 import kotlin.properties.Delegates
 
 class ChatsListAdapter(
-    private val onClick: (ChatItem, View) -> Unit
+    private val onClick: (ChatItem) -> Unit
 ) : ListAdapter<ChatItem, ChatsListAdapter.ChatViewHolder>(ChatDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
@@ -34,7 +34,7 @@ class ChatsListAdapter(
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.onClick(true) {
-            onClick.invoke(item, this)
+            onClick.invoke(item)
         }
     }
 

@@ -26,7 +26,7 @@ object DomainLayerDi {
         }
 
         bind<ConnectycubeSignInUseCase>() with provider {
-            ConnectycubeSignInUseCase(instance(), instance())
+            ConnectycubeSignInUseCase(instance(), instance(), instance())
         }
         bind<FetchChatsUseCase>() with provider {
             FetchChatsUseCase(instance(), instance())

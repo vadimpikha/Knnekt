@@ -61,4 +61,6 @@ dependencies {
     implementation "io.arrow-kt:arrow-core-data:$arrow_version"
 
     implementation "com.connectycube:connectycube-android-sdk-chat:$connectycube_version"
+
+    implementation "androidx.paging:paging-runtime:$paging_version"
 }

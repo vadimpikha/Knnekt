@@ -17,6 +17,8 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun chatDao(): ChatDao
 
+//    abstract fun messageDao(): MessageDao
+
     companion object {
 
         // For Singleton instantiation
