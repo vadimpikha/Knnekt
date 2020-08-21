@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/chatsListFragment">
+    <fragment
+        android:id="@+id/chatsListFragment"
+        android:name="knnekt.presentation.ui.main.chats.list.ChatsListFragment"
+        android:label="ChatsListFragment">
+        <action
+            android:id="@+id/chatsList_to_chat"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="knnekt.presentation.ui.main.chats.messages.ChatFragment">
+        <argument
+            android:name="chat"
+            app:argType="knnekt.shared.data.entity.Chat" />
+    </fragment>
+</navigation>

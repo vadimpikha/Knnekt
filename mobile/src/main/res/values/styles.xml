@@ -1,0 +1,43 @@
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">#3e2a78</item>
+        <item name="colorPrimaryDark">#21054d</item>
+    </style>
+
+    <style name="ItemTitleTextAppearance" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="MessageTimeTextStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">@style/MessageTimeTextAppearance</item>
+        <item name="android:alpha">0.7</item>
+    </style>
+
+    <style name="AttachmentMessageTimeTextStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">@style/MessageTimeTextAppearance</item>
+        <item name="android:background">@drawable/bg_badge</item>
+    </style>
+
+    <style name="MessageTimeTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+
+    <style name="MessageBodyTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
+    <style name="AttachmentImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+
+
+</resources>

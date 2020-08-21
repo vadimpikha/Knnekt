@@ -1,0 +1,37 @@
+package knnekt.presentation.ui.main
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.connectycube.chat.ConnectycubeChatService
+import com.connectycube.chat.exception.ChatException
+import com.connectycube.chat.listeners.ChatDialogMessageListener
+import com.connectycube.chat.listeners.MessageDeleteListener
+import com.connectycube.chat.listeners.MessageStatusListener
+import com.connectycube.chat.listeners.MessageUpdateListener
+import com.connectycube.chat.model.ConnectycubeChatMessage
+import knnekt.shared.data.connection.ChatConnectionManager
+import knnekt.shared.domain.chats.InvalidateChatUseCase
+import kotlinx.coroutines.launch
+
+class MainViewModel(
+    private val connectionManager: ChatConnectionManager,
+    invalidateChatUseCase: InvalidateChatUseCase
+) : ViewModel() {
+
+
+
+    init {
+        connectionManager.chatInvalidatedEvent.observeForever {
+            it.getContentIfNotHandled()?.let { chatId ->
+                viewModelScope.launch {
+                    invalidateChatUseCase(chatId)
+                }
+            }
+        }
+    }
+
+    fun ping() {
+
+    }
+
+}

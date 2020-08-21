@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <size android:height="300dp" android:width="200dp"/>
+            <solid android:color="@android:color/white"/>
+        </shape>
+    </item>
+    <item android:top="78dp"
+        android:bottom="78dp"
+        android:left="24dp"
+        android:right="24dp"
+        android:drawable="@drawable/ic_broken_image_png"/>
+</layer-list>
