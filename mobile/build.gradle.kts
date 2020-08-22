@@ -104,8 +104,6 @@ dependencies {
     // Kotlin
     implementation(Libs.KOTLIN_STDLIB)
 
-    implementation(Libs.SWIPE_REFRESH_LAYOUT)
-
     implementation(Libs.COROUTINES_ANDROID)
 
     // Instrumentation tests

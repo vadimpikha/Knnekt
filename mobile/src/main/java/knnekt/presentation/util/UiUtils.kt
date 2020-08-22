@@ -185,7 +185,3 @@ private fun recordInitialPaddingForView(view: View) = InitialPadding(
 private fun recordInitialMarginForView(view: View) = InitialMargin(
     view.marginLeft, view.marginTop, view.marginRight, view.marginBottom
 )
-
-fun Fragment.setActionBar(toolbar: Toolbar) {
-    (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
-}

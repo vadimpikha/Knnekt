@@ -4,6 +4,7 @@ import knnekt.shared.data.mapper.ChatMapper
 import knnekt.shared.data.mapper.MessageMapper
 import knnekt.shared.data.mapper.RemoteMessageToEntityMapper
 import knnekt.shared.data.mapper.UserMapper
+import knnekt.shared.domain.chats.GetChatConnectionUseCase
 import knnekt.shared.domain.chats.GetChatsPagingUseCase
 import knnekt.shared.domain.chats.InvalidateChatUseCase
 import knnekt.shared.domain.messages.GetMessagesPagingUseCase
@@ -37,6 +38,10 @@ object DomainLayerDi {
         bind() from singleton {
             val mapper = MessageMapper(instance<LocalPreferencesRepository>().user!!.id)
             GetMessagesPagingUseCase(instance(), mapper)
+        }
+
+        bind() from singleton {
+            GetChatConnectionUseCase()
         }
     }
 

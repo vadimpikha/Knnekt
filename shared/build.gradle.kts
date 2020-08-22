@@ -64,7 +64,6 @@ dependencies {
     kapt(Libs.ROOM_COMPILER)
     testImplementation(Libs.ARCH_TESTING)
 
-
     implementation(Libs.CORE_KTX)
 
     // Kotlin

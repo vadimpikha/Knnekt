@@ -1,4 +1,4 @@
-package knnekt.presentation.di
+package knnekt.presentation.viewmodelfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

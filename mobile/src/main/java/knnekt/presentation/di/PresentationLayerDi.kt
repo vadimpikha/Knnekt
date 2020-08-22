@@ -1,12 +1,14 @@
 package knnekt.presentation.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.connectycube.chat.ConnectycubeChatService
 import knnekt.presentation.ui.main.MainViewModel
 import knnekt.presentation.ui.main.chats.list.ChatsListViewModel
 import knnekt.presentation.ui.main.chats.messages.ChatViewModel
 import knnekt.presentation.ui.start.signin.SignInViewModel
 import knnekt.presentation.ui.start.StartViewModel
+import knnekt.presentation.viewmodelfactory.ChatViewModelFactory
+import knnekt.presentation.viewmodelfactory.KodeinViewModelFactory
+import knnekt.shared.data.entity.Chat
 import org.kodein.di.Kodein
 import org.kodein.di.generic.*
 
@@ -18,6 +20,12 @@ object PresentationLayerDi {
                 this
             )
         }
+
+        bind() from multiton { chat: Chat ->
+            ChatViewModelFactory(chat, this)
+        }
+
+
         bindViewModel<SignInViewModel>() with provider {
             SignInViewModel(
                 instance()
@@ -29,8 +37,8 @@ object PresentationLayerDi {
         bindViewModel<ChatsListViewModel>() with provider {
             ChatsListViewModel(instance())
         }
-        bindViewModel<ChatViewModel>() with provider {
-            ChatViewModel(instance())
+        bindViewModel<ChatViewModel>() with factory { chat: Chat ->
+            ChatViewModel(chat, instance(), instance())
         }
 
         bindViewModel<MainViewModel>() with provider {

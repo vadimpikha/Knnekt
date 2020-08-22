@@ -76,8 +76,3 @@ object Libs {
 
     const val PAGING = "androidx.paging:paging-runtime"
 }
-
-/*
-"org.kodein.di:kodein-di-generic-jvm:$kodein_version"
-"org.kodein.di:kodein-di-framework-android-x:$kodein_version"
- */

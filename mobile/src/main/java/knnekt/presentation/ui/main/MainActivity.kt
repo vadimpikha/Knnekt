@@ -4,25 +4,34 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.connectycube.chat.ConnectycubeChatService
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import knnekt.R
+import knnekt.databinding.ActivityMainBinding
 import knnekt.presentation.di.viewModelInstance
-import knnekt.presentation.util.configureDecorView
+import knnekt.presentation.util.viewBinding
 import knnekt.shared.data.connection.ChatConnectionManager
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
-import timber.log.Timber
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), KodeinAware {
+class MainActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by closestKodein()
     private val viewModel: MainViewModel by viewModelInstance()
     private val connectionManager: ChatConnectionManager by instance()
+    private val binding by viewBinding(ActivityMainBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        with(binding) {
+            setContentView(root)
+            setSupportActionBar(toolbar)
+            toolbar.setupWithNavController(findNavController(R.id.nav_host_fragment))
+            lifecycleOwner = this@MainActivity
+            viewModel = this@MainActivity.viewModel
+        }
+
         viewModel.ping()
         connectionManager.initialize()
     }

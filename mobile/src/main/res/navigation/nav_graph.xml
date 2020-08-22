@@ -9,9 +9,7 @@
         android:label="ChatsListFragment">
         <action
             android:id="@+id/chatsList_to_chat"
-            app:destination="@id/chatFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"

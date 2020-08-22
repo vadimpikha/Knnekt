@@ -11,15 +11,22 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 
 inline fun <reified VM : ViewModel, T> T.viewModelInstance(): Lazy<VM> where T : KodeinAware, T : FragmentActivity {
-    return lazy { ViewModelProvider(this, direct.instance()).get(VM::class.java) }
+    return lazy {
+            ViewModelProvider(this, direct.instance()).get(VM::class.java)
+    }
 }
 
 inline fun <reified VM : ViewModel, T> T.viewModelInstance(): Lazy<VM> where T : KodeinAware, T : Fragment {
-    return lazy { ViewModelProvider(this, direct.instance()).get(VM::class.java) }
+    return lazy {
+        ViewModelProvider(this, direct.instance()).get(VM::class.java)
+    }
 }
 
+
 inline fun <reified VM : ViewModel, T> T.activityViewModelInstance(): Lazy<VM> where T : KodeinAware, T : Fragment {
-    return lazy { ViewModelProvider(requireActivity(), direct.instance()).get(VM::class.java) }
+    return lazy {
+            ViewModelProvider(requireActivity(), direct.instance()).get(VM::class.java)
+    }
 }
 
 inline fun <reified T : ViewModel> Kodein.Builder.bindViewModel(overrides: Boolean? = null): Kodein.Builder.TypeBinder<T> {
