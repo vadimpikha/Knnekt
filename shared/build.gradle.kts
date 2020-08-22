@@ -51,8 +51,6 @@ dependencies {
     api(platform(project(":depconstraints")))
     kapt(platform(project(":depconstraints")))
 
-    api(project(":model"))
-
     // AppCompat
     implementation(Libs.APPCOMPAT)
 

@@ -7,7 +7,7 @@ buildscript {
         maven { url = uri("https://github.com/ConnectyCube/connectycube-android-sdk-releases/raw/master/") }
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.0.1")
+        classpath("com.android.tools.build:gradle:4.1.0-rc01")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
         classpath("com.google.gms:google-services:${Versions.GOOGLE_SERVICES}")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.NAVIGATION}")
