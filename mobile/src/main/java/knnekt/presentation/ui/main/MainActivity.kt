@@ -32,11 +32,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
         with(binding) {
             setContentView(root)
-            setSupportActionBar(toolbar)
             navController = findNavController(R.id.nav_host_fragment)
-            toolbar.setupWithNavController(navController)
-            lifecycleOwner = this@MainActivity
-            viewModel = this@MainActivity.viewModel
         }
         connectionManager.initialize()
     }

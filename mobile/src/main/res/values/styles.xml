@@ -1,7 +1,10 @@
-<resources>
-    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">#3e2a78</item>
-        <item name="colorPrimaryDark">#21054d</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorSecondary">?attr/colorPrimary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
     </style>
 
     <style name="ItemTitleTextAppearance" parent="TextAppearance.MaterialComponents.Headline6">
@@ -38,6 +41,9 @@
         <item name="cornerSize">8dp</item>
     </style>
 
-
+    <style name="Widget.Knnekt.AppBar" parent="@style/Widget.Design.AppBarLayout">
+        <item name="android:background">@color/elevation_background</item>
+        <item name="android:elevation">8dp</item>
+    </style>
 
 </resources>

@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_bg_incoming_bubble"
-        android:backgroundTint="?attr/colorBackgroundFloating"
+        android:backgroundTint="?attr/colorControlNormal"
         android:lineSpacingExtra="2dp"
         android:paddingStart="8dp"
         android:paddingTop="4dp"

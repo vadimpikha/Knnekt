@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import knnekt.R
@@ -72,6 +73,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             setLayoutManager(layoutManager)
             adapter = messagesAdapter
             addItemDecoration(MarginItemDecorator(requireContext(), 8, true))
+        }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
         }
     }
 
