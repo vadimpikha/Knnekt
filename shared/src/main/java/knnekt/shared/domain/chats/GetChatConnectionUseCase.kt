@@ -15,6 +15,7 @@ class GetChatConnectionUseCase() : UseCase<Chat, ChatConnection>() {
         return object : ChatConnection {
 
             val chat = ConnectycubeChatDialog(parameters.id).apply {
+                setOccupantsIds(parameters.occupants)
                 type = ConnectycubeDialogType.parseByCode(parameters.type)
                 initForChat(ConnectycubeChatService.getInstance())
             }

@@ -38,8 +38,4 @@ class MainViewModel(
         }
     }
 
-    fun ping() {
-
-    }
-
 }

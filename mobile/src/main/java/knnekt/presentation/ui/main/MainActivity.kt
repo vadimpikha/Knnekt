@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import knnekt.R
@@ -21,18 +22,18 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     private val viewModel: MainViewModel by viewModelInstance()
     private val connectionManager: ChatConnectionManager by instance()
     private val binding by viewBinding(ActivityMainBinding::inflate)
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(binding) {
             setContentView(root)
             setSupportActionBar(toolbar)
-            toolbar.setupWithNavController(findNavController(R.id.nav_host_fragment))
+            navController = findNavController(R.id.nav_host_fragment)
+            toolbar.setupWithNavController(navController)
             lifecycleOwner = this@MainActivity
             viewModel = this@MainActivity.viewModel
         }
-
-        viewModel.ping()
         connectionManager.initialize()
     }
 
