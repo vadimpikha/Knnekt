@@ -2,10 +2,12 @@ package knnekt.presentation.util
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -75,6 +77,7 @@ fun applySystemWindows(
         )
     }
 }
+
 
 @BindingAdapter(
     "marginLeftSystemWindowInsets",

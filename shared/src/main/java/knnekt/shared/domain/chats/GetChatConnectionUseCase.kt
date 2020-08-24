@@ -8,8 +8,7 @@ import knnekt.shared.domain.UseCase
 import knnekt.shared.result.Result
 import knnekt.shared.result.catch
 
-class GetChatConnectionUseCase() : UseCase<Chat, ChatConnection>() {
-
+class GetChatConnectionUseCase : UseCase<Chat, ChatConnection>() {
 
     override fun execute(parameters: Chat): ChatConnection {
         return object : ChatConnection {

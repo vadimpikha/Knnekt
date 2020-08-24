@@ -2,17 +2,23 @@ package knnekt.presentation.ui.main.chats.list
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import knnekt.R
 import knnekt.databinding.FragmentChatsListBinding
 import knnekt.presentation.di.viewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -47,6 +53,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         binding.chatsRecycler.addItemDecoration(divider)
         onBindData()
     }
+
 
     private fun onBindData() {
         lifecycleScope.launch {
