@@ -3,9 +3,5 @@
     <color name="color_primary">#1a73e8</color>
     <color name="color_primary_dark">#574ddd</color>
     <color name="color_on_secondary">#fff</color>
-
-    <color name="color_control_light">#39000000</color> <!-- Same as textColorPrimary disabled -->
-    <color name="color_surface_secondary">#F8F9FA</color> <!-- Same as textColorPrimary disabled -->
-
-    <color name="elevation_background">#fff</color>
+    <color name="color_surface_variant">#EDEDED</color>
 </resources>

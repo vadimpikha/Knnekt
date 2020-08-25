@@ -8,8 +8,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_bg_incoming_bubble"
-        android:backgroundTint="?attr/colorControlActivated"
+        android:background="@drawable/shape_bg_attachment_bubble"
+        android:backgroundTint="?attr/colorSurfaceVariant"
         android:padding="2dp">
 
         <com.google.android.material.imageview.ShapeableImageView

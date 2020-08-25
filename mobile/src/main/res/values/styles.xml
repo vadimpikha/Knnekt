@@ -5,6 +5,8 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorSecondary">?attr/colorPrimary</item>
         <item name="colorOnSecondary">@color/color_on_secondary</item>
+        <item name="colorSurfaceVariant">@color/color_surface_variant</item>
+        <item name="android:statusBarColor">?attr/colorSurface</item>
     </style>
 
     <style name="ItemTitleTextAppearance" parent="TextAppearance.MaterialComponents.Headline6">
@@ -12,22 +14,14 @@
     </style>
 
     <style name="MessageTimeTextStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textAppearance">@style/MessageTimeTextAppearance</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Caption</item>
         <item name="android:alpha">0.7</item>
     </style>
 
     <style name="AttachmentMessageTimeTextStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textAppearance">@style/MessageTimeTextAppearance</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Caption</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:background">@drawable/bg_badge</item>
-    </style>
-
-    <style name="MessageTimeTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-
-    <style name="MessageBodyTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="CircleImageView" parent="">
@@ -41,8 +35,9 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+
     <style name="Widget.Knnekt.AppBar" parent="@style/Widget.Design.AppBarLayout">
-        <item name="android:background">@color/elevation_background</item>
+        <item name="android:background">?attr/colorSurfaceVariant</item>
         <item name="android:elevation">8dp</item>
     </style>
 

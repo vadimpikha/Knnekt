@@ -1,9 +1,7 @@
 package knnekt.presentation.ui.main.chats.messages
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,10 +14,11 @@ import knnekt.presentation.di.activityViewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
 import knnekt.presentation.ui.MarginItemDecorator
 import knnekt.presentation.ui.main.MainViewModel
+import knnekt.presentation.util.onClick
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
 import knnekt.presentation.viewmodelfactory.ChatViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.message_input.view.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -77,6 +76,20 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
+        }
+
+        with(binding.messagePad) {
+            btn_record_video_msg.onClick { switchSecondaryInputButtons() }
+            btn_record_voice_msg.onClick { switchSecondaryInputButtons() }
+        }
+
+    }
+
+    private fun switchSecondaryInputButtons() {
+        with(binding.messagePad) {
+            val translationXTmp = video_msg_wrapper.translationX
+            video_msg_wrapper.animate().translationX(voice_msg_wrapper.translationX)
+            voice_msg_wrapper.animate().translationX(translationXTmp)
         }
     }
 
