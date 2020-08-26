@@ -11,6 +11,8 @@ import knnekt.presentation.lifecycle.Event
 import knnekt.presentation.lifecycle.asEvent
 import knnekt.shared.domain.chats.GetChatConnectionUseCase
 import knnekt.shared.domain.messages.GetMessagesPagingUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
@@ -21,7 +23,8 @@ class ChatViewModel(
 
 //    private val chatConnection = getChatConnectionUseCase(currentChat)
 
-//    val messagesPagingData = getMessagesPagingUseCase(currentChat.id).cachedIn(viewModelScope)
+    val messagesPagingData = getMessagesPagingUseCase(currentChat.id)
+        .cachedIn(viewModelScope)
 
     val outgoingMessageText = MutableLiveData("")
     val toast = MutableLiveData<Event<String>>()

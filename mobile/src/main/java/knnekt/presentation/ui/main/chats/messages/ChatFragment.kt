@@ -137,11 +137,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             toast(it)
         }
 
-//        lifecycleScope.launch {
-//            viewModel.messagesPagingData.collectLatest { data ->
-//                messagesAdapter.submitData(data)
-//            }
-//        }
+        lifecycleScope.launch {
+            viewModel.messagesPagingData.collectLatest { data ->
+                messagesAdapter.submitData(data)
+            }
+        }
     }
 
 }

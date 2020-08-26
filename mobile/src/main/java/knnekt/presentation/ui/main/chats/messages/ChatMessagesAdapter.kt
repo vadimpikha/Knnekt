@@ -19,31 +19,18 @@ import kotlinx.android.synthetic.main.item_message_image_incoming.*
 import kotlinx.android.synthetic.main.item_message_simple_ougoing.*
 import kotlinx.android.synthetic.main.item_message_simple_ougoing.message_time
 
-class ChatMessagesAdapter() : PagingDataAdapter<Message, ChatMessagesAdapter.ChatMessageViewHolder>(MessageDiff) {
-
-    companion object {
-        const val TYPE_INCOMING_SIMPLE = 0
-        const val TYPE_OUTGOING_SIMPLE = 1
-        const val TYPE_OUTGOING_IMAGE = 2
-        const val TYPE_INCOMING_IMAGE = 3
-    }
+class ChatMessagesAdapter : PagingDataAdapter<Message, ChatMessagesAdapter.ChatMessageViewHolder>(MessageDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatMessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
+        val view = inflater.inflate(viewType, parent, false)
+
         return when (viewType) {
-            TYPE_OUTGOING_SIMPLE -> TextMessageViewHolder(
-                inflater.inflate(R.layout.item_message_simple_ougoing, parent, false)
-            )
-            TYPE_INCOMING_SIMPLE -> TextMessageViewHolder(
-                inflater.inflate(R.layout.item_message_simple_incoming, parent, false)
-            )
-            TYPE_INCOMING_IMAGE -> ImageMessageViewHolder(
-                inflater.inflate(R.layout.item_message_image_incoming, parent, false)
-            )
-            TYPE_OUTGOING_IMAGE -> ImageMessageViewHolder(
-                inflater.inflate(R.layout.item_message_image_outgoing, parent, false)
-            )
+            R.layout.item_message_simple_ougoing -> TextMessageViewHolder(view)
+            R.layout.item_message_simple_incoming -> TextMessageViewHolder(view)
+            R.layout.item_message_image_incoming -> ImageMessageViewHolder(view)
+            R.layout.item_message_image_outgoing -> ImageMessageViewHolder(view)
             else -> throw IllegalStateException()
         }
     }
@@ -60,10 +47,10 @@ class ChatMessagesAdapter() : PagingDataAdapter<Message, ChatMessagesAdapter.Cha
         val attachment = withAttachment(item)
 
         return when {
-            incoming && attachment -> TYPE_INCOMING_IMAGE
-            incoming && !attachment -> TYPE_INCOMING_SIMPLE
-            !incoming && attachment -> TYPE_OUTGOING_IMAGE
-            else -> TYPE_OUTGOING_SIMPLE
+            incoming && attachment -> R.layout.item_message_image_incoming
+            incoming && !attachment -> R.layout.item_message_simple_incoming
+            !incoming && attachment -> R.layout.item_message_image_outgoing
+            else -> R.layout.item_message_simple_ougoing
         }
     }
 
