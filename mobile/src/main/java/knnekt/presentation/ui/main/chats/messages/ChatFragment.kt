@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,9 +38,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
     private val binding by viewBinding(FragmentChatBinding::bind)
     private lateinit var messagesAdapter: ChatMessagesAdapter
     private val mainViewModel: MainViewModel by activityViewModelInstance()
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navController = findNavController()
         messagesAdapter = ChatMessagesAdapter()
     }
 
@@ -79,7 +82,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            navController.navigateUp()
         }
 
         with(binding.messagePad) {

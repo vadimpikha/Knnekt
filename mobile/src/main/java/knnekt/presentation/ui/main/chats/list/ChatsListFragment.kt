@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,13 +28,15 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     private val viewModel: ChatsListViewModel by viewModelInstance()
     private val binding by viewBinding(FragmentChatsListBinding::bind)
     private lateinit var chatsListAdapter: ChatsListAdapter
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navController = findNavController()
         chatsListAdapter = ChatsListAdapter(
             onClick = { chat ->
                 val action = ChatsListFragmentDirections.chatsListToChat(chat)
-                findNavController().navigate(action)
+                navController.navigate(action)
             }
         )
     }

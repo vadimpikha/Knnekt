@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import knnekt.R
 import knnekt.databinding.FragmentSignInBinding
@@ -19,7 +20,12 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in), KodeinAware {
     override val kodein by closestKodein()
     private val viewModel: SignInViewModel by activityViewModelInstance()
     private val binding by viewBinding(FragmentSignInBinding::bind)
+    lateinit var navController: NavController
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        navController = findNavController()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
@@ -39,7 +45,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in), KodeinAware {
             toast("This feature not implemented yet")
         }
         binding.signUpLink.onClick(true) {
-            findNavController().navigate(R.id.action_signIn_to_registrationFragment)
+            navController.navigate(R.id.action_signIn_to_registrationFragment)
         }
         binding.forgotPasswordLink.applySpan(UnderlineSpan())
         binding.signUpLink.applySpan(UnderlineSpan())
