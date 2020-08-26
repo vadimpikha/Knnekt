@@ -12,8 +12,12 @@ import knnekt.R
 import knnekt.databinding.FragmentChatBinding
 import knnekt.presentation.di.activityViewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
+import knnekt.presentation.ui.HoldListener
 import knnekt.presentation.ui.MarginItemDecorator
 import knnekt.presentation.ui.main.MainViewModel
+import knnekt.presentation.ui.setOnHoldListener
+import knnekt.presentation.ui.setOnShortClickListener
+import knnekt.presentation.util.disableWhileAnimation
 import knnekt.presentation.util.onClick
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
@@ -79,8 +83,32 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         }
 
         with(binding.messagePad) {
-            btn_record_video_msg.onClick { switchSecondaryInputButtons() }
-            btn_record_voice_msg.onClick { switchSecondaryInputButtons() }
+            btn_record_video_msg.apply {
+                setOnShortClickListener { switchSecondaryInputButtons() }
+                setOnHoldListener(object : HoldListener {
+                    override fun onHold(view: View) {
+                        toast("btn_record_video_msg hold")
+                    }
+
+                    override fun onReleased(view: View) {
+                        toast("btn_record_video_msg release")
+                    }
+                })
+            }
+
+
+            btn_record_voice_msg.apply {
+                setOnShortClickListener { switchSecondaryInputButtons() }
+                setOnHoldListener(object : HoldListener {
+                    override fun onHold(view: View) {
+                        toast("btn_record_voice_msg hold")
+                    }
+
+                    override fun onReleased(view: View) {
+                        toast("btn_record_voice_msg release")
+                    }
+                })
+            }
         }
 
     }
@@ -88,8 +116,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
     private fun switchSecondaryInputButtons() {
         with(binding.messagePad) {
             val translationXTmp = video_msg_wrapper.translationX
-            video_msg_wrapper.animate().translationX(voice_msg_wrapper.translationX)
-            voice_msg_wrapper.animate().translationX(translationXTmp)
+
+            video_msg_wrapper.animate()
+                .translationX(voice_msg_wrapper.translationX)
+                .disableWhileAnimation(btn_record_video_msg)
+
+            voice_msg_wrapper.animate()
+                .translationX(translationXTmp)
+                .disableWhileAnimation(btn_record_voice_msg)
         }
     }
 
