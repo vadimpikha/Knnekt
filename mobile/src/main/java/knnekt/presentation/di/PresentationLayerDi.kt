@@ -21,11 +21,6 @@ object PresentationLayerDi {
             )
         }
 
-        bind() from multiton { chat: Chat ->
-            ChatViewModelFactory(chat, this)
-        }
-
-
         bindViewModel<SignInViewModel>() with provider {
             SignInViewModel(
                 instance()

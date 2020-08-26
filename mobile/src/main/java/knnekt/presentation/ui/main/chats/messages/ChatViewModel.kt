@@ -19,18 +19,18 @@ class ChatViewModel(
     private val getChatConnectionUseCase: GetChatConnectionUseCase
 ) : ViewModel() {
 
-    private val chatConnection = getChatConnectionUseCase(currentChat)
+//    private val chatConnection = getChatConnectionUseCase(currentChat)
 
-    val messagesPagingData = getMessagesPagingUseCase(currentChat.id).cachedIn(viewModelScope)
+//    val messagesPagingData = getMessagesPagingUseCase(currentChat.id).cachedIn(viewModelScope)
 
     val outgoingMessageText = MutableLiveData("")
     val toast = MutableLiveData<Event<String>>()
 
     fun send() {
-        val text = outgoingMessageText.value!!
-        viewModelScope.launch {
-            chatConnection.sendMessage(text)
-        }
+//        val text = outgoingMessageText.value!!
+//        viewModelScope.launch {
+//            chatConnection.sendMessage(text)
+//        }
     }
 
     private fun onError(t: Throwable) {

@@ -32,7 +32,6 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        navController = findNavController()
         chatsListAdapter = ChatsListAdapter(
             onClick = { chat ->
                 val action = ChatsListFragmentDirections.chatsListToChat(chat)
@@ -47,6 +46,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@ChatsListFragment.viewModel
         }
+        navController = findNavController()
         binding.chatsRecycler.adapter = chatsListAdapter
         val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
             val newDrawable = InsetDrawable(drawable, requireContext().dp(66), 0, 0, 0)

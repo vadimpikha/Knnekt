@@ -27,22 +27,23 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
+import org.kodein.di.direct
 import org.kodein.di.generic.instance
 
 class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
     override val kodein by closestKodein()
     private val args: ChatFragmentArgs by navArgs()
-    private val factory: ChatViewModelFactory by instance { args.chat }
-    private val viewModel: ChatViewModel by viewModels { factory }
+    private val viewModel: ChatViewModel by viewModels {
+        ChatViewModelFactory(args.chat, kodein.direct)
+    }
     private val binding by viewBinding(FragmentChatBinding::bind)
-    private lateinit var messagesAdapter: ChatMessagesAdapter
     private val mainViewModel: MainViewModel by activityViewModelInstance()
+    private lateinit var messagesAdapter: ChatMessagesAdapter
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        navController = findNavController()
         messagesAdapter = ChatMessagesAdapter()
     }
 
@@ -53,6 +54,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             viewModel = this@ChatFragment.viewModel
             chat = args.chat
         }
+        navController = findNavController()
         initViews()
         bindData()
     }
@@ -135,11 +137,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             toast(it)
         }
 
-        lifecycleScope.launch {
-            viewModel.messagesPagingData.collectLatest { data ->
-                messagesAdapter.submitData(data)
-            }
-        }
+//        lifecycleScope.launch {
+//            viewModel.messagesPagingData.collectLatest { data ->
+//                messagesAdapter.submitData(data)
+//            }
+//        }
     }
 
 }

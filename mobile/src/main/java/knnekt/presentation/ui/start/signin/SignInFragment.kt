@@ -22,16 +22,13 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in), KodeinAware {
     private val binding by viewBinding(FragmentSignInBinding::bind)
     lateinit var navController: NavController
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        navController = findNavController()
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             viewModel = this@SignInFragment.viewModel
             lifecycleOwner = viewLifecycleOwner
         }
+        navController = findNavController()
 
         initViews()
         onBindLiveData()
