@@ -3,19 +3,21 @@ package knnekt.presentation.util
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Insets
 import android.os.Build
 import android.util.TypedValue
-import android.view.*
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.*
 import androidx.fragment.app.Fragment
+
 
 fun EditText.onActionDone(block: EditText.() -> Unit) =
     setOnEditorActionListener { _, actionId, _ ->
@@ -132,6 +134,11 @@ fun View.onClick(disableWhileOp: Boolean = false, op: View.() -> Unit) {
             op()
         }
     }
+}
+
+fun hideKeyboard(focusedView: View) {
+    val imm = focusedView.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(focusedView.windowToken, 0)
 }
 
 fun View.requestApplyInsetsWhenAttached() {

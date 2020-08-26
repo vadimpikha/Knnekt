@@ -16,9 +16,8 @@ import knnekt.presentation.ui.HoldListener
 import knnekt.presentation.ui.MarginItemDecorator
 import knnekt.presentation.ui.main.MainViewModel
 import knnekt.presentation.ui.setOnHoldListener
-import knnekt.presentation.ui.setOnShortClickListener
 import knnekt.presentation.util.disableWhileAnimation
-import knnekt.presentation.util.onClick
+import knnekt.presentation.util.hideKeyboard
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
 import knnekt.presentation.viewmodelfactory.ChatViewModelFactory
@@ -61,6 +60,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
     }
 
     override fun onStop() {
+        hideKeyboard(binding.messagePad.message_input)
         mainViewModel.setCurrentChat(null)
         super.onStop()
     }
@@ -84,7 +84,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
         with(binding.messagePad) {
             btn_record_video_msg.apply {
-                setOnShortClickListener { switchSecondaryInputButtons() }
+                setOnClickListener { swapSecondaryInputButtons() }
                 setOnHoldListener(object : HoldListener {
                     override fun onHold(view: View) {
                         toast("btn_record_video_msg hold")
@@ -98,7 +98,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
 
             btn_record_voice_msg.apply {
-                setOnShortClickListener { switchSecondaryInputButtons() }
+                setOnClickListener { swapSecondaryInputButtons() }
                 setOnHoldListener(object : HoldListener {
                     override fun onHold(view: View) {
                         toast("btn_record_voice_msg hold")
@@ -113,7 +113,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
     }
 
-    private fun switchSecondaryInputButtons() {
+    private fun swapSecondaryInputButtons() {
         with(binding.messagePad) {
             val translationXTmp = video_msg_wrapper.translationX
 
