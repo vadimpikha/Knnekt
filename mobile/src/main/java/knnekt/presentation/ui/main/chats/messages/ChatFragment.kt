@@ -65,7 +65,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
     }
 
     override fun onStop() {
-        hideKeyboard(binding.messagePad.message_input)
+        hideKeyboard(binding.messagePad.messageInput)
         mainViewModel.setCurrentChat(null)
         super.onStop()
     }
@@ -88,7 +88,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         }
 
         with(binding.messagePad) {
-            btn_record_video_msg.apply {
+            btnRecordVideoMsg.apply {
                 setOnClickListener { swapSecondaryInputButtons() }
                 setOnHoldListener(object : HoldListener {
                     override fun onHold(view: View) {
@@ -102,7 +102,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             }
 
 
-            btn_record_voice_msg.apply {
+            btnRecordVoiceMsg.apply {
                 setOnClickListener { swapSecondaryInputButtons() }
                 setOnHoldListener(object : HoldListener {
                     override fun onHold(view: View) {
@@ -120,15 +120,15 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
     private fun swapSecondaryInputButtons() {
         with(binding.messagePad) {
-            val translationXTmp = video_msg_wrapper.translationX
+            val translationXTmp = videoMsgWrapper.translationX
 
-            video_msg_wrapper.animate()
-                .translationX(voice_msg_wrapper.translationX)
-                .disableWhileAnimation(btn_record_video_msg)
+            videoMsgWrapper.animate()
+                .translationX(voiceMsgWrapper.translationX)
+                .disableWhileAnimation(btnRecordVideoMsg)
 
-            voice_msg_wrapper.animate()
+            voiceMsgWrapper.animate()
                 .translationX(translationXTmp)
-                .disableWhileAnimation(btn_record_voice_msg)
+                .disableWhileAnimation(btnRecordVoiceMsg)
         }
     }
 
