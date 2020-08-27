@@ -54,8 +54,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@ChatFragment.viewModel
             chat = args.chat
-            binding.messagePad.viewModel = this@ChatFragment.viewModel
-            binding.messagePad.lifecycleOwner = viewLifecycleOwner
+            messagePad.viewModel = this@ChatFragment.viewModel
+            messagePad.lifecycleOwner = viewLifecycleOwner
         }
         navController = findNavController()
         initViews()

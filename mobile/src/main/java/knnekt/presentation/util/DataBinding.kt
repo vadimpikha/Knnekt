@@ -1,17 +1,14 @@
 package knnekt.presentation.util
 
+import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.isGone
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
+import androidx.core.view.*
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
@@ -22,11 +19,7 @@ import androidx.lifecycle.observe
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import knnekt.R
-import knnekt.shared.data.entity.Chat
-import kotlinx.android.synthetic.main.item_message_image_incoming.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -119,6 +112,28 @@ fun applySystemWindowsMargins(
 fun View.setVisible(value: Boolean) {
     if (isVisible == value) return
     isVisible = value
+}
+
+@BindingAdapter("changeSizeWhen", "otherSize", "initialSize")
+fun View.setExpanded(value: Boolean, otherSize: Float, initialSize: Float) {
+    val measuredWidth = this.measuredWidth.toFloat()
+    if (value) {
+        if (otherSize == measuredWidth) return
+    } else {
+        if (initialSize == measuredWidth) return
+    }
+
+    val animator = ObjectAnimator.ofFloat(measuredWidth, if (value) otherSize else initialSize)
+
+    animator.addUpdateListener {
+        val size = it.animatedValue as Float
+        updateLayoutParams<ViewGroup.LayoutParams> {
+            width = size.toInt()
+        }
+    }
+
+    animator.duration = 200
+    animator.start()
 }
 
 @BindingAdapter("invisibleWhen")
