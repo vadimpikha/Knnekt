@@ -1,124 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Knnekt.AppBar"
-    android:clipChildren="false"
-    android:clipToPadding="false"
-    android:padding="6dp"
-    tools:layout_height="56dp"
-    tools:layout_width="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-    <LinearLayout
-        android:id="@+id/main_input_area"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/shape_bg_big_rounded"
-        android:backgroundTint="?attr/colorSurface"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/secondary_input_area"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <ImageButton
-            android:id="@+id/btn_emoji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="emoji"
-            android:padding="2dp"
-            android:src="@drawable/ic_insert_emoticon" />
-
-        <EditText
-            android:id="@+id/message_input"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="8dp"
-            android:layout_weight="1"
-            android:autofillHints="message"
-            android:background="@null"
-            android:hint="@string/message_hint"
-            android:inputType="textMultiLine"
-            android:maxLength="1024"
-            android:maxLines="6" />
-
-        <ImageButton
-            android:id="@+id/btn_attachment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="attach"
-            android:padding="2dp"
-            android:src="@drawable/ic_baseline_attach_24" />
-
-
-    </LinearLayout>
+    <data>
+        <variable
+            name="viewModel"
+            type="knnekt.presentation.ui.main.chats.messages.ChatViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/secondary_input_area"
-        android:layout_width="68dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/main_input_area"
-        app:layout_constraintTop_toTopOf="parent">
+        style="@style/Widget.Knnekt.AppBar"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="6dp"
+        tools:layout_height="56dp"
+        tools:layout_width="match_parent">
 
 
-        <FrameLayout
-            android:id="@+id/voice_msg_wrapper"
+        <LinearLayout
+            android:id="@+id/main_input_area"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="match_parent"
             android:background="@drawable/shape_bg_big_rounded"
             android:backgroundTint="?attr/colorSurface"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toStartOf="@id/secondary_input_area"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <ImageButton
-                android:id="@+id/btn_record_voice_msg"
+                android:id="@+id/btn_emoji"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="emoji"
+                android:padding="2dp"
+                android:src="@drawable/ic_insert_emoticon" />
+
+            <EditText
+                android:id="@+id/message_input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_weight="1"
+                android:autofillHints="message"
                 android:background="@null"
-                android:contentDescription="record_voice"
-                android:padding="4dp"
-                android:src="@drawable/ic_mic" />
+                android:hint="@string/message_hint"
+                android:inputType="textMultiLine"
+                android:maxLength="1024"
+                android:maxLines="6" />
 
-        </FrameLayout>
+            <ImageButton
+                android:id="@+id/btn_attachment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="attach"
+                android:padding="2dp"
+                android:src="@drawable/ic_baseline_attach_24" />
 
-        <FrameLayout
-            android:id="@+id/video_msg_wrapper"
-            android:layout_width="0dp"
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/secondary_input_area"
+            android:layout_width="68dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/shape_bg_big_rounded"
-            android:backgroundTint="?attr/colorSurface"
-            android:translationX="52dp"
+            android:layout_marginStart="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="h,1:1"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/main_input_area"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageButton
-                android:id="@+id/btn_record_video_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@null"
-                android:contentDescription="record_video"
-                android:padding="4dp"
-                android:src="@drawable/ic_videocam" />
 
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/voice_msg_wrapper"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_bg_big_rounded"
+                android:backgroundTint="?attr/colorSurface"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/btn_record_voice_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:contentDescription="record_voice"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_mic" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/video_msg_wrapper"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_bg_big_rounded"
+                android:backgroundTint="?attr/colorSurface"
+                android:translationX="52dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/btn_record_video_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:contentDescription="record_video"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_videocam" />
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

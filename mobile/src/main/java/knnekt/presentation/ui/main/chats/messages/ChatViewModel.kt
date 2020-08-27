@@ -1,5 +1,6 @@
 package knnekt.presentation.ui.main.chats.messages
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,13 +22,25 @@ class ChatViewModel(
     private val getChatConnectionUseCase: GetChatConnectionUseCase
 ) : ViewModel() {
 
+    val toast = MutableLiveData<Event<String>>()
+
 //    private val chatConnection = getChatConnectionUseCase(currentChat)
 
     val messagesPagingData = getMessagesPagingUseCase(currentChat.id)
         .cachedIn(viewModelScope)
 
+
     val outgoingMessageText = MutableLiveData("")
-    val toast = MutableLiveData<Event<String>>()
+
+    val outgoingMessageTextNotEmpty = MediatorLiveData<Boolean>().apply {
+        fun rebind() {
+            value = !outgoingMessageText.value.isNullOrEmpty()
+        }
+        addSource(outgoingMessageText) {
+            rebind()
+        }
+    }
+
 
     fun send() {
 //        val text = outgoingMessageText.value!!
