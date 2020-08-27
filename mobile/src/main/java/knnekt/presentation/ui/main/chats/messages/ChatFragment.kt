@@ -23,6 +23,7 @@ import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
 import knnekt.presentation.viewmodelfactory.ChatViewModelFactory
 import kotlinx.android.synthetic.main.message_input.view.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -61,15 +62,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         bindData()
     }
 
-    override fun onStart() {
-        mainViewModel.setCurrentChat(args.chat)
-        super.onStart()
-    }
-
     override fun onStop() {
-        hideKeyboard(binding.messagePad.messageInput)
-        mainViewModel.setCurrentChat(null)
         super.onStop()
+        if (isRemoving)
+            hideKeyboard(binding.messagePad.messageInput)
     }
 
     private fun initViews() {
@@ -122,14 +118,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
     private fun swapSecondaryInputButtons() {
         with(binding.messagePad) {
-            val translationXTmp = videoMsgWrapper.translationX
+            val translationXTmp = btnRecordVideoMsg.translationX
 
-            videoMsgWrapper.animate()
-                .translationX(voiceMsgWrapper.translationX)
+            btnRecordVideoMsg.animate()
+                .translationX(btnRecordVoiceMsg.translationX)
                 .disableWhileAnimation(btnRecordVideoMsg)
 
 
-            voiceMsgWrapper.animate()
+            btnRecordVoiceMsg.animate()
                 .translationX(translationXTmp)
                 .disableWhileAnimation(btnRecordVoiceMsg)
         }

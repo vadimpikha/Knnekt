@@ -2,7 +2,7 @@ package knnekt.shared.data.entity
 
 data class Message (
     val id: String,
-    val dateSent: Long,
+    val dateSent: String,
     val body: String,
     val readIds: Collection<Int>?,
     val deliveredIds: Collection<Int>?,

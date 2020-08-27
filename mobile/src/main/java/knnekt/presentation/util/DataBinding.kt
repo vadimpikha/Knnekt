@@ -1,5 +1,6 @@
 package knnekt.presentation.util
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -24,33 +26,34 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import knnekt.R
 import knnekt.shared.data.entity.Chat
+import kotlinx.android.synthetic.main.item_message_image_incoming.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-
-@BindingAdapter("bindChat")
-fun Toolbar.bindChat(chat: Chat?) {
-    if (chat == null) return
-
-    val image = findViewById<ImageView>(R.id.chat_photo)
-    val status = findViewById<TextView>(R.id.status)
-    val chatName = findViewById<TextView>(R.id.chat_name)
-
-    val placeholder = if (chat.isPrivate)
-        R.drawable.ic_avatar_placeholder
-    else
-        R.drawable.ic_avatar_placeholder_group
-
+@BindingAdapter("imageUri", "placeholder", requireAll = false)
+fun ImageView.setImage(uri: String?, placeholder: Drawable?) {
     Glide.with(this)
-        .load(chat.photo)
+        .load(uri)
         .placeholder(placeholder)
         .error(placeholder)
-        .apply(RequestOptions.circleCropTransform())
         .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(image)
+        .into(this)
+}
 
-    chatName.text = chat.name
-//    onlineStatus.text = chat.name
+
+@BindingAdapter("attachmentImage", "attachmentPlaceholder", requireAll = false)
+fun ImageView.setPicture(uri: String?, placeholder: Drawable?) {
+
+    val width = context.dp(200)
+    val height = context.dp(300)
+
+    Glide.with(this)
+        .load(uri)
+        .placeholder(placeholder)
+        .override(width, height)
+        .dontTransform()
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(this)
 }
 
 @BindingAdapter(
@@ -112,11 +115,16 @@ fun applySystemWindowsMargins(
     }
 }
 
-@BindingAdapter("visible")
-fun setVisibility(view: View, value: Boolean) {
-    val newVisibility = if (value) View.VISIBLE else View.GONE
-    if (view.visibility != newVisibility)
-        view.visibility = newVisibility
+@BindingAdapter("visibleWhen")
+fun View.setVisible(value: Boolean) {
+    if (isVisible == value) return
+    isVisible = value
+}
+
+@BindingAdapter("invisibleWhen")
+fun View.setInvisible(value: Boolean) {
+    if (isInvisible == value) return
+    isInvisible = value
 }
 
 @BindingAdapter("showWhen")

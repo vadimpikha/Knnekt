@@ -4,13 +4,17 @@ import com.connectycube.chat.model.ConnectycubeAttachment
 import knnekt.shared.data.db.MessageEntity
 import knnekt.shared.data.entity.Attachment
 import knnekt.shared.data.entity.Message
+import java.text.SimpleDateFormat
+import java.util.*
 
-class MessageMapper(private val currentUserId: Int): Mapper<MessageEntity, Message> {
+class MessageMapper(private val currentUserId: Int) : Mapper<MessageEntity, Message> {
+
+    private val df = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     override fun convert(obj: MessageEntity): Message {
         return Message(
             id = obj.id,
-            dateSent = obj.dateSent,
+            dateSent = df.format(Date(obj.dateSent * 1000L)),
             body = obj.body,
             readIds = obj.readIds,
             deliveredIds = obj.deliveredIds,

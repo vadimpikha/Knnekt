@@ -20,14 +20,6 @@ class MainViewModel(
     invalidateChatUseCase: InvalidateChatUseCase
 ) : ViewModel() {
 
-
-    val currentChat = MutableLiveData<Chat>(null)
-
-
-    fun setCurrentChat(chat: Chat?) {
-        currentChat.value = chat
-    }
-
     init {
         connectionManager.chatInvalidatedEvent.observeForever {
             it.getContentIfNotHandled()?.let { chatId ->
