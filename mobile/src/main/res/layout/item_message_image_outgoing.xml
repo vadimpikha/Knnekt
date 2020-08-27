@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="message"
             type="knnekt.shared.data.entity.Message" />
@@ -16,18 +17,19 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/shape_bg_attachment_bubble"
             android:backgroundTint="?attr/colorSecondary"
-            android:padding="2dp">
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/attachment_image"
-                android:layout_width="wrap_content"
+                attachmentImage="@{message.attachments.iterator().next().url}"
                 attachmentPlaceholder="@{@drawable/image_placeholder}"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -41,9 +43,9 @@
                 android:id="@+id/message_time"
                 style="@style/AttachmentMessageTimeTextStyle"
                 android:layout_width="wrap_content"
-                android:text="@{message.dateSent}"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:text="@{message.dateSent}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="12:13" />

@@ -23,6 +23,7 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/attachment_image"
+                attachmentImage="@{message.attachments.iterator().next().url}"
                 attachmentPlaceholder="@{@drawable/image_placeholder}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
