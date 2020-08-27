@@ -53,6 +53,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@ChatFragment.viewModel
             chat = args.chat
+            binding.messagePad.viewModel = this@ChatFragment.viewModel
+            binding.messagePad.lifecycleOwner = viewLifecycleOwner
         }
         navController = findNavController()
         initViews()
@@ -125,6 +127,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             videoMsgWrapper.animate()
                 .translationX(voiceMsgWrapper.translationX)
                 .disableWhileAnimation(btnRecordVideoMsg)
+
 
             voiceMsgWrapper.animate()
                 .translationX(translationXTmp)

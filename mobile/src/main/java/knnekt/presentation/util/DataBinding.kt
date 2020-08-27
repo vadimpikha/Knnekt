@@ -2,14 +2,17 @@ package knnekt.presentation.util
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.ViewCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -18,6 +21,7 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import knnekt.R
 import knnekt.shared.data.entity.Chat
 import kotlin.properties.ReadOnlyProperty
@@ -26,7 +30,7 @@ import kotlin.reflect.KProperty
 
 @BindingAdapter("bindChat")
 fun Toolbar.bindChat(chat: Chat?) {
-    if(chat == null) return
+    if (chat == null) return
 
     val image = findViewById<ImageView>(R.id.chat_photo)
     val status = findViewById<TextView>(R.id.status)
@@ -113,6 +117,27 @@ fun setVisibility(view: View, value: Boolean) {
     val newVisibility = if (value) View.VISIBLE else View.GONE
     if (view.visibility != newVisibility)
         view.visibility = newVisibility
+}
+
+@BindingAdapter("showWhen")
+fun showWhen(view: View, value: Boolean) {
+    if (view.isVisible == value) return
+
+    if (value) {
+        val animation = AnimationUtils.loadAnimation(view.context, R.anim.scale_appear).apply {
+            interpolator = LinearOutSlowInInterpolator()
+            onStart { view.isVisible = true }
+        }
+
+        view.startAnimation(animation)
+    } else {
+        val animation = AnimationUtils.loadAnimation(view.context, R.anim.scale_disappear).apply {
+            interpolator = LinearOutSlowInInterpolator()
+            onEnd { view.isGone = true }
+        }
+
+        view.startAnimation(animation)
+    }
 }
 
 class FragmentViewBindingDelegate<T : ViewBinding>(

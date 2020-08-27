@@ -18,6 +18,8 @@ fun View.setOnHoldListener(listener: HoldListener) {
     val handler = Handler()
 
     setOnTouchListener { v, event ->
+        if (!v.isClickable) return@setOnTouchListener false
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 v.isPressed = true
