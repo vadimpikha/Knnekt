@@ -2,12 +2,11 @@ package knnekt.shared.domain.di
 
 import knnekt.shared.data.mapper.ChatMapper
 import knnekt.shared.data.mapper.MessageMapper
-import knnekt.shared.data.mapper.RemoteMessageToEntityMapper
 import knnekt.shared.data.mapper.UserMapper
-import knnekt.shared.domain.chats.GetChatConnectionUseCase
 import knnekt.shared.domain.chats.GetChatsPagingUseCase
 import knnekt.shared.domain.chats.InvalidateChatUseCase
 import knnekt.shared.domain.messages.GetMessagesPagingUseCase
+import knnekt.shared.domain.messages.SendMessageUseCase
 import knnekt.shared.domain.repository.LocalPreferencesRepository
 import knnekt.shared.domain.usecase.ConnectycubeSignInUseCase
 import knnekt.shared.domain.users.CheckUserSignedInUseCase
@@ -41,7 +40,7 @@ object DomainLayerDi {
         }
 
         bind() from singleton {
-            GetChatConnectionUseCase()
+            SendMessageUseCase(instance())
         }
     }
 

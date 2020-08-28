@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="knnekt.presentation.ui.main.chats.messages.ChatViewModel" />
+            type="knnekt.presentation.ui.main.chats.messages.MessageSenderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,7 +58,7 @@
                 android:inputType="textMultiLine"
                 android:maxLength="1024"
                 android:maxLines="6"
-                android:text="@={viewModel.outgoingMessageText}" />
+                android:text="@={viewModel.messageText}" />
 
             <ImageButton
                 android:id="@+id/btn_attachment"
@@ -76,7 +76,7 @@
             android:id="@+id/secondary_input_area"
             android:layout_width="@dimen/message_input_secondary_container_width"
             android:layout_height="0dp"
-            changeSizeWhen="@{viewModel.outgoingMessageTextNotEmpty}"
+            changeSizeWhen="@{viewModel.dataForSendExists}"
             initialSize="@{@dimen/message_input_secondary_container_width}"
             otherSize="@{@dimen/message_input_item_size}"
             android:layout_marginStart="6dp"
@@ -118,7 +118,7 @@
 
             <ImageButton
                 android:id="@+id/btn_send"
-                showWhen="@{viewModel.outgoingMessageTextNotEmpty}"
+                showWhen="@{viewModel.dataForSendExists}"
                 android:layout_width="@dimen/message_input_item_size"
                 android:layout_height="@dimen/message_input_item_size"
                 android:layout_gravity="center"

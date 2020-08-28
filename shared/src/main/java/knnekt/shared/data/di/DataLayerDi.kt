@@ -37,7 +37,8 @@ object DataLayerDi {
                 messageDao,
                 attachmentDao,
                 messageWithAttachmentDao,
-                RemoteMessageToEntityMapper
+                RemoteMessageToEntityMapper,
+                instance<LocalPreferencesRepository>().user!!.id
             )
         }
         bind<LocalPreferencesRepository>() with singleton {

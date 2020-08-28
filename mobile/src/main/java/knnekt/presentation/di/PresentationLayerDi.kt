@@ -33,7 +33,7 @@ object PresentationLayerDi {
             ChatsListViewModel(instance())
         }
         bindViewModel<ChatViewModel>() with factory { chat: Chat ->
-            ChatViewModel(chat, instance(), instance())
+            ChatViewModel(chat, instance())
         }
 
         bindViewModel<MainViewModel>() with provider {
