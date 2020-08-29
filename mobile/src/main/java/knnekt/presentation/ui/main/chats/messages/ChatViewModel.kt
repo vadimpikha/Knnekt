@@ -19,6 +19,11 @@ class ChatViewModel(
 
     val scrollToEvent = MutableLiveData<Event<Int>>()
 
+
+    fun scrollDown() {
+        scrollToEvent.value = Event(0)
+    }
+
     private fun onError(t: Throwable) {
         toast.value = (t.message ?: "Error").asEvent()
     }

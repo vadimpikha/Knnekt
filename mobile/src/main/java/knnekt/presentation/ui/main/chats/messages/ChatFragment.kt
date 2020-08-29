@@ -14,9 +14,9 @@ import knnekt.R
 import knnekt.databinding.FragmentChatBinding
 import knnekt.presentation.lifecycle.observeEvent
 import knnekt.presentation.ui.HoldListener
-import knnekt.presentation.ui.widget.MarginItemDecorator
 import knnekt.presentation.ui.setOnHoldListener
 import knnekt.presentation.ui.widget.JumpSmoothScroller
+import knnekt.presentation.ui.widget.MarginItemDecorator
 import knnekt.presentation.util.disableWhileAnimation
 import knnekt.presentation.util.hideKeyboard
 import knnekt.presentation.util.toast
@@ -43,6 +43,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
     private lateinit var messagesAdapter: ChatMessagesAdapter
     private lateinit var navController: NavController
     private lateinit var scroller: JumpSmoothScroller
+    private lateinit var chatRecyclerLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +72,16 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
     }
 
     private fun initChatAdapter() {
+        chatRecyclerLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            true
+        )
+
         messagesAdapter = ChatMessagesAdapter()
         messagesAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if(positionStart == 0 && senderViewModel.scrollNeeded) {
+                if (positionStart == 0 && senderViewModel.scrollNeeded) {
                     scrollTo(0)
                 }
             }
@@ -83,20 +90,36 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
 
     private fun scrollTo(position: Int) {
         scroller.targetPosition = position
-        binding.messagesRecycler.layoutManager?.startSmoothScroll(scroller)
+        chatRecyclerLayoutManager.startSmoothScroll(scroller)
     }
 
     private fun initViews() {
-        val layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            true
-        )
-
         binding.messagesRecycler.apply {
-            setLayoutManager(layoutManager)
+            layoutManager = chatRecyclerLayoutManager
             adapter = messagesAdapter
             addItemDecoration(MarginItemDecorator(requireContext(), 8, true))
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val totalItemCount = chatRecyclerLayoutManager.itemCount
+                    val firstVisible = chatRecyclerLayoutManager.findFirstVisibleItemPosition()
+
+                    var shouldShow = firstVisible >= 1
+                    if (dy < 0) {
+//                    onScrolled Upwards
+                    } else if (dy > 0) {
+//                    onScrolled Downwards
+                        shouldShow = false
+                    }
+
+                    if (totalItemCount > 0 && shouldShow) {
+                        if (!binding.scrollDownFb.isShown) {
+                            binding.scrollDownFb.show()
+                        }
+                    } else {
+                        if (binding.scrollDownFb.isShown) binding.scrollDownFb.hide()
+                    }
+                }
+            })
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -131,7 +154,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
                 })
             }
         }
-
     }
 
     private fun swapSecondaryInputButtons() {
@@ -150,6 +172,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
     }
 
     private fun bindData() {
+        chatViewModel.scrollToEvent.observeEvent(viewLifecycleOwner, this::scrollTo)
+
         chatViewModel.toast.observeEvent(viewLifecycleOwner) {
             toast(it)
         }

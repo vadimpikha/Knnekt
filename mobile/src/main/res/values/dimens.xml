@@ -1,5 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="small_fab_margin">8dp</dimen>
     <dimen name="message_input_item_size">44dp</dimen>
     <dimen name="message_input_secondary_container_width">68dp</dimen>
 </resources>
