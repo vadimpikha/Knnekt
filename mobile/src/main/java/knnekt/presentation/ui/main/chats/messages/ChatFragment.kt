@@ -40,6 +40,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         MessageSenderViewModelFactory(args.chat, kodein.direct)
     }
     private val binding by viewBinding(FragmentChatBinding::bind)
+
+
     private lateinit var messagesAdapter: ChatMessagesAdapter
     private lateinit var navController: NavController
     private lateinit var scroller: JumpSmoothScroller
@@ -57,8 +59,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
             lifecycleOwner = viewLifecycleOwner
             viewModel = chatViewModel
             chat = args.chat
-            messagePad.viewModel = senderViewModel
-            messagePad.lifecycleOwner = viewLifecycleOwner
+            with(messagePad) {
+                viewModel = senderViewModel
+                lifecycleOwner = viewLifecycleOwner
+            }
         }
         navController = findNavController()
         initViews()
