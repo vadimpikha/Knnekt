@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.connectycube.chat.ConnectycubeChatService
+import com.connectycube.chat.ConnectycubeRestChatService
 import knnekt.R
 import knnekt.databinding.FragmentChatBinding
 import knnekt.presentation.lifecycle.observeEvent

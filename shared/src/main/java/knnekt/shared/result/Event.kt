@@ -28,6 +28,12 @@ open class Event<out T>(private val content: T) {
     fun peekContent(): T = content
 }
 
+fun <T> Event<T>.handled() = apply { getContentIfNotHandled() }
+
+inline fun <T> Event<T>.ifNotHandled(block: (T) -> Unit) {
+    block(getContentIfNotHandled() ?: return)
+}
+
 /**
  * An [Observer] for [Event]s, simplifying the pattern of checking if the [Event]'s content has
  * already been handled.

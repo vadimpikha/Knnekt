@@ -22,11 +22,11 @@ interface ChatDao {
     @Query("SELECT * FROM chats WHERE chat_id = :chatId")
     suspend fun getChat(chatId: String?): ChatEntity?
 
+    /**
+     * update or insert
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(chat: ChatEntity)
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(chat: ChatEntity)
+    suspend fun upsert(chat: ChatEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(chats: List<ChatEntity>)

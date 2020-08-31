@@ -14,6 +14,9 @@ import knnekt.shared.data.entity.User
 import knnekt.shared.data.lifecycle.ChatAppLifecycleObserver
 import knnekt.shared.domain.repository.LocalPreferencesRepository
 import knnekt.shared.result.Event
+import knnekt.shared.result.handled
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.jivesoftware.smack.AbstractConnectionListener
 import org.jivesoftware.smack.XMPPConnection
 import timber.log.Timber
@@ -27,7 +30,7 @@ class ChatConnectionManager(
     private val isInitialized = AtomicBoolean(false)
     private val chatAppObserver = ChatAppLifecycleObserver()
 
-    val chatInvalidatedEvent = MutableLiveData<Event<String>>()
+    val chatInvalidatedEvent = MutableStateFlow(Event("").handled())
 
     private val messageListener = object : ChatDialogMessageListener {
         override fun processMessage(
@@ -35,6 +38,7 @@ class ChatConnectionManager(
             chatMessage: ConnectycubeChatMessage,
             senderId: Int?
         ) {
+            println("processMessage $dialogId")
             chatInvalidatedEvent.value = Event(dialogId)
         }
 
@@ -49,7 +53,7 @@ class ChatConnectionManager(
 
     }
 
-    fun initialize() {
+    private fun initialize() {
         Timber.d("initWith, isPending ${isPending.get()}")
         if (isPending.get() || isInitialized.get()) return
 
@@ -118,5 +122,9 @@ class ChatConnectionManager(
         unregisterAppLifeCycleObserver()
         isPending.set(false)
         isInitialized.set(false)
+    }
+
+    fun enterActiveState() {
+        initialize()
     }
 }

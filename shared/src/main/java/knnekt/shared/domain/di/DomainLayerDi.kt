@@ -14,24 +14,26 @@ import kotlinx.coroutines.Dispatchers
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 object DomainLayerDi {
 
     val useCaseModule = Kodein.Module("useCaseModule") {
-        bind<CheckUserSignedInUseCase>() with provider {
+
+        bind<CheckUserSignedInUseCase>() with singleton {
             CheckUserSignedInUseCase(instance())
         }
-        bind<ConnectycubeSignInUseCase>() with provider {
-            ConnectycubeSignInUseCase(instance(), instance(), UserMapper, null)
+
+        bind<ConnectycubeSignInUseCase>() with singleton {
+            ConnectycubeSignInUseCase(instance(), instance(), UserMapper, Dispatchers.Main)
         }
-        bind<GetChatsPagingUseCase>() with provider {
+
+        bind<GetChatsPagingUseCase>() with singleton {
             GetChatsPagingUseCase(instance(), ChatMapper)
         }
 
-        bind<InvalidateChatUseCase>() with provider {
-            InvalidateChatUseCase(instance(), Dispatchers.IO)
+        bind<InvalidateChatUseCase>() with singleton {
+            InvalidateChatUseCase(instance(), Dispatchers.Main)
         }
 
         bind() from singleton {
@@ -40,8 +42,9 @@ object DomainLayerDi {
         }
 
         bind() from singleton {
-            SendMessageUseCase(instance())
+            SendMessageUseCase(instance(), Dispatchers.Main)
         }
+
     }
 
 }

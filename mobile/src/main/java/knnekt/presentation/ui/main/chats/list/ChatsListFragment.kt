@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import knnekt.R
 import knnekt.databinding.FragmentChatsListBinding
 import knnekt.presentation.di.viewModelInstance
@@ -47,6 +48,8 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
             viewModel = this@ChatsListFragment.viewModel
         }
         navController = findNavController()
+        ( binding.chatsRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
         binding.chatsRecycler.adapter = chatsListAdapter
         val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
             val newDrawable = InsetDrawable(drawable, requireContext().dp(66), 0, 0, 0)

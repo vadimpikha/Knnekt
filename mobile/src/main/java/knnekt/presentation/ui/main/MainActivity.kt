@@ -10,16 +10,13 @@ import knnekt.R
 import knnekt.databinding.ActivityMainBinding
 import knnekt.presentation.di.viewModelInstance
 import knnekt.presentation.util.viewBinding
-import knnekt.shared.data.connection.ChatConnectionManager
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
-import org.kodein.di.generic.instance
 
 class MainActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by closestKodein()
     private val viewModel: MainViewModel by viewModelInstance()
-    private val connectionManager: ChatConnectionManager by instance()
     private val binding by viewBinding(ActivityMainBinding::inflate)
     private lateinit var navController: NavController
 
@@ -27,7 +24,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         navController = findNavController(R.id.nav_host_fragment)
-        connectionManager.initialize()
+        if (savedInstanceState == null)
+            viewModel.enterActiveState()
     }
 
     companion object {

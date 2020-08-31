@@ -1,15 +1,15 @@
 package knnekt.shared.data.chats
 
+import android.util.Log
 import androidx.paging.*
-import com.connectycube.chat.ConnectycubeChatService
 import com.connectycube.chat.ConnectycubeRestChatService
 import com.connectycube.chat.model.ConnectycubeChatDialog
+import com.connectycube.chat.request.MessageGetBuilder
+import com.connectycube.core.request.RequestGetBuilder
 import knnekt.shared.data.db.ChatDao
 import knnekt.shared.data.db.ChatEntity
-import knnekt.shared.data.entity.Chat
 import knnekt.shared.data.mapper.Mapper
 import knnekt.shared.data.util.await
-import knnekt.shared.result.Result
 import kotlinx.coroutines.flow.Flow
 
 interface ChatsRepository {
@@ -35,16 +35,15 @@ class ChatsRepositoryImpl(
     }
 
     override suspend fun updateChat(chatId: String) {
-        chatDao.getChatsPaging().invalidate()
+        val request = MessageGetBuilder()
+            .markAsRead(false)
+            .eq("_id", chatId)
 
 
-//        val (dialog, _) = ConnectycubeRestChatService.getChatDialogById(chatId).await()
-//        val existsInCache = chatDao.getChat(chatId) != null
-//        val chat = remoteToEntityMapper.convert(dialog)
-//        if (existsInCache)
-//            chatDao.update(chat)
-//        else
-//            chatDao.insert(chat)
+        val (dialogs, _) = ConnectycubeRestChatService.getChatDialogs(null, request).await()
+        val chat = remoteToEntityMapper.convert(dialogs.single())
+        chatDao.upsert(chat)
+        Log.d("ChatsRepository", "Updated $chat")
     }
 
     //    override suspend fun getChatById(id: String): Result<Chat> {

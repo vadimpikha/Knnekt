@@ -13,7 +13,7 @@ class ConnectycubeSignInUseCase(
     private val connectycubeService: ConnectycubeService,
     private val localPrefs: LocalPreferencesRepository,
     private val mapper: Mapper<ConnectycubeUser, User>,
-    dispatcher: CoroutineDispatcher?
+    dispatcher: CoroutineDispatcher
 ) : CoroutineUseCase<ConnectycubeSignInUseCase.Credentials, User>(dispatcher) {
 
 

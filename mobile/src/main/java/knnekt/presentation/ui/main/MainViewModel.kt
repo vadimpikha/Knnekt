@@ -1,18 +1,11 @@
 package knnekt.presentation.ui.main
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.connectycube.chat.ConnectycubeChatService
-import com.connectycube.chat.exception.ChatException
-import com.connectycube.chat.listeners.ChatDialogMessageListener
-import com.connectycube.chat.listeners.MessageDeleteListener
-import com.connectycube.chat.listeners.MessageStatusListener
-import com.connectycube.chat.listeners.MessageUpdateListener
-import com.connectycube.chat.model.ConnectycubeChatMessage
 import knnekt.shared.data.connection.ChatConnectionManager
-import knnekt.shared.data.entity.Chat
 import knnekt.shared.domain.chats.InvalidateChatUseCase
+import knnekt.shared.result.ifNotHandled
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -21,13 +14,17 @@ class MainViewModel(
 ) : ViewModel() {
 
     init {
-        connectionManager.chatInvalidatedEvent.observeForever {
-            it.getContentIfNotHandled()?.let { chatId ->
-                viewModelScope.launch {
+        viewModelScope.launch {
+            connectionManager.chatInvalidatedEvent.collectLatest { event ->
+                event.ifNotHandled { chatId ->
                     invalidateChatUseCase(chatId)
                 }
             }
         }
+    }
+
+    fun enterActiveState() {
+        connectionManager.enterActiveState()
     }
 
 }
