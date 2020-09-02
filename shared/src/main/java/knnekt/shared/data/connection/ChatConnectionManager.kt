@@ -58,16 +58,20 @@ class ChatConnectionManager(
         if (isPending.get() || isInitialized.get()) return
 
         isPending.set(true)
-        Timber.d("Start chat login")
         initConnectionListener()
-        ConnectycubeChatService.getInstance().login(
-            convertUser(localPreferencesRepository.user),
+        val user = convertUser(localPreferencesRepository.user)
+
+        Timber.d("Start chat login")
+
+        ConnectycubeChatService.getInstance().login(user,
             object : EntityCallback<Void> {
                 override fun onSuccess(void: Void?, bundle: Bundle?) {
+                    Timber.d("Logged in")
                     isPending.set(false)
                     isInitialized.set(true)
-                    registerAppLifeCycleObserver()
                     registerMessageListener()
+                    chatAppObserver.onLoggedIn()
+                    chatAppObserver.registeredObserver()
                 }
 
                 override fun onError(ex: ResponseException) {
@@ -90,8 +94,6 @@ class ChatConnectionManager(
             id = user.id
             login = user.login
             password = user.password
-            fullName = user.fullName
-            avatar = user.avatar
         }
     }
 
@@ -100,28 +102,12 @@ class ChatConnectionManager(
             AbstractConnectionListener() {
             override fun authenticated(connection: XMPPConnection?, resumed: Boolean) {
                 Timber.d("authenticated")
-                chatAppObserver.onLoggedIn()
             }
 
             override fun connectionClosedOnError(e: Exception) {
                 Timber.d("connectionClosedOnError e= $e")
             }
         })
-    }
-
-    private fun registerAppLifeCycleObserver() {
-        chatAppObserver.registeredObserver()
-    }
-
-    private fun unregisterAppLifeCycleObserver() {
-        chatAppObserver.unregisteredObserver()
-    }
-
-    fun terminate() {
-        ConnectycubeChatService.getInstance().destroy()
-        unregisterAppLifeCycleObserver()
-        isPending.set(false)
-        isInitialized.set(false)
     }
 
     fun enterActiveState() {

@@ -14,6 +14,7 @@ import knnekt.shared.domain.di.DomainLayerDi
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
+import timber.log.Timber
 
 class KnnektApp : Application(), KodeinAware {
 
@@ -33,6 +34,9 @@ class KnnektApp : Application(), KodeinAware {
     override fun onCreate() {
         super.onCreate()
         initConnectyCubeSDK()
+        if (BuildConfig.DEBUG){
+            Timber.plant(Timber.DebugTree())
+        }
     }
 
     private fun initConnectyCubeSDK() {

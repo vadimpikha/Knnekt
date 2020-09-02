@@ -98,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg_badge"
+                android:textColor="?android:attr/textColorPrimaryInverse"
                 android:backgroundTint="?attr/colorSecondary"
                 android:gravity="center"
                 android:paddingHorizontal="8.5dp"
