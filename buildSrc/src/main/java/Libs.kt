@@ -75,4 +75,6 @@ object Libs {
     const val SWIPE_REFRESH_LAYOUT = "androidx.swiperefreshlayout:swiperefreshlayout"
 
     const val PAGING = "androidx.paging:paging-runtime"
+
+    const val PREFERENCES = "androidx.preference:preference-ktx"
 }

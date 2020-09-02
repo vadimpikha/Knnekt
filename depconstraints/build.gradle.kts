@@ -58,6 +58,8 @@ val swiperefresh = "1.1.0"
 
 val paging = "3.0.0-alpha05"
 
+val preferences = "1.1.1"
+
 dependencies {
     constraints {
         api("${Libs.ACTIVITY_KTX}:$activity")
@@ -135,6 +137,7 @@ dependencies {
         api("${Libs.KODEIN_ANDROID}:$kodein")
 
         api("${Libs.PAGING}:$paging")
+        api("${Libs.PREFERENCES}:$preferences")
     }
 }
 

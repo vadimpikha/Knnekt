@@ -93,6 +93,8 @@ dependencies {
 
     api(Libs.PAGING)
 
+    api(Libs.PREFERENCES)
+
     implementation(Libs.TIMBER)
 
     //Kodein

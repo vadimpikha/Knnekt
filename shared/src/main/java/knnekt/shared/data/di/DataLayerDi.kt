@@ -1,7 +1,6 @@
 package knnekt.shared.data.di
 
-import android.preference.PreferenceManager
-import com.google.firebase.auth.FirebaseAuth
+import androidx.preference.PreferenceManager
 import knnekt.shared.data.chats.ChatsRepository
 import knnekt.shared.data.chats.ChatsRepositoryImpl
 import knnekt.shared.data.connection.ChatConnectionManager
@@ -17,7 +16,6 @@ import knnekt.shared.domain.repository.LocalPreferencesRepositoryImpl
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 object DataLayerDi {
