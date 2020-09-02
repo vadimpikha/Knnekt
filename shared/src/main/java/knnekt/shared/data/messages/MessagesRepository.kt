@@ -22,9 +22,7 @@ interface MessagesRepository {
 }
 
 class MessagesRepositoryImpl(
-    private val messageDao: MessageDao,
-    private val attachmentDao: AttachmentDao,
-    private val messageWithAttachmentsDao: MessageWithAttachmentsDao,
+    private val appDatabase: AppDatabase,
     private val remoteToEntityMapper: Mapper<ConnectycubeChatMessage, MessageEntity>,
     private val currentUserId: Int
 ) : MessagesRepository {
@@ -37,11 +35,10 @@ class MessagesRepositoryImpl(
             ),
             remoteMediator = MessageRemoteMediator(
                 chatId,
-                messageDao,
-                attachmentDao,
+                appDatabase,
                 remoteToEntityMapper
             ),
-            pagingSourceFactory = { messageWithAttachmentsDao.postsByDialogId(chatId) }
+            pagingSourceFactory = { appDatabase.messageWithAttachmentDao().postsByDialogId(chatId) }
         ).flow.map { data ->
             data.map { it.message }
         }
@@ -54,6 +51,7 @@ class MessagesRepositoryImpl(
             dateSent = System.currentTimeMillis() / 1000
             senderId = currentUserId
         }
+        val messageDao = appDatabase.messageDao()
         messageDao.insert(remoteToEntityMapper.convert(message))
         val (sentMessage, _)
                 = ConnectycubeRestChatService.createMessage(message, true).await()

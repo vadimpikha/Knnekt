@@ -4,6 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.room.withTransaction
 import com.connectycube.chat.ConnectycubeRestChatService
 import com.connectycube.chat.model.ConnectycubeAttachment
 import com.connectycube.chat.model.ConnectycubeChatDialog
@@ -16,8 +17,7 @@ import knnekt.shared.data.util.await
 @OptIn(ExperimentalPagingApi::class)
 class MessageRemoteMediator(
     private val chatId: String,
-    private val messageDao: MessageDao,
-    private val attachmentDao: AttachmentDao,
+    private val db: AppDatabase,
     private val remoteToEntityMapper: Mapper<ConnectycubeChatMessage, MessageEntity>
 ) : RemoteMediator<Int, MessageWithAttachmentsEntity>() {
 
@@ -41,8 +41,17 @@ class MessageRemoteMediator(
             ).await()
 
             val chats = dialogs.map(remoteToEntityMapper::convert)
-            messageDao.insertAll(chats)
-            attachmentDao.insertAll(chats.flatMap { convert(it) })
+
+            db.withTransaction {
+                if (loadType == LoadType.REFRESH) {
+                    db.attachmentDao().nukeTable()
+                    db.messageDao().nukeTable()
+                }
+
+                db.messageDao().insertAll(chats)
+                db.attachmentDao().insertAll(chats.flatMap { convert(it) })
+            }
+
             return MediatorResult.Success(endOfPaginationReached = dialogs.isEmpty())
         } catch (exception: Exception) {
             return MediatorResult.Error(exception)

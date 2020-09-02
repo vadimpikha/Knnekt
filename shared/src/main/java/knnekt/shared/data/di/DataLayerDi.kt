@@ -30,13 +30,8 @@ object DataLayerDi {
             ChatsRepositoryImpl(instance<AppDatabase>().chatDao(), RemoteChatToEntityMapper)
         }
         bind<MessagesRepository>() with singleton {
-            val messageDao = instance<AppDatabase>().messageDao()
-            val attachmentDao = instance<AppDatabase>().attachmentDao()
-            val messageWithAttachmentDao = instance<AppDatabase>().messageWithAttachmentDao()
             MessagesRepositoryImpl(
-                messageDao,
-                attachmentDao,
-                messageWithAttachmentDao,
+                instance(),
                 RemoteMessageToEntityMapper,
                 instance<LocalPreferencesRepository>().user!!.id
             )
