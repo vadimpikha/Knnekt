@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.LifecycleOwner
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +11,14 @@ import knnekt.BR
 import knnekt.R
 import knnekt.presentation.util.onClick
 import knnekt.shared.data.entity.Chat
+import kotlinx.coroutines.currentCoroutineContext
 
 class ChatsListAdapter(
     private val onClick: (Chat) -> Unit
 ) : PagingDataAdapter<Chat, ChatsListAdapter.ChatViewHolder>(ChatDiff) {
+
+    private var recentlyDeletedItem: Chat? = null
+    private var recentlyDeletedItemPos: Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -33,6 +36,12 @@ class ChatsListAdapter(
     }
 
     override fun getItemViewType(position: Int) = R.layout.item_chat_list
+
+    fun deleteItem(position: Int) {
+        recentlyDeletedItem = peek(position)
+        recentlyDeletedItemPos = position
+        notifyItemRemoved(position)
+    }
 
     class ChatViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 

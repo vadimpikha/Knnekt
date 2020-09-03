@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import knnekt.R
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
+
 
 class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
@@ -48,6 +50,11 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
             viewModel = this@ChatsListFragment.viewModel
         }
         navController = findNavController()
+        setupList()
+        onBindData()
+    }
+
+    private fun setupList() {
         ( binding.chatsRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         binding.chatsRecycler.adapter = chatsListAdapter
@@ -56,7 +63,8 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
             setDrawable(newDrawable)
         }
         binding.chatsRecycler.addItemDecoration(divider)
-        onBindData()
+        val itemTouchHelper = ItemTouchHelper(SwipeToArchiveCallback(requireContext(), chatsListAdapter))
+        itemTouchHelper.attachToRecyclerView(binding.chatsRecycler)
     }
 
 
