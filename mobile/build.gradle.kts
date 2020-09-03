@@ -124,6 +124,7 @@ dependencies {
 
 
     implementation(Libs.TIMBER)
+    implementation(Libs.RECYCLER_SELECTION)
 }
 
 apply(plugin = "com.google.gms.google-services")

@@ -77,4 +77,6 @@ object Libs {
     const val PAGING = "androidx.paging:paging-runtime"
 
     const val PREFERENCES = "androidx.preference:preference-ktx"
+
+    const val RECYCLER_SELECTION = "androidx.recyclerview:recyclerview-selection"
 }

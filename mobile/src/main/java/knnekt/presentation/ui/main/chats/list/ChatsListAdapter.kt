@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import knnekt.BR
@@ -17,6 +19,8 @@ class ChatsListAdapter(
     private val onClick: (Chat) -> Unit
 ) : PagingDataAdapter<Chat, ChatsListAdapter.ChatViewHolder>(ChatDiff) {
 
+    var tracker: SelectionTracker<Chat>? = null
+
     private var recentlyDeletedItem: Chat? = null
     private var recentlyDeletedItemPos: Int = 0
 
@@ -27,11 +31,19 @@ class ChatsListAdapter(
         )
     }
 
+    fun getItemAtPosition(position: Int) = getItem(position)
+    fun getPosition(chat: Chat) = snapshot().items.indexOf(chat)
+
+
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val item = getItem(position) ?: return
-        holder.bind(item)
+
+        tracker?.let {
+            holder.bind(item, it.isSelected(item))
+        }
+
         holder.itemView.onClick(true) {
-            onClick.invoke(item)
+            onClick.invoke(getItem(holder.bindingAdapterPosition) ?: return@onClick)
         }
     }
 
@@ -45,10 +57,20 @@ class ChatsListAdapter(
 
     class ChatViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(chat: Chat) {
+        private var recentItem: Chat? = null
+
+        fun bind(chat: Chat, isSelected: Boolean) {
+            recentItem = chat
+            binding.setVariable(BR.selected, isSelected)
             binding.setVariable(BR.chat, chat)
             binding.executePendingBindings()
         }
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Chat> =
+            object : ItemDetailsLookup.ItemDetails<Chat>() {
+                override fun getPosition(): Int = bindingAdapterPosition
+                override fun getSelectionKey(): Chat? = recentItem
+            }
 
     }
 

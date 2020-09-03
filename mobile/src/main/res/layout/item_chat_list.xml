@@ -8,6 +8,10 @@
         <variable
             name="chat"
             type="knnekt.shared.data.entity.Chat" />
+
+        <variable
+            name="selected"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,8 +19,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_chat_list_item"
         android:clickable="true"
-        android:focusable="true"
-        android:padding="8dp">
+        android:focusable="true">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/chat_photo"
@@ -25,6 +28,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
+            android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,10 +41,10 @@
             android:layout_marginStart="8dp"
             android:orientation="vertical"
             android:paddingVertical="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/chat_photo"
             app:layout_constraintEnd_toStartOf="@id/additional_indicators"
             app:layout_constraintStart_toEndOf="@id/chat_photo"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@id/chat_photo">
 
             <TextView
                 android:id="@+id/chat_name"
@@ -72,10 +76,23 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/selection_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            visibleWhen="@{selected}"
+            activated="@{selected}"
+            android:backgroundTint="?attr/colorSurface"
+            android:src="@drawable/asld_star_event"
+            app:layout_constraintCircleRadius="25dp"
+            app:layout_constraintCircleAngle="135"
+            app:layout_constraintCircle="@id/chat_photo"/>
+
         <LinearLayout
             android:id="@+id/additional_indicators"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_margin="8dp"
             android:gravity="center_vertical|end"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -86,9 +103,9 @@
                 android:id="@+id/last_message_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{chat.updatedAt}"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@{chat.updatedAt}"
                 tools:text="11:25" />
 
             <TextView
@@ -98,11 +115,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg_badge"
-                android:textColor="?android:attr/textColorPrimaryInverse"
                 android:backgroundTint="?attr/colorSecondary"
                 android:gravity="center"
                 android:paddingHorizontal="8.5dp"
                 android:text="@{chat.unreadMessageCount}"
+                android:textColor="?android:attr/textColorPrimaryInverse"
                 android:textStyle="bold"
                 tools:text="99+" />
 

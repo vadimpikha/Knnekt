@@ -23,6 +23,11 @@ import knnekt.R
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+@BindingAdapter("activated")
+fun activated(view: View, state: Boolean) {
+    view.isActivated = state
+}
+
 @BindingAdapter("imageUri", "placeholder", requireAll = false)
 fun ImageView.setImage(uri: String?, placeholder: Drawable?) {
     Glide.with(this)

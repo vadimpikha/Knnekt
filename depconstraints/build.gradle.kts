@@ -60,6 +60,8 @@ val paging = "3.0.0-alpha05"
 
 val preferences = "1.1.1"
 
+val recycler_selection = "1.0.0"
+
 dependencies {
     constraints {
         api("${Libs.ACTIVITY_KTX}:$activity")
@@ -138,6 +140,7 @@ dependencies {
 
         api("${Libs.PAGING}:$paging")
         api("${Libs.PREFERENCES}:$preferences")
+        api("${Libs.RECYCLER_SELECTION}:$recycler_selection")
     }
 }
 
