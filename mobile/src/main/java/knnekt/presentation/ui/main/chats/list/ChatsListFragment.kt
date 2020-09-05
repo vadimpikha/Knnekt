@@ -85,10 +85,15 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         binding.chatsRecycler.addItemDecoration(divider)
 
         swipeToArchiveCallback = object : SwipeToArchiveCallback(
-            requireContext(),
-            chatsListAdapter
+            requireContext()
         ) {
             override fun isItemViewSwipeEnabled() = !selectionTracker.hasSelection()
+
+            override fun onSwiped(position: Int) {
+                val chat = chatsListAdapter.getItemAtPosition(position)
+                if (chat != null)
+                    viewModel.archiveChat(chat.id, true)
+            }
         }
 
         ItemTouchHelper(swipeToArchiveCallback).attachToRecyclerView(binding.chatsRecycler)

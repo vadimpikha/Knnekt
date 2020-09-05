@@ -21,9 +21,6 @@ class ChatsListAdapter(
 
     var tracker: SelectionTracker<Chat>? = null
 
-    private var recentlyDeletedItem: Chat? = null
-    private var recentlyDeletedItemPos: Int = 0
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ChatViewHolder(
@@ -48,12 +45,6 @@ class ChatsListAdapter(
     }
 
     override fun getItemViewType(position: Int) = R.layout.item_chat_list
-
-    fun deleteItem(position: Int) {
-        recentlyDeletedItem = peek(position)
-        recentlyDeletedItemPos = position
-        notifyItemRemoved(position)
-    }
 
     class ChatViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 

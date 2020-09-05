@@ -10,9 +10,8 @@ import knnekt.R
 import knnekt.presentation.ui.main.chats.list.ChatsListAdapter
 import knnekt.presentation.util.themeColor
 
-open class SwipeToArchiveCallback(
-    context: Context,
-    private val adapter: ChatsListAdapter
+abstract class SwipeToArchiveCallback(
+    context: Context
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     var onSwipe: Boolean = false
@@ -33,9 +32,15 @@ open class SwipeToArchiveCallback(
     ) = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        onSwipe = false
-        adapter.deleteItem(viewHolder.bindingAdapterPosition)
+        onSwiped(viewHolder.bindingAdapterPosition)
     }
+
+    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+        super.onSelectedChanged(viewHolder, actionState)
+        onSwipe = actionState == ItemTouchHelper.ACTION_STATE_SWIPE
+    }
+
+    abstract fun onSwiped(position: Int)
 
     override fun isLongPressDragEnabled() = false
 
@@ -58,7 +63,6 @@ open class SwipeToArchiveCallback(
         val iconBottom: Int = iconTop + icon.intrinsicHeight
 
         if (dX < 0) { // Swiping to the left
-            onSwipe = true
             val iconLeft: Int = itemView.right - iconMargin - icon.intrinsicWidth
             val iconRight = itemView.right - iconMargin
             icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
@@ -67,7 +71,6 @@ open class SwipeToArchiveCallback(
                 itemView.top, itemView.right, itemView.bottom
             )
         } else { // view is unSwiped
-            onSwipe = false
             icon.setBounds(0, 0, 0, 0);
             background.setBounds(0, 0, 0, 0)
         }

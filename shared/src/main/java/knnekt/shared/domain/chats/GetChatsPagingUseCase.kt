@@ -1,6 +1,7 @@
 package knnekt.shared.domain.chats
 
 import androidx.paging.PagingData
+import androidx.paging.filter
 import androidx.paging.map
 import knnekt.shared.data.chats.ChatsRepository
 import knnekt.shared.data.db.ChatEntity
@@ -18,7 +19,9 @@ class GetChatsPagingUseCase(
     override fun execute(parameters: Unit): Flow<PagingData<Chat>> {
         return chatsRepository.getChatsPagingData()
             .map { data ->
-                data.map { entityToUiChatMapper.convert(it) }
+                data.filter { it.prefs?.isArchived != true }
+                    .map { it.chat }
+                    .map { entityToUiChatMapper.convert(it) }
             }
     }
 }

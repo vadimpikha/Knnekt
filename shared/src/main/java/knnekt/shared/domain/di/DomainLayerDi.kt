@@ -3,6 +3,7 @@ package knnekt.shared.domain.di
 import knnekt.shared.data.mapper.ChatMapper
 import knnekt.shared.data.mapper.MessageMapper
 import knnekt.shared.data.mapper.UserMapper
+import knnekt.shared.domain.chats.ArchiveChatUseCase
 import knnekt.shared.domain.chats.GetChatsPagingUseCase
 import knnekt.shared.domain.chats.InvalidateChatUseCase
 import knnekt.shared.domain.messages.GetMessagesPagingUseCase
@@ -43,6 +44,10 @@ object DomainLayerDi {
 
         bind() from singleton {
             SendMessageUseCase(instance(), Dispatchers.Main)
+        }
+
+        bind() from singleton {
+            ArchiveChatUseCase(instance(), Dispatchers.Default)
         }
 
     }
