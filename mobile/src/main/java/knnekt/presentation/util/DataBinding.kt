@@ -20,6 +20,7 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import knnekt.R
+import knnekt.shared.data.entity.Chat
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -30,6 +31,26 @@ fun activated(view: View, state: Boolean) {
 
 @BindingAdapter("imageUri", "placeholder", requireAll = false)
 fun ImageView.setImage(uri: String?, placeholder: Drawable?) {
+    Glide.with(this)
+        .load(uri)
+        .placeholder(placeholder)
+        .error(placeholder)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(this)
+}
+
+@BindingAdapter("bindChatPhoto")
+fun ImageView.setChatPhoto(chat: Chat?) {
+
+    chat ?: return
+
+    val uri = chat.photo
+    val placeholder = when {
+        chat.id == "archived" -> R.drawable.ic_avatar_archived
+        chat.isPrivate -> R.drawable.ic_avatar_placeholder
+        else -> R.drawable.ic_avatar_placeholder_group
+    }
+
     Glide.with(this)
         .load(uri)
         .placeholder(placeholder)

@@ -38,7 +38,7 @@ class ChatsListAdapter(
 
         tracker?.let {
             holder.bind(item, it.isSelected(item))
-        }
+        } ?: holder.bind(item, false)
 
         holder.itemView.onClick(true) {
             onClick.invoke(getItem(holder.bindingAdapterPosition) ?: return@onClick)
@@ -52,7 +52,6 @@ class ChatsListAdapter(
         var recentItem: Chat? = null
 
         fun bind(chat: Chat?, isSelected: Boolean) {
-            Timber.d("Bind $chat")
             recentItem = chat
             binding.setVariable(BR.selected, isSelected)
             binding.setVariable(BR.chat, chat)

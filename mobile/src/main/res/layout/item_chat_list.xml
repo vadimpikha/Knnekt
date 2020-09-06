@@ -23,8 +23,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/chat_photo"
-            imageUri="@{chat.photo}"
-            placeholder="@{chat.private ? @drawable/ic_avatar_placeholder : @drawable/ic_avatar_placeholder_group}"
+            bindChatPhoto="@{chat}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
