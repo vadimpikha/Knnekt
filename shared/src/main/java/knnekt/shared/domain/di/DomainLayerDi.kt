@@ -15,38 +15,39 @@ import kotlinx.coroutines.Dispatchers
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
+import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 object DomainLayerDi {
 
     val useCaseModule = Kodein.Module("useCaseModule") {
 
-        bind<CheckUserSignedInUseCase>() with singleton {
+        bind<CheckUserSignedInUseCase>() with provider {
             CheckUserSignedInUseCase(instance())
         }
 
-        bind<ConnectycubeSignInUseCase>() with singleton {
+        bind<ConnectycubeSignInUseCase>() with provider {
             ConnectycubeSignInUseCase(instance(), instance(), UserMapper, Dispatchers.Main)
         }
 
-        bind<GetChatsPagingUseCase>() with singleton {
+        bind<GetChatsPagingUseCase>() with provider {
             GetChatsPagingUseCase(instance(), ChatMapper)
         }
 
-        bind<InvalidateChatUseCase>() with singleton {
+        bind<InvalidateChatUseCase>() with provider {
             InvalidateChatUseCase(instance(), Dispatchers.Main)
         }
 
-        bind() from singleton {
+        bind() from provider {
             val mapper = MessageMapper(instance<LocalPreferencesRepository>().user!!.id)
             GetMessagesPagingUseCase(instance(), mapper)
         }
 
-        bind() from singleton {
+        bind() from provider {
             SendMessageUseCase(instance(), Dispatchers.Main)
         }
 
-        bind() from singleton {
+        bind() from provider {
             ArchiveChatUseCase(instance(), Dispatchers.Default)
         }
 

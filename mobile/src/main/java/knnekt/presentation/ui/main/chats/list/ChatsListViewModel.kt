@@ -15,7 +15,9 @@ class ChatsListViewModel(
     private val archiveChatUseCase: ArchiveChatUseCase
 ) : ViewModel() {
 
-    val chatsPagingData = getChatsPagingUseCase(Unit).cachedIn(viewModelScope)
+    val chatsPagingData = getChatsPagingUseCase(GetChatsPagingUseCase.Param(false))
+        .cachedIn(viewModelScope)
+
     val toastEvent = MutableLiveData<Event<String>>()
 
     private fun onError(t: Throwable) {

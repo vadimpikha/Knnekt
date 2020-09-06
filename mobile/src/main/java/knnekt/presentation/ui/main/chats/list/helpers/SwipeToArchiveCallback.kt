@@ -7,14 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import knnekt.R
-import knnekt.presentation.ui.main.chats.list.ChatsListAdapter
 import knnekt.presentation.util.themeColor
 
 abstract class SwipeToArchiveCallback(
     context: Context
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-    var onSwipe: Boolean = false
+    var whileSwipe: Boolean = false
         private set
 
 
@@ -37,7 +36,7 @@ abstract class SwipeToArchiveCallback(
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         super.onSelectedChanged(viewHolder, actionState)
-        onSwipe = actionState == ItemTouchHelper.ACTION_STATE_SWIPE
+        whileSwipe = actionState == ItemTouchHelper.ACTION_STATE_SWIPE
     }
 
     abstract fun onSwiped(position: Int)

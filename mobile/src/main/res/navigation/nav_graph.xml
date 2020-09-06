@@ -12,6 +12,11 @@
             app:destination="@id/chatFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_chatsListFragment_to_archivedChatsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:destination="@id/archivedChatsFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -20,5 +25,15 @@
         <argument
             android:name="chat"
             app:argType="knnekt.shared.data.entity.Chat" />
+    </fragment>
+    <fragment
+        android:id="@+id/archivedChatsFragment"
+        android:name="knnekt.presentation.ui.main.chats.list.archived.ArchivedChatsFragment"
+        android:label="Archived">
+        <action
+            android:id="@+id/action_archivedChatsFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
 </navigation>
