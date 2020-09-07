@@ -58,7 +58,7 @@ class ArchivedChatsFragment : Fragment(R.layout.fragment_archived_chats), Kodein
     }
 
     private fun bindData() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.archivedChatsPagingData.collectLatest { pagingData ->
                 chatsListAdapter.submitData(pagingData)
             }

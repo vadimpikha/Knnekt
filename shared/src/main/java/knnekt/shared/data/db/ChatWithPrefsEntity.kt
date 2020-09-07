@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 
-data class ChatWithPrefsEntity (
+data class ChatWithPrefsEntity(
     @Embedded
     val chat: ChatEntity,
     @Relation(

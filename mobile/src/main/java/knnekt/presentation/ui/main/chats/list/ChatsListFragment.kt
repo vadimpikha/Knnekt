@@ -52,6 +52,8 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         super.onCreate(savedInstanceState)
         chatsListAdapter = ChatsListAdapter(
             onClick = { chat ->
+                if(selectionTracker.hasSelection()) return@ChatsListAdapter
+
                 if(chat.id == Chat.ARCHIVED_CHAT_ID) {
                     navController.navigate(R.id.action_chatsListFragment_to_archivedChatsFragment)
                 } else {
@@ -129,13 +131,10 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
 
     private fun onBindData() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.chatsPagingData
-                .map {
-                    it.insertHeaderItem(Chat.archivedSectionItem)
-                }
                 .collectLatest { pagingData ->
-                chatsListAdapter.submitData(pagingData)
+                chatsListAdapter.submitData(pagingData.insertHeaderItem(Chat.archivedSectionItem))
             }
         }
         viewModel.toastEvent.observeEvent(viewLifecycleOwner) { text ->

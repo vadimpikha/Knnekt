@@ -112,7 +112,8 @@
             android:src="@drawable/ic_keyboard_arrow_down"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@+id/messages_recycler"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/scroll_down" />
 
         <include
             android:id="@+id/message_pad"

@@ -25,7 +25,7 @@ object ChatMapper : Mapper<ChatEntity, Chat> {
 
     private fun getUpdateTime(obj: ChatEntity): String {
         var lastMessageDateSent: Long = obj.lastMessageDateSent * 1000
-        if (lastMessageDateSent == 0L) lastMessageDateSent = obj.createdAt.time
+        if (lastMessageDateSent == 0L) lastMessageDateSent = obj.createdAt?.time ?: return ""
         return getPrettyDate(lastMessageDateSent)
     }
 

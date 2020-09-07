@@ -20,7 +20,7 @@ import knnekt.shared.data.db.converters.UserConverters
         AttachmentEntity::class,
         ChatPrefsEntity::class
     ],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(
@@ -59,6 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "knnekt-db")
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }

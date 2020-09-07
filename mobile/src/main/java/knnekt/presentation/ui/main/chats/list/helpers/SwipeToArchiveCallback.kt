@@ -16,11 +16,7 @@ abstract class SwipeToArchiveCallback(
     var whileSwipe: Boolean = false
         private set
 
-    private val iconColor = context.themeColor(android.R.attr.textColorPrimaryInverse)
-    private val icon =
-        ContextCompat.getDrawable(context, R.drawable.ic_outline_archive_24)!!.apply {
-            setTint(iconColor)
-        }
+    private val icon = ContextCompat.getDrawable(context, R.drawable.ic_outline_archive_24)!!
     private val background = ColorDrawable(context.themeColor(R.attr.colorSecondary))
 
     override fun onMove(
@@ -41,13 +37,6 @@ abstract class SwipeToArchiveCallback(
     abstract fun onSwiped(position: Int)
 
     override fun isLongPressDragEnabled() = false
-
-    abstract fun onSwiped(position: Int)
-
-    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-        super.onSelectedChanged(viewHolder, actionState)
-        whileSwipe = actionState == ItemTouchHelper.ACTION_STATE_SWIPE
-    }
 
     override fun onChildDraw(
         c: Canvas,
