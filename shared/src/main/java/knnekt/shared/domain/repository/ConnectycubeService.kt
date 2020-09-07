@@ -16,8 +16,7 @@ interface ConnectycubeService {
 class ConnectycubeServiceImpl : ConnectycubeService {
 
     override suspend fun signIn(login: String, password: String): ConnectycubeUser {
-        val (user, _) = ConnectycubeUsers.signIn(login, password).await()
-        return user
+        return ConnectycubeUsers.signIn(login, password).await()
     }
 
     override fun isSignedIn(): Boolean {

@@ -7,9 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.*
 import knnekt.R
@@ -42,7 +40,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     private lateinit var swipeToArchiveCallback: SwipeToArchiveCallback
 
     private val chatSelectionPredicate = object : SelectionTracker.SelectionPredicate<Chat>() {
-        fun onSwipe() = swipeToArchiveCallback.onSwipe
+        fun onSwipe() = swipeToArchiveCallback.whileSwipe
         override fun canSetStateForKey(key: Chat, nextState: Boolean) = !onSwipe()
         override fun canSetStateAtPosition(position: Int, nextState: Boolean) = !onSwipe()
         override fun canSelectMultiple() = true
@@ -84,11 +82,13 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         }
         binding.chatsRecycler.addItemDecoration(divider)
 
-        swipeToArchiveCallback = object : SwipeToArchiveCallback(
-            requireContext(),
-            chatsListAdapter
-        ) {
+        swipeToArchiveCallback = object : SwipeToArchiveCallback(requireContext()) {
             override fun isItemViewSwipeEnabled() = !selectionTracker.hasSelection()
+            override fun onSwiped(position: Int) {
+                chatsListAdapter.notifyItemRemoved(position)
+                chatsListAdapter.getItemAtPosition(position)
+                    ?.let(viewModel::archiveChat)
+            }
         }
 
         ItemTouchHelper(swipeToArchiveCallback).attachToRecyclerView(binding.chatsRecycler)

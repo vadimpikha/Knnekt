@@ -3,6 +3,7 @@ package knnekt.shared.data.chats
 import android.util.Log
 import androidx.paging.*
 import com.connectycube.chat.ConnectycubeRestChatService
+import com.connectycube.chat.Consts
 import com.connectycube.chat.model.ConnectycubeChatDialog
 import com.connectycube.chat.request.MessageGetBuilder
 import com.connectycube.core.request.RequestGetBuilder
@@ -37,13 +38,12 @@ class ChatsRepositoryImpl(
     override suspend fun updateChat(chatId: String) {
         val request = MessageGetBuilder()
             .markAsRead(false)
-            .eq("_id", chatId)
+            .eq(Consts.DIALOG_ID_FIELD_NAME, chatId)
 
 
-        val (dialogs, _) = ConnectycubeRestChatService.getChatDialogs(null, request).await()
+        val dialogs = ConnectycubeRestChatService.getChatDialogs(null, request).await()
         val chat = remoteToEntityMapper.convert(dialogs.single())
         chatDao.upsert(chat)
-        Log.d("ChatsRepository", "Updated $chat")
     }
 
     //    override suspend fun getChatById(id: String): Result<Chat> {

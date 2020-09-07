@@ -9,6 +9,7 @@ import com.connectycube.chat.ConnectycubeRestChatService
 import com.connectycube.chat.model.ConnectycubeAttachment
 import com.connectycube.chat.model.ConnectycubeChatDialog
 import com.connectycube.chat.model.ConnectycubeChatMessage
+import com.connectycube.chat.request.MessageGetBuilder
 import com.connectycube.core.request.RequestGetBuilder
 import knnekt.shared.data.db.*
 import knnekt.shared.data.mapper.Mapper
@@ -30,12 +31,12 @@ class MessageRemoteMediator(
         try {
             val allDataSize = state.pages.sumBy { it.data.size }
 
-            val request = RequestGetBuilder().apply {
+            val request = MessageGetBuilder().apply {
                 limit = state.config.pageSize
                 skip = allDataSize
+                markAsRead(false)
             }
-            val (dialogs, _)
-                    = ConnectycubeRestChatService.getDialogMessages(
+            val dialogs = ConnectycubeRestChatService.getDialogMessages(
                 ConnectycubeChatDialog(chatId),
                 request
             ).await()
@@ -43,10 +44,10 @@ class MessageRemoteMediator(
             val chats = dialogs.map(remoteToEntityMapper::convert)
 
             db.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    db.attachmentDao().nukeTable()
-                    db.messageDao().nukeTable()
-                }
+//                if (loadType == LoadType.REFRESH) {
+//                    db.attachmentDao().nukeTable()
+//                    db.messageDao().nukeTable()
+//                }
 
                 db.messageDao().insertAll(chats)
                 db.attachmentDao().insertAll(chats.flatMap { convert(it) })

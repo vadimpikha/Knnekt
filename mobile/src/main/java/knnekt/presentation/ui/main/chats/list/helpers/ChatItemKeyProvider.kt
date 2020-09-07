@@ -7,6 +7,7 @@ import knnekt.shared.data.entity.Chat
 class ChatItemKeyProvider(
     private val adapter: ChatsListAdapter
 ) : ItemKeyProvider<Chat>(SCOPE_MAPPED) {
+
     override fun getKey(position: Int): Chat? {
         return adapter.getItemAtPosition(position)
     }

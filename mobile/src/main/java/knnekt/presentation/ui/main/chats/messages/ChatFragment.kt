@@ -10,15 +10,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.connectycube.chat.ConnectycubeChatService
-import com.connectycube.chat.ConnectycubeRestChatService
 import knnekt.R
 import knnekt.databinding.FragmentChatBinding
 import knnekt.presentation.lifecycle.observeEvent
 import knnekt.presentation.ui.HoldListener
 import knnekt.presentation.ui.setOnHoldListener
 import knnekt.presentation.ui.widget.JumpSmoothScroller
-import knnekt.presentation.ui.widget.MarginItemDecorator
+import knnekt.presentation.ui.widget.MarginItemDecoration
 import knnekt.presentation.util.disableWhileAnimation
 import knnekt.presentation.util.hideKeyboard
 import knnekt.presentation.util.toast
@@ -103,7 +101,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         binding.messagesRecycler.apply {
             layoutManager = chatRecyclerLayoutManager
             adapter = messagesAdapter
-            addItemDecoration(MarginItemDecorator(requireContext(), 8, true))
+            addItemDecoration(MarginItemDecoration(requireContext(), 8, true))
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     val totalItemCount = chatRecyclerLayoutManager.itemCount

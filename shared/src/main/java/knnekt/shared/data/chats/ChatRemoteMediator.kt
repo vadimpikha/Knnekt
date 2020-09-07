@@ -31,8 +31,8 @@ class ChatRemoteMediator(
                 limit = state.config.pageSize
                 skip = allDataSize
             }
-            val (dialogs, _)
-                    = ConnectycubeRestChatService.getChatDialogs(null, request).await()
+
+            val dialogs = ConnectycubeRestChatService.getChatDialogs(null, request).await()
 
             val chats = dialogs.map(remoteToEntityMapper::convert)
             chatDao.insertAll(chats)
