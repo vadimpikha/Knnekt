@@ -9,6 +9,7 @@ import com.connectycube.chat.model.ConnectycubeChatDialog
 import com.connectycube.core.request.RequestGetBuilder
 import knnekt.shared.data.db.ChatDao
 import knnekt.shared.data.db.ChatEntity
+import knnekt.shared.data.db.ChatWithPrefsEntity
 import knnekt.shared.data.mapper.Mapper
 import knnekt.shared.data.util.await
 
@@ -16,12 +17,12 @@ import knnekt.shared.data.util.await
 class ChatRemoteMediator(
     private val chatDao: ChatDao,
     private val remoteToEntityMapper: Mapper<ConnectycubeChatDialog, ChatEntity>
-) : RemoteMediator<Int, ChatEntity>() {
+) : RemoteMediator<Int, ChatWithPrefsEntity>() {
 
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, ChatEntity>
+        state: PagingState<Int, ChatWithPrefsEntity>
     ): MediatorResult {
 
         try {

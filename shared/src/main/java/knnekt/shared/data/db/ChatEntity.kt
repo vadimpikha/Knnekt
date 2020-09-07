@@ -2,6 +2,7 @@ package knnekt.shared.data.db
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.connectycube.chat.model.ConnectycubeChatDialog
@@ -14,9 +15,11 @@ import com.connectycube.chat.model.ConnectycubeDialogType
 data class ChatEntity(
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "chat_id") val chatId: String,
+    @ColumnInfo(name = "chat_id")
+    val chatId: String,
     val dialogType: Int
 ) : ConnectycubeChatDialog() {
+
     init {
         type = ConnectycubeDialogType.parseByCode(dialogType)
     }

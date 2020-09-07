@@ -14,6 +14,7 @@ import knnekt.R
 import knnekt.presentation.util.onClick
 import knnekt.shared.data.entity.Chat
 import kotlinx.coroutines.currentCoroutineContext
+import timber.log.Timber
 
 class ChatsListAdapter(
     private val onClick: (Chat) -> Unit
@@ -32,11 +33,11 @@ class ChatsListAdapter(
     fun getPosition(chat: Chat) = snapshot().items.indexOf(chat)
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        val item = getItem(position) ?: return
+        val item = getItem(position)
 
         tracker?.let {
             holder.bind(item, it.isSelected(item))
-        }
+        } ?: holder.bind(item, false)
 
         holder.itemView.onClick(true) {
             onClick.invoke(getItem(holder.bindingAdapterPosition) ?: return@onClick)
@@ -47,9 +48,9 @@ class ChatsListAdapter(
 
     class ChatViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private var recentItem: Chat? = null
+        var recentItem: Chat? = null
 
-        fun bind(chat: Chat, isSelected: Boolean) {
+        fun bind(chat: Chat?, isSelected: Boolean) {
             recentItem = chat
             binding.setVariable(BR.selected, isSelected)
             binding.setVariable(BR.chat, chat)

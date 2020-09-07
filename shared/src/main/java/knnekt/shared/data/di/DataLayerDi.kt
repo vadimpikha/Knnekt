@@ -25,7 +25,7 @@ object DataLayerDi {
             ConnectycubeServiceImpl()
         }
         bind<ChatsRepository>() with singleton {
-            ChatsRepositoryImpl(instance<AppDatabase>().chatDao(), RemoteChatToEntityMapper)
+            ChatsRepositoryImpl(instance(), RemoteChatToEntityMapper)
         }
         bind<MessagesRepository>() with singleton {
             MessagesRepositoryImpl(

@@ -22,6 +22,7 @@ import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
 import knnekt.shared.data.entity.Chat
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -40,9 +41,9 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     private lateinit var swipeToArchiveCallback: SwipeToArchiveCallback
 
     private val chatSelectionPredicate = object : SelectionTracker.SelectionPredicate<Chat>() {
-        fun onSwipe() = swipeToArchiveCallback.whileSwipe
-        override fun canSetStateForKey(key: Chat, nextState: Boolean) = !onSwipe()
-        override fun canSetStateAtPosition(position: Int, nextState: Boolean) = !onSwipe()
+        fun whileSwipe() = swipeToArchiveCallback.whileSwipe
+        override fun canSetStateForKey(key: Chat, nextState: Boolean) = !whileSwipe()
+        override fun canSetStateAtPosition(position: Int, nextState: Boolean) = !whileSwipe()
         override fun canSelectMultiple() = true
     }
 
@@ -51,8 +52,12 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         super.onCreate(savedInstanceState)
         chatsListAdapter = ChatsListAdapter(
             onClick = { chat ->
-                val action = ChatsListFragmentDirections.chatsListToChat(chat)
-                navController.navigate(action)
+                if(chat.id == Chat.ARCHIVED_CHAT_ID) {
+                    navController.navigate(R.id.action_chatsListFragment_to_archivedChatsFragment)
+                } else {
+                    val action = ChatsListFragmentDirections.chatsListToChat(chat)
+                    navController.navigate(action)
+                }
             }
         )
     }
@@ -61,7 +66,6 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = this@ChatsListFragment.viewModel
         }
         navController = findNavController()
         setupList()
@@ -83,11 +87,27 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         binding.chatsRecycler.addItemDecoration(divider)
 
         swipeToArchiveCallback = object : SwipeToArchiveCallback(requireContext()) {
+
+            fun canBeSwiped(holder: ChatsListAdapter.ChatViewHolder): Boolean {
+                return holder.recentItem?.id != Chat.ARCHIVED_CHAT_ID
+            }
+
+            override fun getSwipeDirs(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                return if (canBeSwiped(viewHolder as ChatsListAdapter.ChatViewHolder))
+                    super.getSwipeDirs(recyclerView, viewHolder)
+                else
+                    0
+            }
+
             override fun isItemViewSwipeEnabled() = !selectionTracker.hasSelection()
+
             override fun onSwiped(position: Int) {
-                chatsListAdapter.notifyItemRemoved(position)
-                chatsListAdapter.getItemAtPosition(position)
-                    ?.let(viewModel::archiveChat)
+                val chat = chatsListAdapter.getItemAtPosition(position)
+                if (chat != null)
+                    viewModel.archiveChat(chat.id, true)
             }
         }
 
@@ -110,7 +130,11 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
     private fun onBindData() {
         lifecycleScope.launch {
-            viewModel.chatsPagingData.collectLatest { pagingData ->
+            viewModel.chatsPagingData
+                .map {
+                    it.insertHeaderItem(Chat.archivedSectionItem)
+                }
+                .collectLatest { pagingData ->
                 chatsListAdapter.submitData(pagingData)
             }
         }

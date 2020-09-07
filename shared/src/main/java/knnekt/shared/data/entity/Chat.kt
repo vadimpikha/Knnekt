@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Chat (
+data class Chat(
     val id: String,
     val lastMessage: String,
     val lastMessageUser: String,
@@ -16,4 +16,18 @@ data class Chat (
     val isPrivate: Boolean,
     val occupants: List<Int>,
     val occupantsCount: Int?
-): Parcelable
+) : Parcelable {
+
+
+    companion object {
+
+        const val ARCHIVED_CHAT_ID = "archived"
+
+        val archivedSectionItem = Chat(
+            ARCHIVED_CHAT_ID, "", "", null,
+            "", "Archived chats", 0, "", false,
+            emptyList(), null
+        )
+    }
+}
+

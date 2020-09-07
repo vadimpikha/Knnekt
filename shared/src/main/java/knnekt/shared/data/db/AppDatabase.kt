@@ -13,7 +13,13 @@ import knnekt.shared.data.db.converters.UserConverters
  * The Room database for this app
  */
 @Database(
-    entities = [UserEntity::class, ChatEntity::class, MessageEntity::class, AttachmentEntity::class],
+    entities = [
+        UserEntity::class,
+        ChatEntity::class,
+        MessageEntity::class,
+        AttachmentEntity::class,
+        ChatPrefsEntity::class
+    ],
     version = 2,
     exportSchema = false
 )
@@ -23,6 +29,10 @@ import knnekt.shared.data.db.converters.UserConverters
     MessageConverters::class
 )
 abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun chatsWithPrefsDao(): ChatWithPrefsDao
+
+    abstract fun chatPrefsDao(): ChatPrefsDao
 
     abstract fun chatDao(): ChatDao
 
@@ -54,6 +64,7 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     suspend fun clearTablesForLogout() {
+        chatPrefsDao().clear()
         chatDao().nukeTable()
         messageDao().nukeTable()
         attachmentDao().nukeTable()
