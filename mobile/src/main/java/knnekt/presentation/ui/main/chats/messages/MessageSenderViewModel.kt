@@ -4,7 +4,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
-import knnekt.presentation.lifecycle.Event
 import knnekt.shared.data.entity.Chat
 import knnekt.shared.domain.messages.SendMessageUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -18,10 +17,10 @@ class MessageSenderViewModel(
     private val sendMessageUseCase: SendMessageUseCase
 ) : ViewModel() {
 
-    private val _scrollNeeded = AtomicBoolean(false)
+    private val _messageJustSent = AtomicBoolean(false)
 
-    val scrollNeeded: Boolean
-        get() = _scrollNeeded.getAndSet(false)
+    val messageJustSent: Boolean
+        get() = _messageJustSent.getAndSet(false)
 
     private val nonCancellableScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -41,7 +40,7 @@ class MessageSenderViewModel(
         val body = messageText.value!!
         messageText.value = ""
         nonCancellableScope.launch {
-            _scrollNeeded.set(true)
+            _messageJustSent.set(true)
             sendMessageUseCase(SendMessageUseCase.Params(body, chat.id))
         }
     }

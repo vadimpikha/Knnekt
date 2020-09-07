@@ -1,6 +1,8 @@
 package knnekt.shared.data.di
 
 import androidx.preference.PreferenceManager
+import knnekt.shared.data.chats.ChatMessagesRemoteSource
+import knnekt.shared.data.chats.ChatMessagesRemoteSourceImpl
 import knnekt.shared.data.chats.ChatsRepository
 import knnekt.shared.data.chats.ChatsRepositoryImpl
 import knnekt.shared.data.connection.ChatConnectionManager
@@ -30,6 +32,7 @@ object DataLayerDi {
         bind<MessagesRepository>() with singleton {
             MessagesRepositoryImpl(
                 instance(),
+                instance(),
                 RemoteMessageToEntityMapper,
                 instance<LocalPreferencesRepository>().user!!.id
             )
@@ -44,6 +47,10 @@ object DataLayerDi {
     }
 
     val dataSourceModule = Kodein.Module("dataSourceModule") {
+
+        bind<ChatMessagesRemoteSource>() with singleton {
+            ChatMessagesRemoteSourceImpl()
+        }
 
         bind<AppDatabase>() with singleton { AppDatabase(instance()) }
     }

@@ -16,6 +16,7 @@ class ChatViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return ChatViewModel(
             chat,
+            kodein.instance(),
             kodein.instance()
         ) as T
     }

@@ -21,4 +21,8 @@ class GetMessagesPagingUseCase(
                 data.map { entityToUiMessageMapper.convert(it) }
             }
     }
+
+    suspend fun invalidate(chatId: String) {
+        messagesRepository.refreshChatMessages(chatId)
+    }
 }

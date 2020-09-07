@@ -85,11 +85,19 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         messagesAdapter = ChatMessagesAdapter()
         messagesAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (positionStart == 0 && senderViewModel.scrollNeeded) {
+                if (positionStart == 0 && isAutoScrollNeeded()) {
                     scrollTo(0)
                 }
             }
         })
+    }
+
+    private fun isAutoScrollNeeded() : Boolean {
+        return senderViewModel.messageJustSent || (chatViewModel.messageJustReceived && isStartOfList())
+    }
+
+    private fun isStartOfList(): Boolean {
+        return chatRecyclerLayoutManager.findFirstVisibleItemPosition() == 0
     }
 
     private fun scrollTo(position: Int) {

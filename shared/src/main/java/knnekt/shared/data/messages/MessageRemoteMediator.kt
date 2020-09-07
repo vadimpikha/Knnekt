@@ -5,23 +5,20 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.connectycube.chat.ConnectycubeRestChatService
-import com.connectycube.chat.model.ConnectycubeAttachment
-import com.connectycube.chat.model.ConnectycubeChatDialog
 import com.connectycube.chat.model.ConnectycubeChatMessage
-import com.connectycube.chat.request.MessageGetBuilder
-import com.connectycube.core.request.RequestGetBuilder
+import knnekt.shared.data.chats.ChatMessagesRemoteSource
 import knnekt.shared.data.db.*
 import knnekt.shared.data.mapper.Mapper
-import knnekt.shared.data.util.await
+import timber.log.Timber
+import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
 class MessageRemoteMediator(
     private val chatId: String,
     private val db: AppDatabase,
-    private val remoteToEntityMapper: Mapper<ConnectycubeChatMessage, MessageEntity>
+    private val remoteSource: ChatMessagesRemoteSource,
+    private val remoteToEntityMapper: Mapper<ConnectycubeChatMessage, MessageEntity>,
 ) : RemoteMediator<Int, MessageWithAttachmentsEntity>() {
-
 
     override suspend fun load(
         loadType: LoadType,
@@ -29,25 +26,54 @@ class MessageRemoteMediator(
     ): MediatorResult {
 
         try {
-            val allDataSize = state.pages.sumBy { it.data.size }
 
-            val request = MessageGetBuilder().apply {
-                limit = state.config.pageSize
-                skip = allDataSize
-                markAsRead(false)
+            val limit = state.config.pageSize
+
+            Timber.d("load with $loadType")
+
+            val dialogs = when (loadType) {
+                LoadType.REFRESH -> {
+                    val date = getSendDateClosestToCurrentPosition(state)
+
+                    if (date == null) {
+                        Timber.d("Get top")
+                        remoteSource.getTop(chatId, limit).also {
+                            Timber.d("Loaded: ${it.joinToString("; ") { it.body }}")
+                        }
+                    } else {
+                        Timber.d("Get top after $date")
+                        remoteSource.getTopAfter(chatId, limit, date).also {
+                            Timber.d("Loaded: ${it.map { it.body }.joinToString("; ")}")
+                        }
+                    }
+                }
+                LoadType.PREPEND -> {
+                    val date = getSendDateForFirstItem(state)
+                        ?: throw InvalidObjectException("Result is empty")
+
+                    Timber.d("Get top after $date")
+                    remoteSource.getTopAfter(chatId, limit, date).also {
+                        Timber.d("Loaded: ${it.map { it.body }.joinToString("; ")}")
+                    }
+                }
+                LoadType.APPEND -> {
+                    val date = getSendDateForLastItem(state)
+                        ?: throw InvalidObjectException("Result is empty")
+
+                    Timber.d("Get top before $date")
+                    remoteSource.getTopBefore(chatId, limit, date).also {
+                        Timber.d("Loaded: ${it.map { it.body }.joinToString("; ")}")
+                    }
+                }
             }
-            val dialogs = ConnectycubeRestChatService.getDialogMessages(
-                ConnectycubeChatDialog(chatId),
-                request
-            ).await()
 
             val chats = dialogs.map(remoteToEntityMapper::convert)
 
             db.withTransaction {
-//                if (loadType == LoadType.REFRESH) {
-//                    db.attachmentDao().nukeTable()
-//                    db.messageDao().nukeTable()
-//                }
+                if (loadType == LoadType.REFRESH) {
+                    db.attachmentDao().nukeTable()
+                    db.messageDao().nukeTable()
+                }
 
                 db.messageDao().insertAll(chats)
                 db.attachmentDao().insertAll(chats.flatMap { convert(it) })
@@ -58,6 +84,21 @@ class MessageRemoteMediator(
             return MediatorResult.Error(exception)
         }
 
+    }
+
+    private fun getSendDateForLastItem(state: PagingState<Int, MessageWithAttachmentsEntity>): Long? {
+        return state.lastItemOrNull()?.message?.dateSent
+    }
+
+    private fun getSendDateForFirstItem(state: PagingState<Int, MessageWithAttachmentsEntity>): Long? {
+        return state.firstItemOrNull()?.message?.dateSent
+    }
+
+
+    private fun getSendDateClosestToCurrentPosition(state: PagingState<Int, MessageWithAttachmentsEntity>): Long? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.message?.dateSent
+        }
     }
 
     fun convert(message: ConnectycubeChatMessage): List<AttachmentEntity> {

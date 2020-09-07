@@ -38,7 +38,6 @@ class ChatConnectionManager(
             chatMessage: ConnectycubeChatMessage,
             senderId: Int?
         ) {
-            println("processMessage $dialogId")
             chatInvalidatedEvent.value = Event(dialogId)
         }
 

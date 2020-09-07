@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.connectycube.chat.ConnectycubeRestChatService
 import com.connectycube.chat.model.ConnectycubeChatMessage
+import knnekt.shared.data.chats.ChatMessagesRemoteSource
 import knnekt.shared.data.db.*
 import knnekt.shared.data.mapper.Mapper
 import knnekt.shared.data.util.await
@@ -18,14 +19,20 @@ interface MessagesRepository {
 
     fun getMessagesPagingData(chatId: String): Flow<PagingData<MessageEntity>>
     suspend fun sendMessage(text: String, chatId: String)
+    suspend fun refreshChatMessages(chatId: String)
 
 }
 
 class MessagesRepositoryImpl(
     private val appDatabase: AppDatabase,
+    private val remoteSource: ChatMessagesRemoteSource,
     private val remoteToEntityMapper: Mapper<ConnectycubeChatMessage, MessageEntity>,
     private val currentUserId: Int
 ) : MessagesRepository {
+
+    override suspend fun refreshChatMessages(chatId: String) {
+        appDatabase.messageWithAttachmentDao().postsByDialogId(chatId).invalidate()
+    }
 
     override fun getMessagesPagingData(chatId: String): Flow<PagingData<MessageEntity>> {
         return Pager(
@@ -36,6 +43,7 @@ class MessagesRepositoryImpl(
             remoteMediator = MessageRemoteMediator(
                 chatId,
                 appDatabase,
+                remoteSource,
                 remoteToEntityMapper
             ),
             pagingSourceFactory = { appDatabase.messageWithAttachmentDao().postsByDialogId(chatId) }

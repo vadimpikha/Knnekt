@@ -24,6 +24,8 @@
             android:paddingStart="10dp"
             android:paddingTop="6dp"
             android:paddingEnd="32dp"
+            android:linksClickable="true"
+            android:autoLink="all"
             android:paddingBottom="24dp"
             android:text="@{message.body}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
