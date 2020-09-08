@@ -79,6 +79,23 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         binding.chatsRecycler.adapter = chatsListAdapter
         setupListDecorations()
         setupSelectionTracker()
+        chatsListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                scrollUp()
+            }
+
+            override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                scrollUp()
+            }
+
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                scrollUp()
+            }
+        })
+    }
+
+    private fun scrollUp() {
+        binding.chatsRecycler.scrollToPosition(0)
     }
 
     private fun setupListDecorations() {
