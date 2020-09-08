@@ -23,7 +23,7 @@ object PresentationLayerDi {
         }
 
         bindViewModel<ArchivedChatsViewModel>() with provider {
-            ArchivedChatsViewModel(instance())
+            ArchivedChatsViewModel(instance(), instance())
         }
 
         bindViewModel<SignInViewModel>() with provider {

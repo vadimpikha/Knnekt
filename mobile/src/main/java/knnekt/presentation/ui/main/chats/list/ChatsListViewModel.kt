@@ -24,9 +24,9 @@ class ChatsListViewModel(
         toastEvent.value = (t.message ?: "Error occurred").asEvent()
     }
 
-    fun archiveChat(chatId: String, archive: Boolean) {
+    fun archiveChat(chatId: String) {
         viewModelScope.launch {
-            archiveChatUseCase(ArchiveChatUseCase.Param(chatId, archive))
+            archiveChatUseCase(ArchiveChatUseCase.Param(chatId, true))
         }
     }
 }

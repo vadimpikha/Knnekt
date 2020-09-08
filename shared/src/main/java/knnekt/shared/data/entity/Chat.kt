@@ -20,14 +20,7 @@ data class Chat(
 
 
     companion object {
-
         const val ARCHIVED_CHAT_ID = "archived"
-
-        val archivedSectionItem = Chat(
-            ARCHIVED_CHAT_ID, "", "", null,
-            "", "Archived chats", 0, "", false,
-            emptyList(), null
-        )
     }
 }
 

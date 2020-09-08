@@ -2,6 +2,7 @@ package knnekt.shared.domain.chats
 
 import androidx.paging.PagingData
 import androidx.paging.filter
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import knnekt.shared.data.chats.ChatsRepository
 import knnekt.shared.data.db.ChatEntity

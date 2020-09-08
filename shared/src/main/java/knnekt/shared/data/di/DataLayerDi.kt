@@ -7,6 +7,7 @@ import knnekt.shared.data.chats.ChatsRepository
 import knnekt.shared.data.chats.ChatsRepositoryImpl
 import knnekt.shared.data.connection.ChatConnectionManager
 import knnekt.shared.data.db.AppDatabase
+import knnekt.shared.data.mapper.AttachmentMapper
 import knnekt.shared.data.mapper.RemoteChatToEntityMapper
 import knnekt.shared.data.mapper.RemoteMessageToEntityMapper
 import knnekt.shared.data.messages.MessagesRepository
@@ -34,6 +35,7 @@ object DataLayerDi {
                 instance(),
                 instance(),
                 RemoteMessageToEntityMapper,
+                AttachmentMapper,
                 instance<LocalPreferencesRepository>().user!!.id
             )
         }

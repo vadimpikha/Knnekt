@@ -122,6 +122,12 @@ fun Context.dp(value: Number) = TypedValue.applyDimension(
     resources.displayMetrics
 ).toInt()
 
+fun Context.sp(value: Number) = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_SP,
+    value.toFloat(),
+    resources.displayMetrics
+)
+
 fun Fragment.dp(value: Number) = requireContext().dp(value)
 
 fun View.onClick(disableWhileOp: Boolean = false, op: View.() -> Unit) {

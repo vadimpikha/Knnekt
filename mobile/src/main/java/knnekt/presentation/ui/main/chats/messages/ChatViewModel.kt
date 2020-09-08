@@ -7,7 +7,6 @@ import knnekt.presentation.lifecycle.asEvent
 import knnekt.shared.data.connection.ChatConnectionManager
 import knnekt.shared.data.entity.Chat
 import knnekt.shared.domain.messages.GetMessagesPagingUseCase
-import knnekt.shared.result.ifNotHandled
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -39,7 +38,7 @@ class ChatViewModel(
                 .collectLatest { event ->
                     Timber.d("Invalidation chat ${event.peekContent()}")
                     _messageJustReceived.set(true)
-                    event.ifNotHandled { getMessagesPagingUseCase.invalidate(it) }
+                    getMessagesPagingUseCase.refreshTopPage(event.peekContent())
                 }
         }
     }

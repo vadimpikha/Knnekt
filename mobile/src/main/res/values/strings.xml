@@ -19,4 +19,6 @@
     <string name="message_hint">Message</string>
     <string name="last_seen_at">last seen at %1$s</string>
     <string name="scroll_down">Scroll down</string>
+    <string name="archive">Archive</string>
+    <string name="unarchive">Unarchive</string>
 </resources>

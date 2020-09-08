@@ -9,9 +9,15 @@ import com.connectycube.chat.model.ConnectycubeChatDialog
 import com.connectycube.chat.request.MessageGetBuilder
 import com.connectycube.core.request.RequestGetBuilder
 import knnekt.shared.data.db.*
+import knnekt.shared.data.entity.Chat
 import knnekt.shared.data.mapper.Mapper
 import knnekt.shared.data.util.await
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 interface ChatsRepository {
 
@@ -26,6 +32,29 @@ class ChatsRepositoryImpl(
     private val db: AppDatabase,
     private val remoteToEntityMapper: Mapper<ConnectycubeChatDialog, ChatEntity>
 ) : ChatsRepository {
+
+    private val scope = CoroutineScope(Dispatchers.Default)
+
+    private val archivedSectionItem = ChatEntity(Chat.ARCHIVED_CHAT_ID, 1).apply {
+        setOccupantsIds(emptyList())
+        name = "Archived"
+        lastMessageDateSent = Long.MAX_VALUE
+    }
+
+    init {
+        scope.launch {
+            db.chatPrefsDao()
+                .archivedChatsCount()
+                .distinctUntilChanged()
+                .collectLatest { count ->
+                if (count > 0) {
+                    db.chatDao().insertIfAbsent(archivedSectionItem)
+                } else {
+                    db.chatDao().deleteChatsByIds(Chat.ARCHIVED_CHAT_ID)
+                }
+            }
+        }
+    }
 
     override suspend fun archiveChat(chatId: String, archive: Boolean) {
         db.withTransaction {

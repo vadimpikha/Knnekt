@@ -18,6 +18,7 @@ class MessageRemoteMediator(
     private val db: AppDatabase,
     private val remoteSource: ChatMessagesRemoteSource,
     private val remoteToEntityMapper: Mapper<ConnectycubeChatMessage, MessageEntity>,
+    private val attachmentMapper: Mapper<ConnectycubeChatMessage, List<AttachmentEntity>>
 ) : RemoteMediator<Int, MessageWithAttachmentsEntity>() {
 
     override suspend fun load(
@@ -76,7 +77,7 @@ class MessageRemoteMediator(
                 }
 
                 db.messageDao().insertAll(chats)
-                db.attachmentDao().insertAll(chats.flatMap { convert(it) })
+                db.attachmentDao().insertAll(chats.flatMap(attachmentMapper::convert))
             }
 
             return MediatorResult.Success(endOfPaginationReached = dialogs.isEmpty())
@@ -99,23 +100,6 @@ class MessageRemoteMediator(
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.message?.dateSent
         }
-    }
-
-    fun convert(message: ConnectycubeChatMessage): List<AttachmentEntity> {
-        return message.attachments?.map {
-            AttachmentEntity(it.id, message.id, it.type).apply {
-                name = it.name
-                contentType = it.contentType
-                type = it.type
-                url = it.url
-                id = it.id
-                data = it.data
-                size = it.size
-                height = it.height
-                width = it.width
-                duration = it.duration
-            }
-        } ?: emptyList()
     }
 
 

@@ -31,6 +31,9 @@ interface ChatDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(chats: List<ChatEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertIfAbsent(vararg chats: ChatEntity)
+
     @Query("SELECT * FROM chats LIMIT :limit OFFSET :offset")
     fun getChatsByPage(limit: Int, offset: Int): Flow<List<ChatEntity>>
 

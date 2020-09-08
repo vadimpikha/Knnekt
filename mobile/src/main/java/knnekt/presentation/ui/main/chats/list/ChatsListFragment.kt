@@ -1,8 +1,10 @@
 package knnekt.presentation.ui.main.chats.list
 
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -16,13 +18,13 @@ import knnekt.presentation.di.viewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
 import knnekt.presentation.ui.main.chats.list.helpers.ChatItemDetailsLookup
 import knnekt.presentation.ui.main.chats.list.helpers.ChatItemKeyProvider
-import knnekt.presentation.ui.main.chats.list.helpers.SwipeToArchiveCallback
+import knnekt.presentation.ui.main.chats.list.helpers.SwipeToDismissCallback
 import knnekt.presentation.util.dp
+import knnekt.presentation.util.themeColor
 import knnekt.presentation.util.toast
 import knnekt.presentation.util.viewBinding
 import knnekt.shared.data.entity.Chat
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -38,10 +40,10 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     private lateinit var chatsListAdapter: ChatsListAdapter
     private lateinit var navController: NavController
     private lateinit var selectionTracker: SelectionTracker<Chat>
-    private lateinit var swipeToArchiveCallback: SwipeToArchiveCallback
+    private lateinit var swipeToDismissCallback: SwipeToDismissCallback
 
     private val chatSelectionPredicate = object : SelectionTracker.SelectionPredicate<Chat>() {
-        fun whileSwipe() = swipeToArchiveCallback.whileSwipe
+        fun whileSwipe() = swipeToDismissCallback.whileSwipe
         override fun canSetStateForKey(key: Chat, nextState: Boolean) = !whileSwipe()
         override fun canSetStateAtPosition(position: Int, nextState: Boolean) = !whileSwipe()
         override fun canSelectMultiple() = true
@@ -52,9 +54,9 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         super.onCreate(savedInstanceState)
         chatsListAdapter = ChatsListAdapter(
             onClick = { chat ->
-                if(selectionTracker.hasSelection()) return@ChatsListAdapter
+                if (selectionTracker.hasSelection()) return@ChatsListAdapter
 
-                if(chat.id == Chat.ARCHIVED_CHAT_ID) {
+                if (chat.id == Chat.ARCHIVED_CHAT_ID) {
                     navController.navigate(R.id.action_chatsListFragment_to_archivedChatsFragment)
                 } else {
                     val action = ChatsListFragmentDirections.chatsListToChat(chat)
@@ -105,7 +107,12 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         }
         binding.chatsRecycler.addItemDecoration(divider)
 
-        swipeToArchiveCallback = object : SwipeToArchiveCallback(requireContext()) {
+        swipeToDismissCallback = object : SwipeToDismissCallback(
+           R.drawable.ic_outline_archive_24,
+            requireContext().themeColor(R.attr.colorSecondary),
+            getString(R.string.archive),
+            requireContext().themeColor(android.R.attr.textColorPrimaryInverse)
+        ) {
 
             fun canBeSwiped(holder: ChatsListAdapter.ChatViewHolder): Boolean {
                 return holder.recentItem?.id != Chat.ARCHIVED_CHAT_ID
@@ -126,11 +133,11 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
             override fun onSwiped(position: Int) {
                 val chat = chatsListAdapter.getItemAtPosition(position)
                 if (chat != null)
-                    viewModel.archiveChat(chat.id, true)
+                    viewModel.archiveChat(chat.id)
             }
         }
 
-        ItemTouchHelper(swipeToArchiveCallback).attachToRecyclerView(binding.chatsRecycler)
+        ItemTouchHelper(swipeToDismissCallback).attachToRecyclerView(binding.chatsRecycler)
     }
 
     private fun setupSelectionTracker() {
@@ -149,10 +156,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
     private fun onBindData() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.chatsPagingData
-                .collectLatest { pagingData ->
-                chatsListAdapter.submitData(pagingData.insertHeaderItem(Chat.archivedSectionItem))
-            }
+            viewModel.chatsPagingData.collectLatest(chatsListAdapter::submitData)
         }
         viewModel.toastEvent.observeEvent(viewLifecycleOwner) { text ->
             toast(text)
