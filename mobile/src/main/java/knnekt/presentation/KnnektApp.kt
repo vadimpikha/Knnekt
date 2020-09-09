@@ -20,6 +20,7 @@ class KnnektApp : Application(), KodeinAware {
         import(androidXModule(this@KnnektApp))
         with(PresentationLayerDi) {
             import(viewModelModule)
+            import(uiModule)
         }
         with(DomainLayerDi) {
             import(useCaseModule)

@@ -1,6 +1,9 @@
 package knnekt.presentation.di
 
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
+import knnekt.presentation.notifications.AppNotificationManager
+import knnekt.presentation.notifications.AppNotificationManagerImpl
 import knnekt.presentation.ui.main.MainViewModel
 import knnekt.presentation.ui.main.chats.list.ChatsListViewModel
 import knnekt.presentation.ui.main.chats.list.archived.ArchivedChatsViewModel
@@ -14,6 +17,12 @@ import org.kodein.di.Kodein
 import org.kodein.di.generic.*
 
 object PresentationLayerDi {
+
+    val uiModule = Kodein.Module("uiModule") {
+        bind<AppNotificationManager>( ) with singleton {
+            AppNotificationManagerImpl(NotificationManagerCompat.from(instance()), instance())
+        }
+    }
 
     val viewModelModule = Kodein.Module("viewModelModule") {
         bind<ViewModelProvider.Factory>() with singleton {
