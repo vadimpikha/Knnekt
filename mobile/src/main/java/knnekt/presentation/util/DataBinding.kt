@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.*
 import androidx.databinding.BindingAdapter
@@ -45,11 +46,8 @@ fun ImageView.setChatPhoto(chat: Chat?) {
     chat ?: return
 
     val uri = chat.photo
-    val placeholder = when {
-        chat.id == "archived" -> R.drawable.ic_avatar_archived
-        chat.isPrivate -> R.drawable.ic_avatar_placeholder
-        else -> R.drawable.ic_avatar_placeholder_group
-    }
+    val placeholder = if (chat.isPrivate) R.drawable.ic_avatar_placeholder
+    else R.drawable.ic_avatar_placeholder_group
 
     Glide.with(this)
         .load(uri)

@@ -130,18 +130,6 @@ fun Context.sp(value: Number) = TypedValue.applyDimension(
 
 fun Fragment.dp(value: Number) = requireContext().dp(value)
 
-fun View.onClick(disableWhileOp: Boolean = false, op: View.() -> Unit) {
-    setOnClickListener {
-        if (disableWhileOp) {
-            isEnabled = false
-            op()
-            isEnabled = true
-        } else {
-            op()
-        }
-    }
-}
-
 fun hideKeyboard(focusedView: View) {
     val imm = focusedView.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(focusedView.windowToken, 0)

@@ -41,7 +41,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in), KodeinAware {
         binding.forgotPasswordLink.setOnClickListener {
             toast("This feature not implemented yet")
         }
-        binding.signUpLink.onClick(true) {
+        binding.signUpLink.setOnClickListener {
             navController.navigate(R.id.action_signIn_to_registrationFragment)
         }
         binding.forgotPasswordLink.applySpan(UnderlineSpan())

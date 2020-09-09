@@ -21,4 +21,5 @@
     <string name="scroll_down">Scroll down</string>
     <string name="archive">Archive</string>
     <string name="unarchive">Unarchive</string>
+    <string name="archived_chats">Archived chats</string>
 </resources>

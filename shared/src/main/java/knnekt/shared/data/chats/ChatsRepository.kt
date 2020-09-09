@@ -1,19 +1,22 @@
 package knnekt.shared.data.chats
 
-import android.util.Log
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.room.withTransaction
 import com.connectycube.chat.ConnectycubeRestChatService
 import com.connectycube.chat.Consts
 import com.connectycube.chat.model.ConnectycubeChatDialog
 import com.connectycube.chat.request.MessageGetBuilder
-import com.connectycube.core.request.RequestGetBuilder
-import knnekt.shared.data.db.*
+import knnekt.shared.data.db.AppDatabase
+import knnekt.shared.data.db.ChatEntity
+import knnekt.shared.data.db.ChatPrefsEntity
+import knnekt.shared.data.db.ChatWithPrefsEntity
 import knnekt.shared.data.entity.Chat
 import knnekt.shared.data.mapper.Mapper
 import knnekt.shared.data.util.await
 import knnekt.shared.utils.processScope
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -34,24 +37,30 @@ class ChatsRepositoryImpl(
     private val remoteToEntityMapper: Mapper<ConnectycubeChatDialog, ChatEntity>
 ) : ChatsRepository {
 
-    private val archivedSectionItem = ChatEntity(Chat.ARCHIVED_CHAT_ID, 1).apply {
-        setOccupantsIds(emptyList())
-        name = "Archived"
-        lastMessageDateSent = Long.MAX_VALUE
+    private fun createArchivedChatsSection(chatsSequence: String, unreadChats: Int): ChatEntity {
+        return ChatEntity(Chat.ARCHIVED_CHAT_ID, 1).apply {
+            lastMessage = chatsSequence
+            setOccupantsIds(emptyList())
+            name = ""
+            unreadMessageCount = unreadChats
+            lastMessageDateSent = Long.MAX_VALUE // to be always top in list
+        }
     }
 
     init {
         processScope.launch(Dispatchers.Default) {
-            db.chatPrefsDao()
-                .archivedChatsCount()
+            db.chatDao()
+                .getArchivedChats()
                 .distinctUntilChanged()
-                .collectLatest { count ->
-                if (count > 0) {
-                    db.chatDao().insertIfAbsent(archivedSectionItem)
-                } else {
-                    db.chatDao().deleteChatsByIds(Chat.ARCHIVED_CHAT_ID)
+                .collectLatest { archivedChats ->
+                    if (archivedChats.isNotEmpty()) {
+                        val chatNames = archivedChats.joinToString { it.name }
+                        val unreadChats = archivedChats.count { it.unreadMessageCount > 0 }
+                        db.chatDao().insert(createArchivedChatsSection(chatNames, unreadChats))
+                    } else {
+                        db.chatDao().deleteChatsByIds(Chat.ARCHIVED_CHAT_ID)
+                    }
                 }
-            }
         }
     }
 
@@ -84,11 +93,6 @@ class ChatsRepositoryImpl(
 
         val dialogs = ConnectycubeRestChatService.getChatDialogs(null, request).await()
         val chat = remoteToEntityMapper.convert(dialogs.single())
-        db.chatDao().upsert(chat)
-        Log.d("ChatsRepository", "Updated $chat")
+        db.chatDao().insert(chat)
     }
-
-    //    override suspend fun getChatById(id: String): Result<Chat> {
-//        return Result.catch { chatDao.getChat(id) }
-//    }
 }

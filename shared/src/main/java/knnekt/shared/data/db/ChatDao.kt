@@ -1,8 +1,6 @@
 package knnekt.shared.data.db
 
-import androidx.paging.PagingSource
 import androidx.room.*
-import knnekt.shared.data.db.ChatEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -10,14 +8,15 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface ChatDao {
+
+    @Query("SELECT * FROM chats INNER JOIN chats_prefs ON chats_prefs.chat_id = chats.chat_id WHERE chats_prefs.archived = 1")
+    fun getArchivedChats(): Flow<List<ChatEntity>>
+
     @Query("SELECT * FROM chats ORDER BY lastMessageDateSent DESC")
     suspend fun getChatsSync(): List<ChatEntity>
 
     @Query("SELECT * FROM chats ORDER BY lastMessageDateSent DESC")
     fun getChats(): Flow<List<ChatEntity>>
-
-    @Query("SELECT * FROM chats ORDER BY lastMessageDateSent DESC")
-    fun getChatsPaging(): PagingSource<Int, ChatEntity>
 
     @Query("SELECT * FROM chats WHERE chat_id = :chatId")
     suspend fun getChat(chatId: String?): ChatEntity?
@@ -26,7 +25,7 @@ interface ChatDao {
      * update or insert
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(chat: ChatEntity)
+    suspend fun insert(vararg chats: ChatEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(chats: List<ChatEntity>)

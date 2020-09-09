@@ -11,16 +11,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import knnekt.BR
 import knnekt.R
-import knnekt.presentation.util.onClick
+import knnekt.presentation.util.isArchivedSection
 import knnekt.shared.data.entity.Chat
-import kotlinx.coroutines.currentCoroutineContext
-import timber.log.Timber
 
 class ChatsListAdapter(
     private val onClick: (Chat) -> Unit
 ) : PagingDataAdapter<Chat, ChatsListAdapter.ChatViewHolder>(ChatDiff) {
 
-    var tracker: SelectionTracker<Chat>? = null
+//    var tracker: SelectionTracker<Chat>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -35,16 +33,21 @@ class ChatsListAdapter(
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val item = getItem(position)
 
-        tracker?.let {
+        /*tracker?.let {
             holder.bind(item, it.isSelected(item))
-        } ?: holder.bind(item, false)
+        } ?:*/ holder.bind(item, false)
 
-        holder.itemView.onClick(true) {
-            onClick.invoke(getItem(holder.bindingAdapterPosition) ?: return@onClick)
+        holder.itemView.setOnClickListener {
+            onClick.invoke(getItem(holder.bindingAdapterPosition) ?: return@setOnClickListener)
         }
     }
 
-    override fun getItemViewType(position: Int) = R.layout.item_chat_list
+    override fun getItemViewType(position: Int): Int {
+        return if (getItem(position)?.isArchivedSection == true)
+            R.layout.item_archived_chats
+        else
+            R.layout.item_chat_list
+    }
 
     class ChatViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 

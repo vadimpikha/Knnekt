@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/archivedChatsFragment"
         android:name="knnekt.presentation.ui.main.chats.list.archived.ArchivedChatsFragment"
-        android:label="Archived">
+        android:label="@string/archived_chats">
         <action
             android:id="@+id/action_archivedChatsFragment_to_chatFragment"
             app:destination="@id/chatFragment"

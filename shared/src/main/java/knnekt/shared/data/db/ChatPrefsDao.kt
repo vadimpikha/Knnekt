@@ -17,8 +17,4 @@ interface ChatPrefsDao {
 
     @Query("DELETE FROM chats_prefs")
     suspend fun clear()
-
-    @Query("SELECT COUNT(chat_id) FROM chats_prefs WHERE archived = 1")
-    fun archivedChatsCount(): Flow<Int>
-
 }
