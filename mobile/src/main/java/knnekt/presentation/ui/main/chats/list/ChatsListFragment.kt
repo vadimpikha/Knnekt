@@ -39,7 +39,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
 
     private lateinit var chatsListAdapter: ChatsListAdapter
     private lateinit var navController: NavController
-    private lateinit var selectionTracker: SelectionTracker<Chat>
+//    private lateinit var selectionTracker: SelectionTracker<Chat>
     private lateinit var swipeToDismissCallback: SwipeToDismissCallback
 
     private val chatSelectionPredicate = object : SelectionTracker.SelectionPredicate<Chat>() {
@@ -54,7 +54,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         super.onCreate(savedInstanceState)
         chatsListAdapter = ChatsListAdapter(
             onClick = { chat ->
-                if (selectionTracker.hasSelection()) return@ChatsListAdapter
+//                if (selectionTracker.hasSelection()) return@ChatsListAdapter
 
                 if (chat.id == Chat.ARCHIVED_CHAT_ID) {
                     navController.navigate(R.id.action_chatsListFragment_to_archivedChatsFragment)
@@ -128,7 +128,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
                     0
             }
 
-            override fun isItemViewSwipeEnabled() = !selectionTracker.hasSelection()
+            override fun isItemViewSwipeEnabled() =  true//!selectionTracker.hasSelection()
 
             override fun onSwiped(position: Int) {
                 val chat = chatsListAdapter.getItemAtPosition(position)
@@ -141,16 +141,16 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     }
 
     private fun setupSelectionTracker() {
-        selectionTracker = SelectionTracker.Builder(
-            "chats-selection",
-            binding.chatsRecycler,
-            ChatItemKeyProvider(chatsListAdapter),
-            ChatItemDetailsLookup(binding.chatsRecycler),
-            StorageStrategy.createParcelableStorage(Chat::class.java)
-        ).withSelectionPredicate(chatSelectionPredicate)
-            .build()
-
-        chatsListAdapter.tracker = selectionTracker
+//        selectionTracker = SelectionTracker.Builder(
+//            "chats-selection",
+//            binding.chatsRecycler,
+//            ChatItemKeyProvider(chatsListAdapter),
+//            ChatItemDetailsLookup(binding.chatsRecycler),
+//            StorageStrategy.createParcelableStorage(Chat::class.java)
+//        ).withSelectionPredicate(chatSelectionPredicate)
+//            .build()
+//
+//        chatsListAdapter.tracker = selectionTracker
     }
 
 
