@@ -12,15 +12,15 @@
             app:destination="@id/chatFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popEnterAnim="@anim/fragment_close_exit"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/action_chatsListFragment_to_archivedChatsFragment"
             app:destination="@id/archivedChatsFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popEnterAnim="@anim/fragment_close_exit"
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"

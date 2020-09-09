@@ -12,6 +12,7 @@ import knnekt.shared.data.db.*
 import knnekt.shared.data.entity.Chat
 import knnekt.shared.data.mapper.Mapper
 import knnekt.shared.data.util.await
+import knnekt.shared.utils.processScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -33,8 +34,6 @@ class ChatsRepositoryImpl(
     private val remoteToEntityMapper: Mapper<ConnectycubeChatDialog, ChatEntity>
 ) : ChatsRepository {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
-
     private val archivedSectionItem = ChatEntity(Chat.ARCHIVED_CHAT_ID, 1).apply {
         setOccupantsIds(emptyList())
         name = "Archived"
@@ -42,7 +41,7 @@ class ChatsRepositoryImpl(
     }
 
     init {
-        scope.launch {
+        processScope.launch(Dispatchers.Default) {
             db.chatPrefsDao()
                 .archivedChatsCount()
                 .distinctUntilChanged()

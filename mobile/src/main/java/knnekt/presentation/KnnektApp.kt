@@ -1,14 +1,12 @@
 package knnekt.presentation
 
 import android.app.Application
-import com.connectycube.auth.session.ConnectycubeSession
 import com.connectycube.auth.session.ConnectycubeSessionManager
-import com.connectycube.auth.session.ConnectycubeSessionParameters
-import knnekt.presentation.di.PresentationLayerDi
 import com.connectycube.auth.session.ConnectycubeSettings
 import com.connectycube.core.LogLevel
 import knnekt.BuildConfig
 import knnekt.R
+import knnekt.presentation.di.PresentationLayerDi
 import knnekt.shared.data.di.DataLayerDi
 import knnekt.shared.domain.di.DomainLayerDi
 import org.kodein.di.Kodein
