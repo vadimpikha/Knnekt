@@ -1,23 +1,18 @@
 package knnekt.presentation.ui.main.chats.list
 
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.*
 import knnekt.R
 import knnekt.databinding.FragmentChatsListBinding
 import knnekt.presentation.di.viewModelInstance
 import knnekt.presentation.lifecycle.observeEvent
-import knnekt.presentation.ui.main.chats.list.helpers.ChatItemDetailsLookup
-import knnekt.presentation.ui.main.chats.list.helpers.ChatItemKeyProvider
 import knnekt.presentation.ui.main.chats.list.helpers.SwipeToDismissCallback
 import knnekt.presentation.util.dp
 import knnekt.presentation.util.themeColor

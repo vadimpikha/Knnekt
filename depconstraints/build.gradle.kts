@@ -56,7 +56,7 @@ val kodein = "6.5.5"
 
 val swiperefresh = "1.1.0"
 
-val paging = "3.0.0-alpha05"
+val paging = "3.0.0-alpha06"
 
 val preferences = "1.1.1"
 
