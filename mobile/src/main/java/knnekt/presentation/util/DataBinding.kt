@@ -20,6 +20,7 @@ import androidx.lifecycle.observe
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.android.material.badge.BadgeDrawable
 import knnekt.R
 import knnekt.shared.data.entity.Chat
 import kotlin.properties.ReadOnlyProperty

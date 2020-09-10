@@ -24,11 +24,11 @@
             android:layout_height="50dp"
             android:layout_margin="8dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_avatar_archived"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:srcCompat="@drawable/ic_avatar_archived"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
@@ -71,7 +71,7 @@
         </LinearLayout>
 
 
-        <TextView
+        <knnekt.presentation.ui.widget.BadgeTextView
             android:id="@+id/unread_chats_badge"
             invisibleWhen="@{chat.unreadMessageCount.isEmpty()}"
             android:layout_width="wrap_content"
@@ -80,8 +80,8 @@
             android:background="@drawable/bg_badge"
             android:backgroundTint="?attr/colorControlNormal"
             android:gravity="center"
-            android:paddingVertical="3dp"
-            android:paddingHorizontal="8.5dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
             android:text="@{chat.unreadMessageCount}"
             android:textColor="?android:attr/textColorPrimaryInverse"
             android:textStyle="bold"
