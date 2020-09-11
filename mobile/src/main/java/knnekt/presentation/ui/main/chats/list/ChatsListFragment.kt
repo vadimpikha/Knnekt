@@ -34,8 +34,10 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     private val binding by viewBinding(FragmentChatsListBinding::bind)
 
     private lateinit var chatsListAdapter: ChatsListAdapter
+    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var navController: NavController
-//    private lateinit var selectionTracker: SelectionTracker<Chat>
+
+    //    private lateinit var selectionTracker: SelectionTracker<Chat>
     private lateinit var swipeToDismissCallback: SwipeToDismissCallback
 
     private val chatSelectionPredicate = object : SelectionTracker.SelectionPredicate<Chat>() {
@@ -73,23 +75,30 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
     }
 
     private fun setupList() {
+        layoutManager = LinearLayoutManager(requireContext())
+        binding.chatsRecycler.layoutManager = layoutManager
         (binding.chatsRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         binding.chatsRecycler.adapter = chatsListAdapter
         setupListDecorations()
         setupSelectionTracker()
         chatsListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                scrollUp()
+
             }
 
             override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-                scrollUp()
+//                scrollUp()
             }
 
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                scrollUp()
+                if (positionStart == 0 && isStartOfList())
+                    scrollUp()
             }
         })
+    }
+
+    private fun isStartOfList(): Boolean {
+        return  layoutManager.findFirstVisibleItemPosition() == 0
     }
 
     private fun scrollUp() {
@@ -104,7 +113,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
         binding.chatsRecycler.addItemDecoration(divider)
 
         swipeToDismissCallback = object : SwipeToDismissCallback(
-           R.drawable.ic_outline_archive_24,
+            R.drawable.ic_outline_archive_24,
             requireContext().themeColor(R.attr.colorSecondary),
             getString(R.string.archive),
             requireContext().themeColor(android.R.attr.textColorPrimaryInverse)
@@ -124,7 +133,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), KodeinAware {
                     0
             }
 
-            override fun isItemViewSwipeEnabled() =  true//!selectionTracker.hasSelection()
+            override fun isItemViewSwipeEnabled() = true//!selectionTracker.hasSelection()
 
             override fun onSwiped(position: Int) {
                 val chat = chatsListAdapter.getItemAtPosition(position)
