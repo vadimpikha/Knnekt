@@ -15,15 +15,15 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import timber.log.Timber;
+
 public class RecyclerViewSwipeDecorator {
 
     private Canvas canvas;
     private RecyclerView recyclerView;
     private RecyclerView.ViewHolder viewHolder;
     private float dX;
-    private float dY;
     private int actionState;
-    private boolean isCurrentlyActive;
 
     private int swipeLeftBackgroundColor;
     private int swipeLeftActionIconId;
@@ -73,9 +73,7 @@ public class RecyclerViewSwipeDecorator {
         this.recyclerView = recyclerView;
         this.viewHolder = viewHolder;
         this.dX = dX;
-        this.dY = dY;
         this.actionState = actionState;
-        this.isCurrentlyActive = isCurrentlyActive;
         this.iconHorizontalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, recyclerView.getContext().getResources().getDisplayMetrics());
     }
 
@@ -339,7 +337,7 @@ public class RecyclerViewSwipeDecorator {
                 }
             }
         } catch (Exception e) {
-            Log.e(this.getClass().getName(), e.getMessage());
+            Timber.e(e);
         }
     }
 
@@ -353,7 +351,7 @@ public class RecyclerViewSwipeDecorator {
      * A Builder for the RecyclerViewSwipeDecorator class
      */
     public static class Builder {
-        private RecyclerViewSwipeDecorator mDecorator;
+        private final RecyclerViewSwipeDecorator mDecorator;
 
         /**
          * Create a builder for a RecyclerViewsSwipeDecorator
