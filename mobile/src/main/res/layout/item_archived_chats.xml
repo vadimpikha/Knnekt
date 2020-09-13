@@ -16,13 +16,13 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_chat_list_item"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/chat_photo"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="8dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,44 +31,33 @@
             app:srcCompat="@drawable/ic_avatar_archived"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:orientation="vertical"
-            android:paddingVertical="2dp"
-            app:layout_constraintBottom_toBottomOf="@id/chat_photo"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/archived_chats"
+            android:textAppearance="@style/ItemTitleTextAppearance"
             app:layout_constraintEnd_toStartOf="@id/unread_chats_badge"
-            app:layout_constraintStart_toEndOf="@id/chat_photo"
-            app:layout_constraintTop_toTopOf="@id/chat_photo">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/archived_chats"
-                android:textAppearance="@style/ItemTitleTextAppearance"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/chat_photo"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Chat name" />
+            app:layout_constraintStart_toEndOf="@+id/chat_photo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Chat name" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{chat.lastMessage}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/chat_photo"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hello, World!" />
-
-        </LinearLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{chat.lastMessage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/unread_chats_badge"
+            app:layout_constraintStart_toEndOf="@+id/chat_photo"
+            tools:text="Hello, World!" />
 
 
         <knnekt.presentation.ui.widget.BadgeTextView
@@ -76,7 +65,6 @@
             invisibleWhen="@{chat.unreadMessageCount.isEmpty()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:background="@drawable/bg_badge"
             android:backgroundTint="?attr/colorControlNormal"
             android:gravity="center"

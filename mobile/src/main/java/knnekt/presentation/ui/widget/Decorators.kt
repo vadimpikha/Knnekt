@@ -18,6 +18,20 @@ class MarginItemDecoration(
     private val reversed: Boolean = false
 ) : RecyclerView.ItemDecoration() {
 
+    private var allSides = false
+
+    companion object {
+        @Suppress("FunctionName")
+        fun AllSides(
+            context: Context,
+            @Dimension(unit = Dimension.DP)
+            margin: Int
+        ) = MarginItemDecoration(context, margin).apply {
+            allSides = true
+        }
+    }
+
+
     private val marginPx = context.dp(margin)
 
     override fun getItemOffsets(
@@ -35,7 +49,7 @@ class MarginItemDecoration(
         val last = itemPosition == (parent.adapter?.itemCount ?: 0) - 1
 
         with(outRect) {
-            if (first) {
+            if (first && !allSides) {
                 if (reversed) {
                     bottom = marginPx
                 } else {
@@ -43,7 +57,7 @@ class MarginItemDecoration(
                 }
             }
 
-            if (last) {
+            if (last && !allSides) {
                 if (reversed) {
                     top = marginPx
                 } else {
@@ -51,6 +65,9 @@ class MarginItemDecoration(
                 }
             }
 
+            if (allSides) {
+                top = marginPx
+            }
             left = marginPx
             right = marginPx
             bottom = marginPx
