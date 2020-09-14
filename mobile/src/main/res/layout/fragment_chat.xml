@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@id/message_pad"
             android:layout_margin="@dimen/small_fab_margin"
             android:backgroundTint="?attr/colorSurfaceVariant"
             android:contentDescription="@string/scroll_down"

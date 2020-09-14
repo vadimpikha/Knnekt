@@ -13,9 +13,7 @@ class FcmService : FcmPushListenerService(), KodeinAware {
 
     override val kodein: Kodein by closestKodein()
 
-    val appNotificationManager: AppNotificationManager by instance()
-
-//    data: {user_id=1731269, badge=62, message=You have 62 new messages, dialog_id=5f270a01ca8bf42eedfb723e}
+    private val appNotificationManager: AppNotificationManager by instance()
 
     override fun sendPushMessage(
         data: MutableMap<Any?, Any?>,

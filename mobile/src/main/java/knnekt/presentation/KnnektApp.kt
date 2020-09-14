@@ -47,7 +47,7 @@ class KnnektApp : Application(), KodeinAware {
                 getString(R.string.connectycube_auth_secret)
             )
             accountKey = getString(R.string.connectycube_account_key)
-            logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.NOTHING
+            logLevel =  LogLevel.NOTHING
         }
 
         ConnectycubeSessionManager.getInstance().init(applicationContext)

@@ -35,7 +35,8 @@
         <meta-data android:name="com.connectycube.pushnotifications.ENVIRONMENT" android:value="DEVELOPMENT" />
 
         <service
-            android:name=".presentation.fcm.FcmService">
+            android:name=".presentation.fcm.FcmService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

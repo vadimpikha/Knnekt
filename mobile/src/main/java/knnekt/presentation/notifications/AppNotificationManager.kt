@@ -27,6 +27,10 @@ class AppNotificationManagerImpl(
         private const val CHAT_NOTIFICATION_ID = 1
     }
 
+    init {
+        createChannelIfNeeded()
+    }
+
 
     override fun showNewMessageNotification(
         context: Context,
@@ -34,7 +38,6 @@ class AppNotificationManagerImpl(
         message: String,
         chatId: String
     ) {
-        createChannelIfNeeded()
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.common_full_open_on_phone)

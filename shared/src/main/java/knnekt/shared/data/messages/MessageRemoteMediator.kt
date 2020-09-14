@@ -38,7 +38,7 @@ class MessageRemoteMediator(
 
                     if (date == null) {
                         Timber.d("Get top")
-                        remoteSource.getTop(chatId, limit).also {
+                        remoteSource.getTop(chatId, state.config.initialLoadSize).also {
                             Timber.d("Loaded: ${it.joinToString("; ") { it.body }}")
                         }
                     } else {
