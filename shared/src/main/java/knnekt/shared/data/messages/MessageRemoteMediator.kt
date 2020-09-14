@@ -72,8 +72,9 @@ class MessageRemoteMediator(
 
             db.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    db.attachmentDao().nukeTable()
-                    db.messageDao().nukeTable()
+                    val messagesIds = db.messageDao().messagesIdsByDialogId(chatId)
+                    db.attachmentDao().deleteByMessageId(*messagesIds)
+                    db.messageDao().deleteByDialogId(chatId)
                 }
 
                 db.messageDao().insertAll(chats)

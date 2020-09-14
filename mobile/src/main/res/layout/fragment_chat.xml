@@ -14,17 +14,15 @@
             type="knnekt.presentation.ui.main.chats.messages.ChatViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/Widget.Knnekt.AppBar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,44 +45,33 @@
                     app:shapeAppearanceOverlay="@style/CircleImageView"
                     tools:srcCompat="@tools:sample/avatars" />
 
-                <LinearLayout
-                    android:id="@+id/chat_info_container"
+                <TextView
+                    android:id="@+id/chat_name"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{chat.name}"
+                    android:textAppearance="@style/ItemTitleTextAppearance"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/chat_photo">
-
-                    <TextView
-                        android:id="@+id/chat_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{chat.name}"
-                        android:textAppearance="@style/ItemTitleTextAppearance"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/chat_photo"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Chat name" />
+                    app:layout_constraintStart_toEndOf="@+id/chat_photo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Chat name" />
 
 
-                    <TextView
-                        android:id="@+id/status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@string/last_seen_at"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/chat_photo"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Was at 16:31" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/last_seen_at"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/chat_photo"
+                    tools:text="Was at 16:31" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,36 +80,33 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messages_recycler"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/message_pad"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/message_pad"
+            android:layout_below="@id/toolbar" />
+
+        <include
+            android:id="@+id/message_pad"
+            layout="@layout/message_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/scroll_down_fb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tint="?attr/colorControlNormal"
-            app:borderWidth="0dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/small_fab_margin"
             android:backgroundTint="?attr/colorSurfaceVariant"
+            android:contentDescription="@string/scroll_down"
             android:onClick="@{() -> viewModel.scrollDown()}"
             android:src="@drawable/ic_keyboard_arrow_down"
+            app:borderWidth="0dp"
             app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@+id/messages_recycler"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/scroll_down" />
+            app:tint="?attr/colorControlNormal" />
 
-        <include
-            android:id="@+id/message_pad"
-            layout="@layout/message_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

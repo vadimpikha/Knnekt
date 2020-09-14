@@ -3,4 +3,7 @@
     <dimen name="small_fab_margin">8dp</dimen>
     <dimen name="message_input_item_size">44dp</dimen>
     <dimen name="message_input_secondary_container_width">68dp</dimen>
+
+    <dimen name="message_incoming_bubble_margin_right">40dp</dimen>
+    <dimen name="message_outcoming_bubble_margin_left">88dp</dimen>
 </resources>

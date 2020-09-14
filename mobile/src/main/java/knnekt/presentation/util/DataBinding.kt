@@ -9,7 +9,10 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.*
+import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
@@ -25,6 +28,22 @@ import knnekt.R
 import knnekt.shared.data.entity.Chat
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
+
+@BindingAdapter(
+    "app:asyncText",
+    "android:textSize",
+    requireAll = false)
+fun asyncText(view: TextView, text: CharSequence, textSize: Int?) {
+    // first, set all measurement affecting properties of the text
+    // (size, locale, typeface, direction, etc)
+    if (textSize != null) {
+        // interpret the text size as SP
+        view.textSize = textSize.toFloat()
+    }
+    val params = TextViewCompat.getTextMetricsParams(view)
+    (view as AppCompatTextView).setTextFuture(
+        PrecomputedTextCompat.getTextFuture(text, params, null))
+}
 
 @BindingAdapter("activated")
 fun activated(view: View, state: Boolean) {

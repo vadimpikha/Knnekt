@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import knnekt.R
-import knnekt.databinding.ActivityMainBinding
 import knnekt.presentation.di.viewModelInstance
-import knnekt.presentation.util.viewBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 
@@ -17,12 +15,11 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by closestKodein()
     private val viewModel: MainViewModel by viewModelInstance()
-    private val binding by viewBinding(ActivityMainBinding::inflate)
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
         navController = findNavController(R.id.nav_host_fragment)
         if (savedInstanceState == null)
             viewModel.enterActiveState()

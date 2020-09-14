@@ -17,8 +17,8 @@ interface AttachmentDao {
     @Query("SELECT * FROM attachments WHERE attachment_id = :attachId ")
     suspend fun loadItemsById(attachId: String): List<AttachmentEntity>
 
-    @Query("DELETE FROM attachments WHERE messageId = :messageId")
-    fun deleteByMessageId(messageId: String)
+    @Query("DELETE FROM attachments WHERE messageId IN (:messageId)")
+    suspend fun deleteByMessageId(vararg messageId: String)
 
     @Query("DELETE FROM attachments WHERE attachment_id = :attachmentId")
     fun deleteById(attachmentId: String)

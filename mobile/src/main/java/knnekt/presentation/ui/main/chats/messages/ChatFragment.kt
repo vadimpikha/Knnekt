@@ -92,7 +92,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         })
     }
 
-    private fun isAutoScrollNeeded() : Boolean {
+    private fun isAutoScrollNeeded(): Boolean {
         return senderViewModel.messageJustSent || (chatViewModel.messageJustReceived && isStartOfList())
     }
 
@@ -189,7 +189,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KodeinAware {
         chatViewModel.toast.observeEvent(viewLifecycleOwner) {
             toast(it)
         }
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             chatViewModel.messagesPagingData.collectLatest { data ->
                 messagesAdapter.submitData(data)
             }
