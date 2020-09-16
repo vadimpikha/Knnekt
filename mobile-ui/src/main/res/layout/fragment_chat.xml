@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="chat"
+            type="knnekt.domain.entity.Chat" />
+
+        <variable
+            name="viewModel"
+            type="knnekt.presentation.messages.ChatMessagesViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.Knnekt.AppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/toolbar_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="6dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/chat_photo"
+                    imageUri="@{chat.photo}"
+                    placeholder="@{chat.private ? @drawable/ic_avatar_placeholder : @drawable/ic_avatar_placeholder_group}"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="h,1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/CircleImageView"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/chat_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{chat.name}"
+                    android:textAppearance="@style/ItemTitleTextAppearance"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/chat_photo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Chat name" />
+
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/last_seen_at"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/chat_photo"
+                    tools:text="Was at 16:31" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messages_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/message_pad"
+            android:layout_below="@id/toolbar" />
+
+        <include
+            android:id="@+id/message_pad"
+            layout="@layout/message_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/scroll_down_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/message_pad"
+            android:layout_margin="@dimen/small_fab_margin"
+            android:backgroundTint="?attr/colorSurfaceVariant"
+            android:contentDescription="@string/scroll_down"
+            android:onClick="@{() -> viewModel.scrollDown()}"
+            android:src="@drawable/ic_keyboard_arrow_down"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:tint="?attr/colorControlNormal" />
+
+    </RelativeLayout>
+</layout>

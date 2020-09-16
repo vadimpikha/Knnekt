@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+android {
+    compileSdkVersion project_compile_sdk
+    buildToolsVersion project_build_tools_version
+
+    defaultConfig {
+        applicationId "ua.vadimpikha.knnekt"
+        minSdkVersion project_min_sdk
+        targetSdkVersion project_target_sdk
+        versionCode 1
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        resValue "string", "connectycube_app_id", connectycube_app_id
+        resValue "string", "connectycube_auth_key", connectycube_auth_key
+        resValue "string", "connectycube_auth_secret", connectycube_auth_secret
+        resValue "string", "connectycube_account_key", connectycube_account_key
+        resValue "string", "firebase_project_id", firebase_project_id
+
+        vectorDrawables.useSupportLibrary  true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            versionNameSuffix = ' debug'
+        }
+    }
+
+    buildFeatures {
+        dataBinding true
+    }
+
+    androidExtensions {
+        experimental true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
+
+dependencies {
+    implementation project(":domain")
+    implementation project(":data")
+    implementation project(":presentation")
+
+    implementation "androidx.core:core-ktx:$core_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "org.kodein.di:kodein-di-framework-android-x:$kodein_version"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_component_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_component_version"
+
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+}
