@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/chatsListFragment">
+    <fragment
+        android:id="@+id/chatsListFragment"
+        android:name="knnekt.presentation.ui.main.chats.list.ChatsListFragment"
+        android:label="@string/app_name">
+        <action
+            android:id="@+id/chatsList_to_chat"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_chatsListFragment_to_archivedChatsFragment"
+            app:destination="@id/archivedChatsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="knnekt.presentation.ui.main.chats.messages.ChatFragment"
+        android:label="">
+        <argument
+            android:name="chatId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/archivedChatsFragment"
+        android:name="knnekt.presentation.ui.main.chats.list.archived.ArchivedChatsFragment"
+        android:label="@string/archived_chats">
+        <action
+            android:id="@+id/action_archivedChatsFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+</navigation>

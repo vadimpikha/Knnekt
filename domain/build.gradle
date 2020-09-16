@@ -1,22 +1,20 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.kodein.di:kodein-di-generic-jvm:$kodein_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "io.arrow-kt:arrow-core-data:$arrow_version"
+plugins {
+    id 'java-library'
+    id 'kotlin'
 }
 
-sourceSets {
-    main { java.srcDirs = ['src/main/kotlin'] }
-    test { java.srcDirs = ['src/test/kotlin'] }
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 compileKotlin {
     kotlinOptions.jvmTarget = '1.8'
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
+dependencies {
+    implementation "androidx.paging:paging-common-ktx:$paging_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
+    implementation "org.kodein.di:kodein-di:$kodein_version"
+}
