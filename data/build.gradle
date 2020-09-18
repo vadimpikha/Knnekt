@@ -51,4 +51,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "org.kodein.di:kodein-di:$kodein_version"
     implementation "androidx.preference:preference-ktx:$preference_version"
+
+    implementation "com.connectycube:connectycube-android-sdk-chat:$connectycube_version"
+    implementation "com.connectycube:connectycube-android-sdk-videochat:$connectycube_version"
+    implementation "com.connectycube:connectycube-android-sdk-storage:$connectycube_version"
+    implementation "com.connectycube:connectycube-android-sdk-pushnotifications:$connectycube_version"
+
+    implementation "com.google.code.gson:gson:$gson_version"
 }

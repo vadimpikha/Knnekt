@@ -33,6 +33,7 @@ class ChatRemoteMediator(
 
             MediatorResult.Success(endOfPaginationReached = chats.isEmpty())
         } catch (exception: Exception) {
+            throw exception
             MediatorResult.Error(exception)
         }
     }

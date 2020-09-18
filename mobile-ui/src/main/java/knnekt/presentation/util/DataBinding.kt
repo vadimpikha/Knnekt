@@ -32,7 +32,8 @@ import kotlin.reflect.KProperty
 @BindingAdapter(
     "app:asyncText",
     "android:textSize",
-    requireAll = false)
+    requireAll = false
+)
 fun asyncText(view: TextView, text: CharSequence, textSize: Int?) {
     // first, set all measurement affecting properties of the text
     // (size, locale, typeface, direction, etc)
@@ -42,7 +43,13 @@ fun asyncText(view: TextView, text: CharSequence, textSize: Int?) {
     }
     val params = TextViewCompat.getTextMetricsParams(view)
     (view as AppCompatTextView).setTextFuture(
-        PrecomputedTextCompat.getTextFuture(text, params, null))
+        PrecomputedTextCompat.getTextFuture(text, params, null)
+    )
+}
+
+@BindingAdapter("textInt")
+fun TextView.setTextInt(value: Int) {
+    text = value.toString()
 }
 
 @BindingAdapter("activated")

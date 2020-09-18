@@ -7,7 +7,17 @@ import knnekt.domain.mapper.Mapper
 object RemoteMessageToEntityMapper : Mapper<MessageRemoteEntity, MessageEntity> {
 
     override fun convert(obj: MessageRemoteEntity): MessageEntity {
-        TODO("Not yet implemented")
+        return MessageEntity(
+            obj.id,
+            obj.body,
+            obj.readIds,
+            obj.deliveredIds,
+            obj.dateSend,
+            null,
+            null,
+            obj.senderId,
+            false
+        )
     }
 
 }

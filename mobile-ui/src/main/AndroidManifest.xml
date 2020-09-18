@@ -34,13 +34,13 @@
         <meta-data android:name="com.connectycube.pushnotifications.SENDER_ID" android:value="@string/gcm_defaultSenderId" />
         <meta-data android:name="com.connectycube.pushnotifications.ENVIRONMENT" android:value="DEVELOPMENT" />
 
-        <service
-            android:name=".presentation.fcm.FcmService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".presentation.fcm.FcmService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
     </application>
 
