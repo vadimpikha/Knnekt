@@ -5,7 +5,7 @@ data class Chat(
     val lastMessage: String,
     val lastMessageUser: String,
     val photo: String?,
-    val unreadMessageCount: String,
+    val unreadMessageCount: Int,
     val name: String,
     val type: Int,
     val updatedAt: String,

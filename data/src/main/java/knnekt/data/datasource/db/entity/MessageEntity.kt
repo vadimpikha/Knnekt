@@ -4,7 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "messages"
+    tableName = "messages",
+    ignoredColumns = ["attachments"]
 )
 data class MessageEntity(
     @PrimaryKey
@@ -17,4 +18,8 @@ data class MessageEntity(
     val recipientId: Int?,
     val senderId: Int?,
     val markable: Boolean
-)
+) {
+
+    var attachments: List<AttachmentEntity> = emptyList()
+
+}

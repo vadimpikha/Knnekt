@@ -17,11 +17,11 @@ android {
         versionName "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        resValue "string", "connectycube_app_id", connectycube_app_id
-        resValue "string", "connectycube_auth_key", connectycube_auth_key
-        resValue "string", "connectycube_auth_secret", connectycube_auth_secret
-        resValue "string", "connectycube_account_key", connectycube_account_key
-        resValue "string", "firebase_project_id", firebase_project_id
+        resValue "string", "connectycube_app_id", connectycube_app_id as String
+        resValue "string", "connectycube_auth_key", connectycube_auth_key as String
+        resValue "string", "connectycube_auth_secret", connectycube_auth_secret as String
+        resValue "string", "connectycube_account_key", connectycube_account_key as String
+        resValue "string", "firebase_project_id", firebase_project_id as String
 
         vectorDrawables.useSupportLibrary  true
     }
@@ -79,4 +79,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_component_version"
 
     implementation "com.github.bumptech.glide:glide:$glide_version"
+
+    implementation "com.connectycube:connectycube-android-sdk-core:$connectycube_version"
 }

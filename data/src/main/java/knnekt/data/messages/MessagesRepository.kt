@@ -76,7 +76,7 @@ class MessagesRepositoryImpl(
 
         val messageDao = db.messageDao()
 //        messageDao.insert(remoteToEntityMapper.convert(message))
-        messagesRemoteDataSource.createMessage(text, userId)
+        messagesRemoteDataSource.createMessage(chatId, text, userId)
 
 //        val sentMessage = ConnectycubeRestChatService.createMessage(message, true).await()
 //        messageDao.update(remoteToEntityMapper.convert(sentMessage))
