@@ -1,15 +1,16 @@
 package knnekt.data.datasource.db.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "messages",
-    ignoredColumns = ["attachments"]
+    tableName = "messages"
 )
 data class MessageEntity(
     @PrimaryKey
     val id: String,
+    val chatId: String,
     val body: String,
     val readIds: List<Int>,
     val deliveredIds: List<Int>,
@@ -19,7 +20,7 @@ data class MessageEntity(
     val senderId: Int?,
     val markable: Boolean
 ) {
-
+    @Ignore
     var attachments: List<AttachmentEntity> = emptyList()
 
 }

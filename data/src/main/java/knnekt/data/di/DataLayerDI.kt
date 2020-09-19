@@ -39,7 +39,8 @@ object DataLayerDI {
         }
 
         bind<Mapper<MessageWithAttachmentsEntity, Message>>() with singleton {
-            MessageWithAttachmentToPresentationMapper
+            val userId = instance<PreferencesDataSource>().currentUser!!.id
+            MessageWithAttachmentToPresentationMapper(userId)
         }
         bind<Mapper<MessageRemoteEntity, List<AttachmentEntity>>>() with singleton {
             RemoteMessageAttachmentMapper

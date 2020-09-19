@@ -63,6 +63,7 @@ class MessagesRepositoryImpl(
         val userId = requireNotNull(preferencesDataSource.currentUser?.id)
 
         val message = MessageEntity(
+            "",
             chatId,
             text,
             emptyList(),

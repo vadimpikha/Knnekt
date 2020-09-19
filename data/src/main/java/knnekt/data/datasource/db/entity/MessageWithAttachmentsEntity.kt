@@ -11,10 +11,4 @@ data class MessageWithAttachmentsEntity(
         entityColumn = "messageId"
     )
     val attachments: List<AttachmentEntity>?
-) {
-
-    init {
-        message.attachments = attachments.orEmpty()
-    }
-
-}
+)
