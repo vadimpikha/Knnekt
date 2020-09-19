@@ -25,16 +25,16 @@ interface MessageDao {
     @Query("UPDATE messages SET deliveredIds = :userId WHERE id = :id")
     fun updateDeliveredIds(id: String, userId: String): Int
 
-    @Query("SELECT * FROM messages WHERE id = :dialogId ORDER BY dateSent DESC")
+    @Query("SELECT * FROM messages WHERE chatId = :dialogId ORDER BY dateSent DESC")
     fun messagesByDialogIdPaging(dialogId: String): PagingSource<Int, MessageEntity>
 
-    @Query("SELECT * FROM messages WHERE id = :dialogId ORDER BY dateSent DESC")
+    @Query("SELECT * FROM messages WHERE chatId = :dialogId ORDER BY dateSent DESC")
     suspend fun messagesByDialogId(dialogId: String): List<MessageEntity>
 
-    @Query("SELECT id FROM messages WHERE id = :dialogId")
+    @Query("SELECT id FROM messages WHERE chatId = :dialogId")
     suspend fun messagesIdsByDialogId(dialogId: String): Array<String>
 
-    @Query("DELETE FROM messages WHERE id = :dialogId")
+    @Query("DELETE FROM messages WHERE chatId = :dialogId")
     suspend fun deleteByDialogId(dialogId: String)
 
     @Query("DELETE FROM messages WHERE id = :messageId")

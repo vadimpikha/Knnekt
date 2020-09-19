@@ -9,6 +9,7 @@ object RemoteMessageToEntityMapper : Mapper<MessageRemoteEntity, MessageEntity> 
     override fun convert(obj: MessageRemoteEntity): MessageEntity {
         return MessageEntity(
             obj.id,
+            obj.chatId,
             obj.body,
             obj.readIds,
             obj.deliveredIds,

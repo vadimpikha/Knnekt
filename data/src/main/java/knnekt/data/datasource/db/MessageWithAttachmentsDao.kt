@@ -10,10 +10,10 @@ import knnekt.data.datasource.db.entity.MessageWithAttachmentsEntity
 interface MessageWithAttachmentsDao {
 
     @Transaction
-    @Query("SELECT * from messages")
-    suspend fun getMessagesWithAttachments(): List<MessageWithAttachmentsEntity>
+    @Query("SELECT * from messages WHERE chatId = :dialogId ORDER BY dateSent DESC")
+    suspend fun getMessagesWithAttachments(dialogId: String): List<MessageWithAttachmentsEntity>
 
     @Transaction
-    @Query("SELECT * FROM messages WHERE id = :dialogId ORDER BY dateSent DESC")
+    @Query("SELECT * FROM messages WHERE chatId = :dialogId ORDER BY dateSent DESC")
     fun postsByDialogId(dialogId: String): PagingSource<Int, MessageWithAttachmentsEntity>
 }
