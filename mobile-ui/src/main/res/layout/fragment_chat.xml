@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="chat"
-            type="knnekt.domain.entity.Chat" />
-
-        <variable
             name="viewModel"
             type="knnekt.presentation.messages.ChatMessagesViewModel" />
     </data>
@@ -33,8 +29,8 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/chat_photo"
-                    imageUri="@{chat.photo}"
-                    placeholder="@{chat.private ? @drawable/ic_avatar_placeholder : @drawable/ic_avatar_placeholder_group}"
+                    imageUri="@{viewModel.chat.photo}"
+                    placeholder="@{viewModel.chat.private ? @drawable/ic_avatar_placeholder : @drawable/ic_avatar_placeholder_group}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
@@ -52,7 +48,7 @@
                     android:layout_marginHorizontal="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@{chat.name}"
+                    android:text="@{viewModel.chat.name}"
                     android:textAppearance="@style/ItemTitleTextAppearance"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/chat_photo"
@@ -93,20 +89,20 @@
             android:layout_alignParentBottom="true" />
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/scroll_down_fb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_above="@id/message_pad"
-            android:layout_margin="@dimen/small_fab_margin"
-            android:backgroundTint="?attr/colorSurfaceVariant"
-            android:contentDescription="@string/scroll_down"
-            android:onClick="@{() -> viewModel.scrollDown()}"
-            android:src="@drawable/ic_keyboard_arrow_down"
-            app:borderWidth="0dp"
-            app:fabSize="mini"
-            app:tint="?attr/colorControlNormal" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/scroll_down_fb"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_above="@id/message_pad"-->
+<!--            android:layout_margin="@dimen/small_fab_margin"-->
+<!--            android:backgroundTint="?attr/colorSurfaceVariant"-->
+<!--            android:contentDescription="@string/scroll_down"-->
+<!--            android:onClick="@{() -> viewModel.scrollDown()}"-->
+<!--            android:src="@drawable/ic_keyboard_arrow_down"-->
+<!--            app:borderWidth="0dp"-->
+<!--            app:fabSize="mini"-->
+<!--            app:tint="?attr/colorControlNormal" />-->
 
     </RelativeLayout>
 </layout>

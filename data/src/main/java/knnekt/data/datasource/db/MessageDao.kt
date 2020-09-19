@@ -16,9 +16,6 @@ interface MessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: MessageEntity)
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(item: MessageEntity): Int
-
     @Query("SELECT * FROM messages WHERE id = :id ")
     fun loadItem(id: String): MessageEntity
 

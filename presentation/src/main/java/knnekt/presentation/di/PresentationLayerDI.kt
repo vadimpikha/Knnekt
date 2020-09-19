@@ -1,6 +1,5 @@
 package knnekt.presentation.di
 
-import android.system.Os.bind
 import androidx.lifecycle.ViewModelProvider
 import knnekt.presentation.auth.SignInViewModel
 import knnekt.presentation.chats.ArchivedChatsViewModel
@@ -31,7 +30,7 @@ object PresentationLayerDI {
             ChatsListViewModel(instance(), instance())
         }
         bindViewModel<ChatMessagesViewModel>() with factory { chatId: String ->
-            ChatMessagesViewModel(chatId, instance())
+            ChatMessagesViewModel(chatId, instance(), instance())
         }
 
 //        bindViewModel<MainViewModel>() with provider {

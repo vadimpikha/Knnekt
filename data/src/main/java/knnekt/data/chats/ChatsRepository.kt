@@ -44,6 +44,11 @@ class ChatsRepositoryImpl(
         }
     }
 
+    override fun getChatById(chatId: String): Flow<Chat> {
+        return db.chatsWithPrefsDao().getChat(chatId)
+            .map { entityToPresentationMapper.convert(it) }
+    }
+
     override suspend fun archiveChat(chatId: String, archive: Boolean) {
         db.withTransaction {
             val chatPrefsDao = db.chatPrefsDao()

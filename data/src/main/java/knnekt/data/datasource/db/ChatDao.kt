@@ -21,7 +21,7 @@ interface ChatDao {
     fun getChats(): Flow<List<ChatEntity>>
 
     @Query("SELECT * FROM chats WHERE chat_id = :chatId")
-    suspend fun getChat(chatId: String?): ChatEntity?
+    fun getChat(chatId: String): Flow<ChatEntity>
 
     /**
      * update or insert

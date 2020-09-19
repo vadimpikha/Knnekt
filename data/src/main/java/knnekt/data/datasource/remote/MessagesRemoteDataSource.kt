@@ -8,10 +8,12 @@ import com.connectycube.chat.request.MessageGetBuilder
 import knnekt.data.datasource.remote.entity.AttachmentRemoteEntity
 import knnekt.data.datasource.remote.entity.MessageRemoteEntity
 import knnekt.data.util.await
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 interface MessagesRemoteDataSource {
 
-    suspend fun createMessage(chatId: String, text: String, userId: Int)
+    fun createMessage(chatId: String, text: String, userId: Int): Flow<MessageRemoteEntity>
     suspend fun getRecentMessages(chatId: String, limit: Int): List<MessageRemoteEntity>
     suspend fun getMessagesAfter(chatId: String, limit: Int, date: Long): List<MessageRemoteEntity>
     suspend fun getMessagesBefore(chatId: String, limit: Int, date: Long): List<MessageRemoteEntity>
@@ -20,14 +22,23 @@ interface MessagesRemoteDataSource {
 
 class MessagesRemoteDataSourceImpl : MessagesRemoteDataSource {
 
-    override suspend fun createMessage(chatId: String, text: String, userId: Int) {
+    override fun createMessage(
+        chatId: String,
+        text: String,
+        userId: Int
+    ): Flow<MessageRemoteEntity> = flow {
+
         val message = ConnectycubeChatMessage().apply {
             body = text
             dialogId = chatId
             dateSent = System.currentTimeMillis() / 1000
             senderId = userId
         }
-        ConnectycubeRestChatService.createMessage(message, true).await()
+        emit(message.let(::convert))
+        val sentMessage =  ConnectycubeRestChatService.createMessage(message, true)
+            .await().let(::convert)
+
+        emit(sentMessage)
     }
 
     override suspend fun getRecentMessages(
@@ -89,8 +100,8 @@ class MessagesRemoteDataSourceImpl : MessagesRemoteDataSource {
             message.dialogId,
             message.dateSent,
             message.body,
-            message.readIds.toList(),
-            message.deliveredIds.toList(),
+            message.readIds?.toList().orEmpty(),
+            message.deliveredIds?.toList().orEmpty(),
             message.senderId,
             message.attachments?.map(this::convert).orEmpty()
         )

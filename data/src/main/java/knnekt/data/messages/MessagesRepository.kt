@@ -11,12 +11,19 @@ import knnekt.data.datasource.db.entity.MessageEntity
 import knnekt.data.datasource.db.entity.MessageWithAttachmentsEntity
 import knnekt.data.datasource.remote.MessagesRemoteDataSource
 import knnekt.data.datasource.remote.entity.MessageRemoteEntity
+import knnekt.data.util.processScope
 import knnekt.domain.entity.Message
 import knnekt.domain.mapper.Mapper
 import knnekt.domain.messages.MessagesRepository
 import knnekt.domain.prefs.PreferencesDataSource
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MessagesRepositoryImpl(
     private val db: AppDatabase,
@@ -62,25 +69,13 @@ class MessagesRepositoryImpl(
 
         val userId = requireNotNull(preferencesDataSource.currentUser?.id)
 
-        val message = MessageEntity(
-            "",
-            chatId,
-            text,
-            emptyList(),
-            emptyList(),
-            System.currentTimeMillis() / 1000,
-            null,
-            null,
-            userId,
-            false
-        )
-
-        val messageDao = db.messageDao()
-//        messageDao.insert(remoteToEntityMapper.convert(message))
-        messagesRemoteDataSource.createMessage(chatId, text, userId)
-
-//        val sentMessage = ConnectycubeRestChatService.createMessage(message, true).await()
-//        messageDao.update(remoteToEntityMapper.convert(sentMessage))
+        processScope.launch {
+            messagesRemoteDataSource.createMessage(chatId, text, userId)
+                .take(2)
+                .collectLatest { message ->
+                    db.messageDao().insert(remoteToEntityMapper.convert(message))
+                }
+        }
     }
 
 

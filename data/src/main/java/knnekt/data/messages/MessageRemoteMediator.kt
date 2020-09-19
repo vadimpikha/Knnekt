@@ -69,7 +69,6 @@ class MessageRemoteMediator(
 
             return MediatorResult.Success(endOfPaginationReached = dialogs.isEmpty())
         } catch (exception: Exception) {
-            throw exception
             return MediatorResult.Error(exception)
         }
 

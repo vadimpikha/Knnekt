@@ -20,13 +20,16 @@ import knnekt.presentation.messages.ChatMessagesViewModelFactory
 import knnekt.presentation.messages.MessageSenderViewModel
 import knnekt.presentation.messages.MessageSenderViewModelFactory
 import knnekt.presentation.ui.setOnHoldListener
+import knnekt.presentation.ui.widget.HolderPrefetcher
+import knnekt.presentation.ui.widget.PrefetchRecycledViewPool
 import knnekt.presentation.util.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.direct
 
+@ExperimentalCoroutinesApi
 class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
 
     override val di by closestDI()
@@ -39,11 +42,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
     }
     private val binding by viewBinding(FragmentChatBinding::bind)
 
+    private val prefetchScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     private lateinit var messagesAdapter: ChatMessagesAdapter
     private lateinit var navController: NavController
     private lateinit var scroller: JumpSmoothScroller
     private lateinit var chatRecyclerLayoutManager: LinearLayoutManager
+    private lateinit var viewPool: PrefetchRecycledViewPool
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +68,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
                 lifecycleOwner = viewLifecycleOwner
             }
         }
+
+        viewPool = PrefetchRecycledViewPool(
+            view.context,
+            prefetchScope
+        ).apply {
+            prepare()
+        }
+
         navController = findNavController()
         initViews()
         bindData()
@@ -108,28 +122,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
             layoutManager = chatRecyclerLayoutManager
             adapter = messagesAdapter
             addItemDecoration(MarginItemDecoration(requireContext(), 8, true))
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    val totalItemCount = chatRecyclerLayoutManager.itemCount
-                    val firstVisible = chatRecyclerLayoutManager.findFirstVisibleItemPosition()
-
-                    var shouldShow = firstVisible >= 1
-                    if (dy < 0) {
-//                    onScrolled Upwards
-                    } else if (dy > 0) {
-//                    onScrolled Downwards
-                        shouldShow = false
-                    }
-
-                    if (totalItemCount > 0 && shouldShow) {
-                        if (!binding.scrollDownFb.isShown) {
-                            binding.scrollDownFb.show()
-                        }
-                    } else {
-                        if (binding.scrollDownFb.isShown) binding.scrollDownFb.hide()
-                    }
-                }
-            })
+            setRecycledViewPool(viewPool)
+            prefetchItems(viewPool)
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -166,6 +160,16 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
         }
     }
 
+    private fun prefetchItems(holderPrefetcher: HolderPrefetcher) {
+        val count = 20
+        holderPrefetcher.setViewsCount(R.layout.item_message_simple_incoming, count) { fakeParent, viewType ->
+            ChatMessagesAdapter.ChatMessageViewHolder.Factory(fakeParent, viewType)
+        }
+        holderPrefetcher.setViewsCount(R.layout.item_message_simple_ougoing, count) { fakeParent, viewType ->
+            ChatMessagesAdapter.ChatMessageViewHolder.Factory(fakeParent, viewType)
+        }
+    }
+
     private fun swapSecondaryInputButtons() {
         with(binding.messagePad) {
             val translationXTmp = btnRecordVideoMsg.translationX
@@ -192,6 +196,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
                 messagesAdapter.submitData(data)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        viewPool.clear()
+        super.onDestroyView()
     }
 
 }

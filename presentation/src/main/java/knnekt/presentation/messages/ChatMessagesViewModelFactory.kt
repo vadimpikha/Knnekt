@@ -14,6 +14,7 @@ class ChatMessagesViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return ChatMessagesViewModel(
             chatId,
+            di.instance(),
             di.instance()
         ) as T
     }
