@@ -29,7 +29,8 @@ data class ChatEntity(
     @ColumnInfo(name = "last_message_date_sent")
     val lastMessageDate: Long,
     val occupants: List<Int>,
-    val occupantsCount: Int
+    val occupantsCount: Int,
+    val createdAt: Long
 ) {
 
     companion object {
@@ -46,7 +47,8 @@ data class ChatEntity(
                 name = "",
                 Long.MAX_VALUE,
                 emptyList(),
-                0
+                0,
+                Long.MAX_VALUE
             )
         }
     }

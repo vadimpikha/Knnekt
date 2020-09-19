@@ -17,7 +17,7 @@ import org.kodein.di.android.x.closestDI
 class SignInFragment : Fragment(R.layout.fragment_sign_in), DIAware {
 
     override val di by closestDI()
-    private val viewModel: knnekt.presentation.auth.SignInViewModel by activityViewModelInstance()
+    private val viewModel: knnekt.presentation.start.auth.SignInViewModel by activityViewModelInstance()
     private val binding by viewBinding(FragmentSignInBinding::bind)
     lateinit var navController: NavController
 
@@ -48,10 +48,6 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in), DIAware {
     }
 
     private fun onBindLiveData() {
-        viewModel.userSignedInEvent.observeEvent(viewLifecycleOwner) {
-            startActivity(MainActivity.intent(requireContext()))
-            activity?.finish()
-        }
         viewModel.toastEvent.observeEvent(viewLifecycleOwner) { text ->
             toast(text)
         }

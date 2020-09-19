@@ -17,7 +17,8 @@ object RemoteChatToEntityMapper: Mapper<ChatRemoteEntity, ChatEntity> {
             obj.name,
             obj.lastMessageDate,
             obj.occupants,
-            obj.occupantsCount
+            obj.occupantsCount,
+            obj.createdAt
         )
     }
 
