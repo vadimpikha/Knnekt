@@ -33,7 +33,11 @@ object ChatWithPrefsToPresentationMapper : Mapper<ChatWithPrefsEntity, Chat> {
 
 
     private fun getUpdateTime(obj: ChatEntity): String {
-        return getPrettyDate(obj.lastMessageDate * 1000)
+        var updatedAt = obj.lastMessageDate * 1000
+        if (updatedAt == 0L) {
+            updatedAt = obj.createdAt
+        }
+        return getPrettyDate(updatedAt)
     }
 
     private fun getPrettyDate(date: Long): String {

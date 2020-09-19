@@ -32,7 +32,7 @@ class MessageRemoteMediator(
 
             val limit = state.config.pageSize
 
-            val dialogs = when (loadType) {
+            val messages = when (loadType) {
                 LoadType.REFRESH -> {
                     val date = getSendDateClosestToCurrentPosition(state)
 
@@ -63,11 +63,11 @@ class MessageRemoteMediator(
                     db.messageDao().deleteByDialogId(chatId)
                 }
 
-                db.messageDao().insertAll(dialogs.map(remoteToEntityMapper::convert))
-                db.attachmentDao().insertAll(dialogs.flatMap(attachmentMapper::convert))
+                db.messageDao().insertAll(messages.map(remoteToEntityMapper::convert))
+                db.attachmentDao().insertAll(messages.flatMap(attachmentMapper::convert))
             }
 
-            return MediatorResult.Success(endOfPaginationReached = dialogs.isEmpty())
+            return MediatorResult.Success(endOfPaginationReached = messages.isEmpty())
         } catch (exception: Exception) {
             return MediatorResult.Error(exception)
         }

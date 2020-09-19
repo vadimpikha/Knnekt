@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="knnekt.presentation.auth.SignInViewModel" />
+            type="knnekt.presentation.start.auth.SignInViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

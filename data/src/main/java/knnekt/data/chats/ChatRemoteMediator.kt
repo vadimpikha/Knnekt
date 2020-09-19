@@ -10,6 +10,7 @@ import knnekt.data.datasource.db.entity.ChatWithPrefsEntity
 import knnekt.data.datasource.remote.ChatsRemoteDataSource
 import knnekt.data.datasource.remote.entity.ChatRemoteEntity
 import knnekt.domain.mapper.Mapper
+import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
 class ChatRemoteMediator(
@@ -25,16 +26,67 @@ class ChatRemoteMediator(
     ): MediatorResult {
 
         return try {
-            val allDataSize = state.pages.sumBy { it.data.size }
 
-            val chats = chatsRemoteDataSource.getChats().map(remoteToEntityMapper::convert)
+            val limit = state.config.pageSize
+
+            val chats = when (loadType) {
+                LoadType.REFRESH -> {
+                    val date = getLastMessageDateClosestToCurrentPosition(state)
+
+                    if (date == null) {
+                        chatsRemoteDataSource.getRecentChats(state.config.initialLoadSize)
+                    } else {
+                        chatsRemoteDataSource.getChatsUpdatedAfter(limit, date)
+                    }
+                }
+                LoadType.PREPEND -> {
+                    val date = getLastMessageDateOfFirstItem(state)
+                        ?: throw InvalidObjectException("Result is empty")
+
+                    chatsRemoteDataSource.getChatsUpdatedAfter(limit, date)
+                }
+                LoadType.APPEND -> {
+                    val date = getLastMessageDateOfLastItem(state)
+                        ?: throw InvalidObjectException("Result is empty")
+
+                    chatsRemoteDataSource.getChatsUpdatedBefore(limit, date)
+                }
+            }.map(remoteToEntityMapper::convert)
 
             db.chatDao().insertAll(chats)
 
             MediatorResult.Success(endOfPaginationReached = chats.isEmpty())
         } catch (exception: Exception) {
-            throw exception
             MediatorResult.Error(exception)
+        }
+    }
+
+    private fun getLastMessageDateOfLastItem(state: PagingState<Int, ChatWithPrefsEntity>): Long? {
+        return state.lastItemOrNull()?.chat?.let { chat ->
+            if (chat.lastMessageDate != 0L)
+                chat.lastMessageDate
+            else
+                chat.createdAt
+        }
+    }
+
+    private fun getLastMessageDateOfFirstItem(state: PagingState<Int, ChatWithPrefsEntity>): Long? {
+        return state.firstItemOrNull()?.chat?.let { chat ->
+            if (chat.lastMessageDate != 0L)
+                chat.lastMessageDate
+            else
+                chat.createdAt
+        }
+    }
+
+    private fun getLastMessageDateClosestToCurrentPosition(state: PagingState<Int, ChatWithPrefsEntity>): Long? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.chat?.let { chat ->
+                if (chat.lastMessageDate != 0L)
+                    chat.lastMessageDate
+                else
+                    chat.createdAt
+            }
         }
     }
 

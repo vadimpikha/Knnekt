@@ -8,19 +8,48 @@ import knnekt.data.util.await
 
 interface ChatsRemoteDataSource {
 
-    suspend fun getChats(): List<ChatRemoteEntity>
+    suspend fun getRecentChats(limit: Int): List<ChatRemoteEntity>
+    suspend fun getChatsUpdatedBefore(limit: Int, date: Long): List<ChatRemoteEntity>
+    suspend fun getChatsUpdatedAfter(limit: Int, date: Long): List<ChatRemoteEntity>
+    suspend fun getChatById(chatId: String): ChatRemoteEntity
 
 }
 
 class ChatsRemoteDataSourceImpl : ChatsRemoteDataSource {
 
-    override suspend fun getChats(): List<ChatRemoteEntity> {
-        val request = RequestGetBuilder()
+    override suspend fun getChatById(chatId: String): ChatRemoteEntity {
+        val request = RequestGetBuilder().apply {
+            this.limit = limit
+            eq("_id", chatId)
+        }
         return ConnectycubeRestChatService.getChatDialogs(null, request)
-            .await().map(this::convert).also {
-                println("=======CHATS==========")
-                println(it)
-            }
+            .await().map(this::convert).single()
+    }
+
+    override suspend fun getRecentChats(limit: Int): List<ChatRemoteEntity> {
+        val request = RequestGetBuilder().apply {
+            this.limit = limit
+        }
+        return ConnectycubeRestChatService.getChatDialogs(null, request)
+            .await().map(this::convert)
+    }
+
+    override suspend fun getChatsUpdatedBefore(limit: Int, date: Long): List<ChatRemoteEntity> {
+        val request = RequestGetBuilder().apply {
+            this.limit = limit
+            lt("updated_at", date)
+        }
+        return ConnectycubeRestChatService.getChatDialogs(null, request)
+            .await().map(this::convert)
+    }
+
+    override suspend fun getChatsUpdatedAfter(limit: Int, date: Long): List<ChatRemoteEntity> {
+        val request = RequestGetBuilder().apply {
+            this.limit = limit
+            gt("updated_at", date)
+        }
+        return ConnectycubeRestChatService.getChatDialogs(null, request)
+            .await().map(this::convert)
     }
 
 
@@ -30,6 +59,7 @@ class ChatsRemoteDataSourceImpl : ChatsRemoteDataSource {
             chat.lastMessage,
             chat.lastMessageDateSent,
             chat.lastMessageUserId ?: -1,
+            chat.createdAt.time,
             chat.photo,
             chat.name,
             chat.unreadMessageCount,

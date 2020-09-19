@@ -73,9 +73,8 @@ class ChatsRepositoryImpl(
     }
 
     override suspend fun updateChat(chatId: String) {
-        val chat = chatsRemoteDataSource.getChats()
-            .map(remoteToEntityMapper::convert)
-            .single()
+        val chat = chatsRemoteDataSource.getChatById(chatId)
+            .let(remoteToEntityMapper::convert)
 
         db.chatDao().insert(chat)
     }

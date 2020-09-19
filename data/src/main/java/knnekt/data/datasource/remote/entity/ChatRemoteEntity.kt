@@ -5,6 +5,7 @@ data class ChatRemoteEntity(
     val lastMessage: String?,
     val lastMessageDate: Long,
     val lastMessageUserId: Int,
+    val createdAt: Long,
     val photo: String?,
     val name: String,
     val unreadCount: Int,

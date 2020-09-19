@@ -6,7 +6,7 @@ import knnekt.domain.chats.GetChatsPagingUseCase
 import knnekt.domain.chats.InvalidateChatUseCase
 import knnekt.domain.messages.GetMessagesPagingUseCase
 import knnekt.domain.messages.SendMessageUseCase
-import knnekt.domain.users.CheckUserSignedInUseCase
+import knnekt.domain.users.GetUserSignedStatusUseCase
 import knnekt.domain.users.SignInUseCase
 import kotlinx.coroutines.Dispatchers
 import org.kodein.di.DI
@@ -23,7 +23,7 @@ object DomainLayerDI {
         }
 
         bind() from singleton {
-            CheckUserSignedInUseCase(instance())
+            GetUserSignedStatusUseCase(instance(), Dispatchers.Main)
         }
 
         bind() from  singleton {

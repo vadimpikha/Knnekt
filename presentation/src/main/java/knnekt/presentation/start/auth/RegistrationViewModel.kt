@@ -1,4 +1,4 @@
-package knnekt.presentation.auth
+package knnekt.presentation.start.auth
 
 import androidx.lifecycle.ViewModel
 
