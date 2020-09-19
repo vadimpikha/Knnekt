@@ -15,15 +15,16 @@ class ChatMessagesAdapter :
     PagingDataAdapter<Message, ChatMessagesAdapter.ChatMessageViewHolder>(MessageDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatMessageViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return ChatMessageViewHolder(
-            DataBindingUtil.inflate(inflater, viewType, parent, false)
-        )
+        return ChatMessageViewHolder.Factory(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: ChatMessageViewHolder, position: Int) {
         val item = getItem(position) ?: return
         holder.bind(item)
+    }
+
+    override fun onViewRecycled(holder: ChatMessageViewHolder) {
+        holder.recycle()
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -44,12 +45,27 @@ class ChatMessagesAdapter :
         return !message.attachments.isNullOrEmpty()
     }
 
-    class ChatMessageViewHolder(val binding: ViewDataBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class ChatMessageViewHolder(binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        private var binding: ViewDataBinding? = binding
 
         fun bind(message: Message) {
-            binding.setVariable(BR.message, message)
-            binding.executePendingBindings()
+            binding?.setVariable(BR.message, message)
+            binding?.executePendingBindings()
+        }
+
+        fun recycle() {
+            binding = null
+        }
+
+        companion object {
+            @Suppress("FunctionName")
+            fun Factory(parent: ViewGroup, viewType: Int) : ChatMessageViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                return ChatMessageViewHolder(
+                    DataBindingUtil.inflate(inflater, viewType, parent, false)
+                )
+            }
         }
 
     }

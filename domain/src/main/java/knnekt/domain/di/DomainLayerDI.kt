@@ -1,6 +1,7 @@
 package knnekt.domain.di
 
 import knnekt.domain.chats.ArchiveChatUseCase
+import knnekt.domain.chats.GetChatByIdUseCase
 import knnekt.domain.chats.GetChatsPagingUseCase
 import knnekt.domain.chats.InvalidateChatUseCase
 import knnekt.domain.messages.GetMessagesPagingUseCase
@@ -16,6 +17,10 @@ import org.kodein.di.singleton
 object DomainLayerDI {
 
     val useCaseModule = DI.Module("DomainLayer.UseCaseModule") {
+
+        bind() from singleton {
+            GetChatByIdUseCase(instance(), Dispatchers.IO)
+        }
 
         bind() from singleton {
             CheckUserSignedInUseCase(instance())

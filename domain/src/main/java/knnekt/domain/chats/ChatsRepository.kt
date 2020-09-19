@@ -9,5 +9,6 @@ interface ChatsRepository {
     fun getChatsPagingData(): Flow<PagingData<Chat>>
     suspend fun updateChat(chatId: String)
     suspend fun archiveChat(chatId: String, archive: Boolean)
+    fun getChatById(chatId: String): Flow<Chat>
 
 }
