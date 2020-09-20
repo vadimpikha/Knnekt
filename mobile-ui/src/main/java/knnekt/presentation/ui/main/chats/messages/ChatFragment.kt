@@ -19,6 +19,7 @@ import knnekt.presentation.ui.widget.MarginItemDecoration
 import knnekt.presentation.messages.ChatMessagesViewModelFactory
 import knnekt.presentation.messages.MessageSenderViewModel
 import knnekt.presentation.messages.MessageSenderViewModelFactory
+import knnekt.presentation.ui.main.chats.list.details.ChatDetailsFragment
 import knnekt.presentation.ui.setOnHoldListener
 import knnekt.presentation.ui.widget.HolderPrefetcher
 import knnekt.presentation.ui.widget.PrefetchRecycledViewPool
@@ -42,7 +43,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
     }
     private val binding by viewBinding(FragmentChatBinding::bind)
 
-    private val prefetchScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private val prefetchScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     private lateinit var messagesAdapter: ChatMessagesAdapter
     private lateinit var navController: NavController
@@ -88,12 +89,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
     }
 
     private fun initChatAdapter() {
-        chatRecyclerLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            true
-        )
-
         messagesAdapter = ChatMessagesAdapter()
         messagesAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
@@ -118,6 +113,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
     }
 
     private fun initViews() {
+        chatRecyclerLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            true
+        )
+
         binding.messagesRecycler.apply {
             layoutManager = chatRecyclerLayoutManager
             adapter = messagesAdapter
@@ -126,8 +127,15 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
             prefetchItems(viewPool)
         }
 
-        binding.toolbar.setNavigationOnClickListener {
-            navController.navigateUp()
+        with(binding.toolbar) {
+            setNavigationOnClickListener {
+                navController.navigateUp()
+            }
+            setOnClickListener {
+                val action =
+                    ChatFragmentDirections.actionChatFragmentToChatDetailsFragment(args.chatId)
+                navController.navigate(action)
+            }
         }
 
         with(binding.messagePad) {
@@ -162,10 +170,16 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
 
     private fun prefetchItems(holderPrefetcher: HolderPrefetcher) {
         val count = 20
-        holderPrefetcher.setViewsCount(R.layout.item_message_simple_incoming, count) { fakeParent, viewType ->
+        holderPrefetcher.setViewsCount(
+            R.layout.item_message_simple_incoming,
+            count
+        ) { fakeParent, viewType ->
             ChatMessagesAdapter.ChatMessageViewHolder.Factory(fakeParent, viewType)
         }
-        holderPrefetcher.setViewsCount(R.layout.item_message_simple_ougoing, count) { fakeParent, viewType ->
+        holderPrefetcher.setViewsCount(
+            R.layout.item_message_simple_ougoing,
+            count
+        ) { fakeParent, viewType ->
             ChatMessagesAdapter.ChatMessageViewHolder.Factory(fakeParent, viewType)
         }
     }

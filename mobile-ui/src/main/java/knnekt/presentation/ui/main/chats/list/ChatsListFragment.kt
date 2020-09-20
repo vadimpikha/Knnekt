@@ -71,11 +71,16 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), DIAware {
 
     private fun setupList() {
         layoutManager = LinearLayoutManager(requireContext())
-        binding.chatsRecycler.layoutManager = layoutManager
-        (binding.chatsRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        binding.chatsRecycler.adapter = chatsListAdapter
-        setupListDecorations()
+        with( binding.chatsRecycler) {
+            setHasFixedSize(true)
+            layoutManager = this@ChatsListFragment.layoutManager
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            adapter = chatsListAdapter
+        }
+
         setupSelectionTracker()
+        setupListDecorations()
+
         chatsListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
 
