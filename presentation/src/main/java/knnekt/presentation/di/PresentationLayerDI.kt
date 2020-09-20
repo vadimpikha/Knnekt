@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import knnekt.presentation.start.auth.SignInViewModel
 import knnekt.presentation.chats.ArchivedChatsViewModel
 import knnekt.presentation.chats.ChatsListViewModel
+import knnekt.presentation.chats.details.ChatDetailsViewModel
 import knnekt.presentation.messages.ChatMessagesViewModel
 import knnekt.presentation.start.StartViewModel
 import org.kodein.di.*
@@ -34,6 +35,9 @@ object PresentationLayerDI {
         }
         bindViewModel<ChatMessagesViewModel>() with factory { chatId: String ->
             ChatMessagesViewModel(chatId, instance(), instance())
+        }
+        bindViewModel<ChatDetailsViewModel>() with factory { chatId: String ->
+            ChatDetailsViewModel(chatId, instance())
         }
     }
 

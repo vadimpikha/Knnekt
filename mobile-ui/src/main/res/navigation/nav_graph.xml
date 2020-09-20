@@ -25,6 +25,9 @@
         <argument
             android:name="chatId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_chatFragment_to_chatDetailsFragment"
+            app:destination="@id/chatDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/archivedChatsFragment"
@@ -35,5 +38,13 @@
             app:destination="@id/chatFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatDetailsFragment"
+        android:name="knnekt.presentation.ui.main.chats.list.details.ChatDetailsFragment"
+        android:label="ChatDetailsFragment" >
+        <argument
+            android:name="chatId"
+            app:argType="string" />
     </fragment>
 </navigation>
