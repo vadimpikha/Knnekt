@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="knnekt.domain.entity.ChatType"/>
+
         <variable
             name="viewModel"
             type="knnekt.presentation.messages.ChatMessagesViewModel" />
@@ -29,8 +31,7 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/chat_photo"
-                    imageUri="@{viewModel.chat.photo}"
-                    placeholder="@{viewModel.chat.private ? @drawable/ic_avatar_placeholder : @drawable/ic_avatar_placeholder_group}"
+                    bindChatPhoto="@{viewModel.chat}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"

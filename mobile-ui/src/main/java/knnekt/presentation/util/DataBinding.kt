@@ -26,6 +26,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.badge.BadgeDrawable
 import knnekt.R
 import knnekt.domain.entity.Chat
+import knnekt.domain.entity.ChatType
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -73,7 +74,7 @@ fun ImageView.setChatPhoto(chat: Chat?) {
     chat ?: return
 
     val uri = chat.photo
-    val placeholder = if (chat.isPrivate) R.drawable.ic_avatar_placeholder
+    val placeholder = if (chat.type == ChatType.PRIVATE) R.drawable.ic_avatar_placeholder
     else R.drawable.ic_avatar_placeholder_group
 
     Glide.with(this)
