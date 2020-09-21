@@ -2,32 +2,58 @@ package knnekt.data.mapper
 
 import com.connectycube.chat.model.ConnectycubeDialogType
 import knnekt.data.datasource.db.entity.ChatEntity
+import knnekt.data.datasource.db.entity.ChatPrefsEntity
 import knnekt.data.datasource.db.entity.ChatWithPrefsEntity
 import knnekt.domain.entity.Chat
+import knnekt.domain.entity.GroupChat
+import knnekt.domain.entity.PrivateChat
 import knnekt.domain.mapper.Mapper
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-object ChatWithPrefsToPresentationMapper : Mapper<ChatWithPrefsEntity, Chat> {
+class ChatWithPrefsToPresentationMapper(
+    private val currentUserId: Int
+) : Mapper<ChatWithPrefsEntity, Chat> {
 
     override fun convert(obj: ChatWithPrefsEntity): Chat {
         val chat = obj.chat
         val prefs = obj.prefs
-        return Chat(
+        return when (ConnectycubeDialogType.parseByCode(chat.dialogType)!!) {
+            ConnectycubeDialogType.BROADCAST -> TODO()
+            ConnectycubeDialogType.GROUP -> createGroupChat(chat, prefs)
+            ConnectycubeDialogType.PRIVATE -> createPrivateChat(chat, prefs)
+            ConnectycubeDialogType.PUBLIC -> TODO()
+        }
+    }
+
+    private fun createGroupChat(chat: ChatEntity, prefs: ChatPrefsEntity?): GroupChat {
+        return GroupChat(
             chat.chatId,
             chat.lastMessage.orEmpty(),
-            "",
             chat.photo,
             chat.unreadMessageCount,
             chat.name,
-            chat.dialogType,
             getUpdateTime(chat),
-            chat.dialogType == ConnectycubeDialogType.PRIVATE.code,
-            chat.occupants,
-            chat.occupantsCount,
             prefs?.isArchived ?: false,
-            prefs?.isMuted ?: false
+            prefs?.isMuted ?: false,
+            "TODO",
+            chat.occupants,
+            chat.occupantsCount
+        )
+    }
+
+    private fun createPrivateChat(chat: ChatEntity, prefs: ChatPrefsEntity?): PrivateChat {
+        return PrivateChat(
+            chat.chatId,
+            chat.lastMessage.orEmpty(),
+            chat.photo,
+            chat.unreadMessageCount,
+            chat.name,
+            getUpdateTime(chat),
+            prefs?.isArchived ?: false,
+            prefs?.isMuted ?: false,
+            chat.occupants.single { it != currentUserId }
         )
     }
 

@@ -21,17 +21,18 @@ import knnekt.domain.mapper.Mapper
 import knnekt.domain.messages.MessagesRepository
 import knnekt.domain.prefs.PreferencesDataSource
 import knnekt.domain.users.UserAuthService
-import org.kodein.di.DI
-import org.kodein.di.bind
-import org.kodein.di.instance
-import org.kodein.di.singleton
+import org.kodein.di.*
 
 object DataLayerDI {
+
+    private val DirectDI.currentUserId: Int
+        get() = instance<PreferencesDataSource>().currentUser!!.id
+
 
     val mappersModule = DI.Module("DataLayer.MappersModule") {
 
         bind<Mapper<ChatWithPrefsEntity, Chat>>() with singleton {
-            ChatWithPrefsToPresentationMapper
+            ChatWithPrefsToPresentationMapper(currentUserId)
         }
 
         bind<Mapper<ChatRemoteEntity, ChatEntity>>() with singleton {
@@ -39,8 +40,7 @@ object DataLayerDI {
         }
 
         bind<Mapper<MessageWithAttachmentsEntity, Message>>() with singleton {
-            val userId = instance<PreferencesDataSource>().currentUser!!.id
-            MessageWithAttachmentToPresentationMapper(userId)
+            MessageWithAttachmentToPresentationMapper(currentUserId)
         }
         bind<Mapper<MessageRemoteEntity, List<AttachmentEntity>>>() with singleton {
             RemoteMessageAttachmentMapper
