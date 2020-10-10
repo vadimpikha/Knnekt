@@ -53,9 +53,31 @@ fun TextView.setTextInt(value: Int) {
     text = value.toString()
 }
 
-@BindingAdapter("activated")
-fun activated(view: View, state: Boolean) {
-    view.isActivated = state
+@BindingAdapter("activated", "animateActivation")
+fun activated(view: View, state: Boolean, animate: Boolean) {
+    val photo: View = view.findViewById(R.id.chat_photo)
+    val indicator: View = view.findViewById(R.id.checked_indicator)
+    val context = view.context
+    if (state == indicator.isVisible) return
+    if (state) {
+        photo.isInvisible = true
+        resetIconYAxis(indicator)
+        indicator.isVisible = true
+        indicator.alpha = 1f
+        if (animate) FlipAnimator.flipView(context, indicator, photo, true)
+    } else {
+        indicator.isGone = true
+        resetIconYAxis(photo)
+        photo.isVisible = true
+        photo.alpha = 1f
+        if (animate) FlipAnimator.flipView(context, indicator, photo, false)
+    }
+}
+
+private fun resetIconYAxis(view: View) {
+    if (view.rotationY != 0f) {
+        view.rotationY = 0f;
+    }
 }
 
 @BindingAdapter("imageUri", "placeholder", requireAll = false)

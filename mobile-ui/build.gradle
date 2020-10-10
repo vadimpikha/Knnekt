@@ -51,7 +51,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs = ["-Xinline-classes", "-Xopt-in=kotlin.RequiresOptIn"]
     }
 }
 
@@ -81,4 +81,6 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
 
     implementation "com.connectycube:connectycube-android-sdk-core:$connectycube_version"
+
+    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
 }
