@@ -7,12 +7,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.*
 import knnekt.R
 import knnekt.data.datasource.db.entity.ChatEntity
 import knnekt.databinding.FragmentChatsListBinding
+import knnekt.domain.entity.Chat
 import knnekt.presentation.chats.ChatsListViewModel
 import knnekt.presentation.di.viewModelInstance
+import knnekt.presentation.ui.main.chats.list.helpers.ChatItemDetailsLookup
+import knnekt.presentation.ui.main.chats.list.helpers.ChatItemKeyProvider
 import knnekt.presentation.ui.main.chats.list.helpers.SwipeToDismissCallback
 import knnekt.presentation.util.*
 import kotlinx.coroutines.flow.collectLatest
@@ -32,22 +37,25 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), DIAware {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var navController: NavController
 
-    //    private lateinit var selectionTracker: SelectionTracker<Chat>
+    private lateinit var selectionTracker: SelectionTracker<String>
     private lateinit var swipeToDismissCallback: SwipeToDismissCallback
 
-//    private val chatSelectionPredicate = object : SelectionTracker.SelectionPredicate<Chat>() {
-//        fun whileSwipe() = swipeToDismissCallback.whileSwipe
-//        override fun canSetStateForKey(key: Chat, nextState: Boolean) = !whileSwipe()
-//        override fun canSetStateAtPosition(position: Int, nextState: Boolean) = !whileSwipe()
-//        override fun canSelectMultiple() = true
-//    }
+    private val chatSelectionPredicate = object : SelectionTracker.SelectionPredicate<String>() {
+        fun whileSwipe() = swipeToDismissCallback.whileSwipe
+        override fun canSetStateForKey(key: String, nextState: Boolean): Boolean {
+//            return !whileSwipe() && key != ChatEntity.ARCHIVED_SECTION_ID
+            return false
+        }
+        override fun canSetStateAtPosition(position: Int, nextState: Boolean) = false//!whileSwipe()
+        override fun canSelectMultiple() = true
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chatsListAdapter = ChatsListAdapter(
             onClick = { chatId ->
-//                if (selectionTracker.hasSelection()) return@ChatsListAdapter
+                if (selectionTracker.hasSelection()) return@ChatsListAdapter
 
                 if (chatId == ChatEntity.ARCHIVED_SECTION_ID) {
                     navController.navigate(R.id.action_chatsListFragment_to_archivedChatsFragment)
@@ -133,7 +141,7 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), DIAware {
                     0
             }
 
-            override fun isItemViewSwipeEnabled() = true//!selectionTracker.hasSelection()
+            override fun isItemViewSwipeEnabled() = !selectionTracker.hasSelection()
 
             override fun onSwiped(position: Int) {
                 val chat = chatsListAdapter.getItemAtPosition(position)
@@ -146,16 +154,16 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list), DIAware {
     }
 
     private fun setupSelectionTracker() {
-//        selectionTracker = SelectionTracker.Builder(
-//            "chats-selection",
-//            binding.chatsRecycler,
-//            ChatItemKeyProvider(chatsListAdapter),
-//            ChatItemDetailsLookup(binding.chatsRecycler),
-//            StorageStrategy.createParcelableStorage(Chat::class.java)
-//        ).withSelectionPredicate(chatSelectionPredicate)
-//            .build()
-//
-//        chatsListAdapter.tracker = selectionTracker
+        selectionTracker = SelectionTracker.Builder(
+            "chats-selection",
+            binding.chatsRecycler,
+            ChatItemKeyProvider(chatsListAdapter),
+            ChatItemDetailsLookup(binding.chatsRecycler),
+            StorageStrategy.createStringStorage()
+        ).withSelectionPredicate(chatSelectionPredicate)
+            .build()
+
+        chatsListAdapter.tracker = selectionTracker
     }
 
 

@@ -20,10 +20,8 @@ class ChatWithPrefsToPresentationMapper(
         val chat = obj.chat
         val prefs = obj.prefs
         return when (ConnectycubeDialogType.parseByCode(chat.dialogType)!!) {
-            ConnectycubeDialogType.BROADCAST -> TODO()
-            ConnectycubeDialogType.GROUP -> createGroupChat(chat, prefs)
             ConnectycubeDialogType.PRIVATE -> createPrivateChat(chat, prefs)
-            ConnectycubeDialogType.PUBLIC -> TODO()
+            else -> createGroupChat(chat, prefs)
         }
     }
 

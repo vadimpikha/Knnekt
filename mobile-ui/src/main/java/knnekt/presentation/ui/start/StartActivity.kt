@@ -21,6 +21,7 @@ class StartActivity : AppCompatActivity(R.layout.activity_start), DIAware {
         viewModel.userLoggedIn.observe(this) { loggedIn ->
             if (loggedIn) {
                 startActivity(MainActivity.intent(this))
+                finish()
             }
         }
     }

@@ -8,7 +8,7 @@ import knnekt.domain.entity.User
 import knnekt.domain.prefs.PreferencesDataSource
 
 class SharedPreferencesDataSource(
-        private val prefs: SharedPreferences
+        prefs: SharedPreferences
 ): PreferencesDataSource {
 
     override var currentUser: User? by prefs.delegate("current_user", null, gsonSerializer())
