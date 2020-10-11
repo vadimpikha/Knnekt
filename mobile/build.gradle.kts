@@ -20,7 +20,6 @@ android {
         resValue("string", "connectycube_auth_key", properties["connectycube_auth_key"] as String)
         resValue("string", "connectycube_auth_secret", properties["connectycube_auth_secret"] as String)
         resValue("string", "connectycube_account_key", properties["connectycube_account_key"] as String)
-        resValue("string", "firebase_project_id", properties["firebase_project_id"] as String)
 
         vectorDrawables.useSupportLibrary = true
 
