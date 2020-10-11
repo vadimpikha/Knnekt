@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import knnekt.R
 import knnekt.databinding.FragmentChatBinding
+import knnekt.domain.entity.Message
 import knnekt.presentation.messages.ChatMessagesViewModel
 import knnekt.presentation.ui.HoldListener
 import knnekt.presentation.ui.widget.JumpSmoothScroller
@@ -63,7 +64,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             viewModel = chatViewModel
-//            chat = args.chat
             with(messagePad) {
                 viewModel = senderViewModel
                 lifecycleOwner = viewLifecycleOwner

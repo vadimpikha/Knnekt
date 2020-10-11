@@ -27,31 +27,31 @@ class ChatWithPrefsToPresentationMapper(
 
     private fun createGroupChat(chat: ChatEntity, prefs: ChatPrefsEntity?): GroupChat {
         return GroupChat(
-            chat.chatId,
-            chat.lastMessage.orEmpty(),
-            chat.photo,
-            chat.unreadMessageCount,
-            chat.name,
-            getUpdateTime(chat),
-            prefs?.isArchived ?: false,
-            prefs?.isMuted ?: false,
-            "TODO",
-            chat.occupants,
-            chat.occupantsCount
+            id = chat.chatId,
+            lastMessage = chat.lastMessage.orEmpty(),
+            photo = chat.photo,
+            unreadMessageCount = chat.unreadMessageCount,
+            name = chat.name,
+            updatedAt = getUpdateTime(chat),
+            isArchived = prefs?.isArchived ?: false,
+            isMuted = prefs?.isMuted ?: false,
+            lastMessageUser = "TODO",
+            occupants = chat.occupants,
+            occupantsCount = chat.occupantsCount
         )
     }
 
     private fun createPrivateChat(chat: ChatEntity, prefs: ChatPrefsEntity?): PrivateChat {
         return PrivateChat(
-            chat.chatId,
-            chat.lastMessage.orEmpty(),
-            chat.photo,
-            chat.unreadMessageCount,
-            chat.name,
-            getUpdateTime(chat),
-            prefs?.isArchived ?: false,
-            prefs?.isMuted ?: false,
-            chat.occupants.single { it != currentUserId }
+            id = chat.chatId,
+            lastMessage = chat.lastMessage.orEmpty(),
+            photo = chat.photo,
+            unreadMessageCount = chat.unreadMessageCount,
+            name = chat.name,
+            updatedAt = getUpdateTime(chat),
+            isArchived = prefs?.isArchived ?: false,
+            isMuted = prefs?.isMuted ?: false,
+            interlocutorId = chat.occupants.single { it != currentUserId }
         )
     }
 

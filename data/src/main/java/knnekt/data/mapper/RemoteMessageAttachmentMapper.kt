@@ -13,10 +13,10 @@ object RemoteMessageAttachmentMapper : Mapper<MessageRemoteEntity, List<Attachme
 
     private fun convert(attachment: AttachmentRemoteEntity, msgId: String): AttachmentEntity {
         return AttachmentEntity(
-            attachment.id,
-            msgId,
-            attachment.type,
-            attachment.url
+            attachmentId = attachment.id,
+            messageId = msgId,
+            attachmentType = attachment.type,
+            url = attachment.url
         )
     }
 }

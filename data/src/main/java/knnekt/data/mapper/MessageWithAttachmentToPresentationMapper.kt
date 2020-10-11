@@ -18,27 +18,27 @@ class MessageWithAttachmentToPresentationMapper(
         val message = obj.message
         val attachments = obj.attachments
         return Message(
-            message.id,
-            df.format(Date(message.dateSent * 1000)),
-            message.body,
-            message.readIds,
-            message.deliveredIds,
-            message.viewsCount,
-            message.recipientId,
-            message.senderId,
-            message.markable,
-            false,
-            attachments?.map(::convert).orEmpty(),
-            message.senderId != currentUserId
+            id = message.id,
+            dateSent = df.format(Date(message.dateSent * 1000)),
+            body = message.body,
+            readIds = message.readIds,
+            deliveredIds = message.deliveredIds,
+            viewsCount = message.viewsCount,
+            recipientId = message.recipientId,
+            senderId = message.senderId,
+            markable = message.markable,
+            delayed = false,
+            attachments = attachments?.map(::convert).orEmpty(),
+            isIncoming = message.senderId != currentUserId
         )
     }
 
 
     private fun convert(attachment: AttachmentEntity): Attachment {
         return Attachment(
-            attachment.attachmentId,
-            attachment.url,
-            attachment.attachmentType
+            id = attachment.attachmentId,
+            url = attachment.url,
+            type = attachment.attachmentType
         )
     }
 }
