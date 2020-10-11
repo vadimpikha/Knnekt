@@ -12,6 +12,7 @@ import knnekt.data.datasource.db.entity.MessageWithAttachmentsEntity
 import knnekt.data.datasource.remote.MessagesRemoteDataSource
 import knnekt.data.datasource.remote.entity.MessageRemoteEntity
 import knnekt.domain.mapper.Mapper
+import timber.log.Timber
 import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
@@ -46,13 +47,21 @@ class MessageRemoteMediator(
                     val date = getSendDateForFirstItem(state)
                         ?: throw InvalidObjectException("Result is empty")
 
-                    remoteSource.getMessagesAfter(chatId, limit, date)
+                    Timber.d("PREPEND after $date")
+
+                    remoteSource.getMessagesAfter(chatId, limit, date).also {
+                        Timber.d("PREPENDED: $it")
+                    }
                 }
                 LoadType.APPEND -> {
                     val date = getSendDateForLastItem(state)
                         ?: throw InvalidObjectException("Result is empty")
 
-                    remoteSource.getMessagesBefore(chatId, limit, date)
+                    Timber.d("APPEND before $date")
+
+                    remoteSource.getMessagesBefore(chatId, limit, date).also {
+                        Timber.d("APPENDED: $it")
+                    }
                 }
             }
 

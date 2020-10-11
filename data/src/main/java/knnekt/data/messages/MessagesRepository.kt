@@ -66,16 +66,11 @@ class MessagesRepositoryImpl(
     }
 
     override suspend fun sendMessage(text: String, chatId: String) {
-
         val userId = requireNotNull(preferencesDataSource.currentUser?.id)
-
-        processScope.launch {
-            messagesRemoteDataSource.createMessage(chatId, text, userId)
-                .take(2)
-                .collectLatest { message ->
-                    db.messageDao().insert(remoteToEntityMapper.convert(message))
-                }
-        }
+        val createdMessage = messagesRemoteDataSource.createMessage(chatId, text, userId)
+//        db.messageDao().insert(remoteToEntityMapper.convert(createdMessage))
+        val sentMessage = messagesRemoteDataSource.sendMessage(createdMessage)
+        db.messageDao().insert(remoteToEntityMapper.convert(sentMessage))
     }
 
 

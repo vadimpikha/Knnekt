@@ -83,4 +83,6 @@ dependencies {
     implementation "com.connectycube:connectycube-android-sdk-core:$connectycube_version"
 
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
+
+//    implementation 'ua.tiras:imageviewer:1.0.1-SNAPSHOT'
 }

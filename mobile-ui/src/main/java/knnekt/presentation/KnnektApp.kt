@@ -11,6 +11,7 @@ import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.androidXModule
 import knnekt.R
+import timber.log.Timber
 
 class KnnektApp : Application(), DIAware {
 
@@ -30,6 +31,7 @@ class KnnektApp : Application(), DIAware {
     override fun onCreate() {
         super.onCreate()
         initConnectyCubeSDK()
+        Timber.plant(Timber.DebugTree())
     }
 
 

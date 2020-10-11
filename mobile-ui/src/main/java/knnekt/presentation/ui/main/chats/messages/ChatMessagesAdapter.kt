@@ -11,8 +11,7 @@ import knnekt.BR
 import knnekt.R
 import knnekt.domain.entity.Message
 
-class ChatMessagesAdapter :
-    PagingDataAdapter<Message, ChatMessagesAdapter.ChatMessageViewHolder>(MessageDiff) {
+class ChatMessagesAdapter : PagingDataAdapter<Message, ChatMessagesAdapter.ChatMessageViewHolder>(MessageDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatMessageViewHolder {
         return ChatMessageViewHolder.Factory(parent, viewType)
@@ -60,7 +59,10 @@ class ChatMessagesAdapter :
 
         companion object {
             @Suppress("FunctionName")
-            fun Factory(parent: ViewGroup, viewType: Int) : ChatMessageViewHolder {
+            fun Factory(
+                parent: ViewGroup,
+                viewType: Int
+            ): ChatMessageViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
                 return ChatMessageViewHolder(
                     DataBindingUtil.inflate(inflater, viewType, parent, false)

@@ -8,16 +8,16 @@ object RemoteMessageToEntityMapper : Mapper<MessageRemoteEntity, MessageEntity> 
 
     override fun convert(obj: MessageRemoteEntity): MessageEntity {
         return MessageEntity(
-            obj.id,
-            obj.chatId,
-            obj.body,
-            obj.readIds,
-            obj.deliveredIds,
-            obj.dateSend,
-            null,
-            null,
-            obj.senderId,
-            false
+            id = obj.id,
+            chatId = obj.chatId,
+            body = obj.body,
+            readIds = obj.readIds,
+            deliveredIds = obj.deliveredIds,
+            dateSent = obj.dateSend,
+            viewsCount = obj.viewsCount,
+            recipientId = obj.recipientId,
+            senderId = obj.senderId,
+            markable = obj.markable
         )
     }
 
