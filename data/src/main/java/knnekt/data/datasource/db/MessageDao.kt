@@ -35,8 +35,11 @@ interface MessageDao {
     suspend fun deleteByDialogId(dialogId: String)
 
     @Query("DELETE FROM messages WHERE id = :messageId")
-    fun deleteByMessageId(messageId: String)
+    suspend fun deleteByMessageId(messageId: String)
 
     @Query("DELETE FROM messages")
     suspend fun nukeTable()
+
+    @Query("UPDATE messages SET isTemp = :temp WHERE id = :id")
+    suspend fun updateTemp(id: String, temp: Boolean)
 }

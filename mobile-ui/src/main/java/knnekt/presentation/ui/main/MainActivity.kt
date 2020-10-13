@@ -7,19 +7,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import knnekt.R
+import knnekt.data.ChatConnectionManager
 import knnekt.presentation.di.viewModelInstance
 import knnekt.presentation.start.StartViewModel
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
+import org.kodein.di.instance
 
 class MainActivity : AppCompatActivity(), DIAware {
 
     override val di by closestDI()
+    private val chatConnectionManager: ChatConnectionManager by instance()
 //    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        chatConnectionManager.enterActiveState()
 //        navController = findNavController(R.id.nav_host_fragment)
     }
 

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ChatWithPrefsDao {
 
+    @Transaction
     @Query("SELECT * FROM chats WHERE chat_id = :chatId")
     fun getChat(chatId: String): Flow<ChatWithPrefsEntity>
 

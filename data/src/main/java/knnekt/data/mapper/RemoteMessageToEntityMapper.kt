@@ -17,7 +17,8 @@ object RemoteMessageToEntityMapper : Mapper<MessageRemoteEntity, MessageEntity> 
             viewsCount = obj.viewsCount,
             recipientId = obj.recipientId,
             senderId = obj.senderId,
-            markable = obj.markable
+            markable = obj.markable,
+            isTemp = false
         )
     }
 
