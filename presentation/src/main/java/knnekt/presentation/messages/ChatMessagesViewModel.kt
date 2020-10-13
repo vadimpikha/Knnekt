@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import knnekt.domain.chats.GetChatByIdUseCase
 import knnekt.domain.messages.GetMessagesPagingUseCase
 import knnekt.presentation.util.Event
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ChatMessagesViewModel(
@@ -29,18 +30,6 @@ class ChatMessagesViewModel(
         .cachedIn(viewModelScope)
 
     val scrollToEvent = MutableLiveData<Event<Int>>()
-
-    init {
-//        viewModelScope.launch {
-//            connectionManager.chatInvalidatedEvent
-//                .filter { it.peekContent() == currentChat.id }
-//                .collectLatest { event ->
-//                    Timber.d("Invalidation chat ${event.peekContent()}")
-//                    _messageJustReceived.set(true)
-//                    getMessagesPagingUseCase.refreshTopPage(event.peekContent())
-//                }
-//        }
-    }
 
     fun scrollDown() {
         scrollToEvent.value = Event(0)

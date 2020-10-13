@@ -20,7 +20,7 @@ import knnekt.data.datasource.db.converters.MessageConverters
         AttachmentEntity::class,
         ChatPrefsEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(

@@ -5,25 +5,19 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.room.withTransaction
+import com.connectycube.chat.model.ConnectycubeChatMessage
 import knnekt.data.datasource.db.AppDatabase
 import knnekt.data.datasource.db.entity.AttachmentEntity
 import knnekt.data.datasource.db.entity.MessageEntity
 import knnekt.data.datasource.db.entity.MessageWithAttachmentsEntity
 import knnekt.data.datasource.remote.MessagesRemoteDataSource
 import knnekt.data.datasource.remote.entity.MessageRemoteEntity
-import knnekt.data.util.processScope
 import knnekt.domain.entity.Message
 import knnekt.domain.mapper.Mapper
 import knnekt.domain.messages.MessagesRepository
 import knnekt.domain.prefs.PreferencesDataSource
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MessagesRepositoryImpl(
     private val db: AppDatabase,
@@ -66,13 +60,44 @@ class MessagesRepositoryImpl(
     }
 
     override suspend fun sendMessage(text: String, chatId: String) {
-        val userId = requireNotNull(preferencesDataSource.currentUser?.id)
-        val createdMessage = messagesRemoteDataSource.createMessage(chatId, text, userId)
-//        db.messageDao().insert(remoteToEntityMapper.convert(createdMessage))
-        val sentMessage = messagesRemoteDataSource.sendMessage(createdMessage)
-        db.messageDao().insert(remoteToEntityMapper.convert(sentMessage))
+        try {
+            val userId = requireNotNull(preferencesDataSource.currentUser?.id)
+            val tmpMessage = createTmpMessage(text, chatId, userId)
+
+            db.messageDao().insert(tmpMessage)
+            messagesRemoteDataSource.sendMessage(
+                tmpMessage.id,
+                tmpMessage.body,
+                tmpMessage.chatId,
+                tmpMessage.dateSent,
+                userId
+            )
+//            db.messageDao().updateTemp(tmpMessage.id, false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        /*db.withTransaction {
+            db.messageDao().insert(remoteToEntityMapper.convert(sentMessage))
+            db.messageDao().deleteByMessageId(tmpMessage.id)
+        }*/
     }
 
+    private fun createTmpMessage(text: String, chatId: String, userId: Int): MessageEntity {
+        return MessageEntity(
+            id = messagesRemoteDataSource.obtainMessageId(),
+            chatId = chatId,
+            body = text,
+            readIds = emptyList(),
+            deliveredIds = emptyList(),
+            dateSent = System.currentTimeMillis() / 1000,
+            viewsCount = null,
+            recipientId = null,
+            senderId = userId,
+            markable = false,
+            isTemp = true
+        )
+    }
 
 }
 

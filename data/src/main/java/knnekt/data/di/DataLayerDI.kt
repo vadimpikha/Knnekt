@@ -1,6 +1,7 @@
 package knnekt.data.di
 
 import androidx.preference.PreferenceManager
+import knnekt.data.ChatConnectionManager
 import knnekt.data.chats.ChatsRepositoryImpl
 import knnekt.data.datasource.db.AppDatabase
 import knnekt.data.datasource.db.entity.*
@@ -85,7 +86,7 @@ object DataLayerDI {
         }
 
         bind<MessagesRemoteDataSource>() with singleton {
-            MessagesRemoteDataSourceImpl()
+            MessagesRemoteDataSourceImpl(instance())
         }
 
         bind<ChatsRemoteDataSource>() with singleton {
@@ -93,6 +94,8 @@ object DataLayerDI {
         }
 
         bind() from singleton { AppDatabase(instance()) }
+
+        bind() from singleton { ChatConnectionManager(instance()) }
     }
 
 }

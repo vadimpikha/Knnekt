@@ -31,7 +31,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0-rc03'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$google_services_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_component_version"
@@ -44,22 +44,6 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url "https://github.com/ConnectyCube/connectycube-android-sdk-releases/raw/master/" }
-        maven {
-            url "$tiras_artifactory_url/gradle-dev-local"
-            credentials {
-                //you need to create "gradle.properties" file with your credentials
-                username = artifactory_username
-                password = artifactory_password
-            }
-        }
-        maven {
-            url "$tiras_artifactory_url/gradle-release-local"
-            credentials {
-                //you need to create "gradle.properties" file with your credentials
-                username = artifactory_username
-                password = artifactory_password
-            }
-        }
     }
 }
 

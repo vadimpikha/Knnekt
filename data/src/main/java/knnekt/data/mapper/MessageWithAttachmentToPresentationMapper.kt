@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MessageWithAttachmentToPresentationMapper(
-   private val currentUserId: Int
+    private val currentUserId: Int
 ) : Mapper<MessageWithAttachmentsEntity, Message> {
 
     private val df = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -29,7 +29,8 @@ class MessageWithAttachmentToPresentationMapper(
             markable = message.markable,
             delayed = false,
             attachments = attachments?.map(::convert).orEmpty(),
-            isIncoming = message.senderId != currentUserId
+            isIncoming = message.senderId != currentUserId,
+            isTemp = message.isTemp
         )
     }
 

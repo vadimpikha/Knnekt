@@ -31,6 +31,8 @@ class MessageRemoteMediator(
 
         try {
 
+            Timber.d(loadType.toString())
+
             val limit = state.config.pageSize
 
             val messages = when (loadType) {
@@ -44,14 +46,15 @@ class MessageRemoteMediator(
                     }
                 }
                 LoadType.PREPEND -> {
-                    val date = getSendDateForFirstItem(state)
+                    /*val date = getSendDateForFirstItem(state)
                         ?: throw InvalidObjectException("Result is empty")
 
                     Timber.d("PREPEND after $date")
 
                     remoteSource.getMessagesAfter(chatId, limit, date).also {
                         Timber.d("PREPENDED: $it")
-                    }
+                    }*/
+                    emptyList()
                 }
                 LoadType.APPEND -> {
                     val date = getSendDateForLastItem(state)

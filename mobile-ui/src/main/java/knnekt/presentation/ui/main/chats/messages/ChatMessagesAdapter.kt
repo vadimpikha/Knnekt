@@ -18,8 +18,8 @@ class ChatMessagesAdapter : PagingDataAdapter<Message, ChatMessagesAdapter.ChatM
     }
 
     override fun onBindViewHolder(holder: ChatMessageViewHolder, position: Int) {
-        val item = getItem(position) ?: return
-        holder.bind(item)
+        val item = getItem(position)
+        holder.bindTo(item)
     }
 
     override fun onViewRecycled(holder: ChatMessageViewHolder) {
@@ -27,7 +27,7 @@ class ChatMessagesAdapter : PagingDataAdapter<Message, ChatMessagesAdapter.ChatM
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)!!
+        val item = getItem(position) ?: return -1
 
         val incoming = item.isIncoming
         val attachment = withAttachment(item)
@@ -41,14 +41,14 @@ class ChatMessagesAdapter : PagingDataAdapter<Message, ChatMessagesAdapter.ChatM
     }
 
     private fun withAttachment(message: Message): Boolean {
-        return !message.attachments.isNullOrEmpty()
+        return message.attachments.isNotEmpty()
     }
 
     class ChatMessageViewHolder(binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
         private var binding: ViewDataBinding? = binding
 
-        fun bind(message: Message) {
+        fun bindTo(message: Message?) {
             binding?.setVariable(BR.message, message)
             binding?.executePendingBindings()
         }
@@ -63,6 +63,7 @@ class ChatMessagesAdapter : PagingDataAdapter<Message, ChatMessagesAdapter.ChatM
                 parent: ViewGroup,
                 viewType: Int
             ): ChatMessageViewHolder {
+                require(viewType > 0)
                 val inflater = LayoutInflater.from(parent.context)
                 return ChatMessageViewHolder(
                     DataBindingUtil.inflate(inflater, viewType, parent, false)

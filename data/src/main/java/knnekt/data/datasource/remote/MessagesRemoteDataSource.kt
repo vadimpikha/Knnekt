@@ -1,54 +1,85 @@
 package knnekt.data.datasource.remote
 
+import com.connectycube.chat.ConnectycubeChatService
 import com.connectycube.chat.ConnectycubeRestChatService
 import com.connectycube.chat.model.ConnectycubeAttachment
 import com.connectycube.chat.model.ConnectycubeChatDialog
 import com.connectycube.chat.model.ConnectycubeChatMessage
+import com.connectycube.chat.model.ConnectycubeDialogType
 import com.connectycube.chat.request.MessageGetBuilder
 import knnekt.data.datasource.db.AppDatabase
-import knnekt.data.datasource.db.entity.MessageEntity
 import knnekt.data.datasource.remote.entity.AttachmentRemoteEntity
 import knnekt.data.datasource.remote.entity.MessageRemoteEntity
 import knnekt.data.util.await
-import knnekt.domain.mapper.Mapper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 interface MessagesRemoteDataSource {
 
-    suspend fun createMessage(chatId: String, text: String, userId: Int): MessageRemoteEntity
-    suspend fun sendMessage(message: MessageRemoteEntity): MessageRemoteEntity
+    fun obtainMessageId(): String
+    suspend fun sendMessage(
+        messageId: String,
+        text: String,
+        chatId: String,
+        dateSend: Long,
+        userId: Int
+    )//: MessageRemoteEntity
+
     suspend fun getRecentMessages(chatId: String, limit: Int): List<MessageRemoteEntity>
     suspend fun getMessagesAfter(chatId: String, limit: Int, date: Long): List<MessageRemoteEntity>
     suspend fun getMessagesBefore(chatId: String, limit: Int, date: Long): List<MessageRemoteEntity>
 
 }
 
-class MessagesRemoteDataSourceImpl : MessagesRemoteDataSource {
+class MessagesRemoteDataSourceImpl(
+    private val db: AppDatabase
+) : MessagesRemoteDataSource {
 
-    override suspend fun createMessage(
-        chatId: String,
-        text: String,
-        userId: Int
-    ): MessageRemoteEntity {
-        return ConnectycubeChatMessage().apply {
-            body = text
-            dialogId = chatId
-            dateSent = System.currentTimeMillis() / 1000
-            senderId = userId
-        }.let(::convert)
+    private val chatsCache = HashMap<Pair<String, Int>, ConnectycubeChatDialog>()
+
+    override fun obtainMessageId(): String {
+        return ConnectycubeChatMessage().id
     }
 
-    override suspend fun sendMessage(message: MessageRemoteEntity): MessageRemoteEntity {
+    override suspend fun sendMessage(
+        messageId: String,
+        text: String,
+        chatId: String,
+        dateSend: Long,
+        userId: Int
+    )/*: MessageRemoteEntity*/ {
+
+        val dialog = obtainChat(chatId, userId)
+
         val connectycubeChatMessage = ConnectycubeChatMessage().apply {
-            body = message.body
-            dialogId = message.chatId
-            dateSent = message.dateSend
-            senderId = message.senderId
+            id = messageId
+            body = text
+            dialogId = chatId
+            dateSent = dateSend
+            senderId = userId
+            isMarkable = true
+            setSaveToHistory(true)
+            if (dialog.isPrivate) this.recipientId = dialog.recipientId
         }
 
-        return ConnectycubeRestChatService.createMessage(connectycubeChatMessage, true)
-            .await().let(::convert)
+        dialog.sendMessage(connectycubeChatMessage)
+
+
+//        return ConnectycubeRestChatService.createMessage(connectycubeChatMessage, true).await()
+//            .let(::convert)
+    }
+
+    private suspend fun obtainChat(chatId: String, userId: Int): ConnectycubeChatDialog {
+
+        return chatsCache.getOrPut(chatId to userId) {
+            val chat = db.chatDao().getChat(chatId)
+
+            ConnectycubeChatDialog(chatId).apply {
+                setOccupantsIds(chat.occupants)
+                type = ConnectycubeDialogType.parseByCode(chat.dialogType)
+                this.userId = userId
+            }.also {
+                it.initForChat(ConnectycubeChatService.getInstance())
+            }
+        }
     }
 
     override suspend fun getRecentMessages(

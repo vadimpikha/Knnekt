@@ -48,14 +48,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
 
     private lateinit var messagesAdapter: ChatMessagesAdapter
     private lateinit var navController: NavController
-    private lateinit var scroller: JumpSmoothScroller
     private lateinit var chatRecyclerLayoutManager: LinearLayoutManager
     private lateinit var viewPool: PrefetchRecycledViewPool
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        scroller = JumpSmoothScroller(requireContext())
         initChatAdapter()
     }
 
@@ -108,7 +106,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat), DIAware {
     }
 
     private fun scrollTo(position: Int) {
-        scroller.targetPosition = position
+        val scroller = JumpSmoothScroller(requireContext()).apply {
+            targetPosition = position
+        }
         chatRecyclerLayoutManager.startSmoothScroll(scroller)
     }
 

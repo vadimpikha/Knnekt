@@ -12,5 +12,6 @@ data class Message(
         val markable: Boolean,
         val delayed: Boolean,
         val attachments: List<Attachment>,
-        val isIncoming: Boolean
+        val isIncoming: Boolean,
+        val isTemp: Boolean
 )

@@ -18,9 +18,6 @@ data class MessageEntity(
     val viewsCount: Int?,
     val recipientId: Int?,
     val senderId: Int?,
-    val markable: Boolean
-) {
-    @Ignore
-    var attachments: List<AttachmentEntity> = emptyList()
-
-}
+    val markable: Boolean,
+    val isTemp: Boolean
+)
