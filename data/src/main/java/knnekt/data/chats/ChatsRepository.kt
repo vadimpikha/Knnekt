@@ -64,7 +64,10 @@ class ChatsRepositoryImpl(
     @OptIn(ExperimentalPagingApi::class)
     override fun getChatsPagingData(): Flow<PagingData<Chat>> {
         return Pager(
-            config = PagingConfig(15, enablePlaceholders = false),
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
             remoteMediator = ChatRemoteMediator(db, chatsRemoteDataSource, remoteToEntityMapper),
             pagingSourceFactory = { db.chatsWithPrefsDao().getChatsPaging() },
         ).flow.map { data ->

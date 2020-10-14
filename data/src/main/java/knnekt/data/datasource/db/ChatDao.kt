@@ -49,4 +49,7 @@ interface ChatDao {
 
     @Delete
     fun deleteChat(vararg chats: ChatEntity)
+
+    @Query("SELECT COUNT(chat_id) FROM chats")
+    suspend fun size(): Int
 }

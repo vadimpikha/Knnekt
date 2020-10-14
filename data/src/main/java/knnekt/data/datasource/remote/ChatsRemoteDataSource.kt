@@ -2,6 +2,8 @@ package knnekt.data.datasource.remote
 
 import com.connectycube.chat.ConnectycubeRestChatService
 import com.connectycube.chat.model.ConnectycubeChatDialog
+import com.connectycube.core.request.GenericQueryRule
+import com.connectycube.core.request.QueryRule
 import com.connectycube.core.request.RequestGetBuilder
 import knnekt.data.datasource.remote.entity.ChatRemoteEntity
 import knnekt.data.util.await
@@ -9,7 +11,7 @@ import knnekt.data.util.await
 interface ChatsRemoteDataSource {
 
     suspend fun getRecentChats(limit: Int): List<ChatRemoteEntity>
-    suspend fun getChatsUpdatedBefore(limit: Int, date: Long): List<ChatRemoteEntity>
+    suspend fun getChats(limit: Int, skip: Int): List<ChatRemoteEntity>
     suspend fun getChatsUpdatedAfter(limit: Int, date: Long): List<ChatRemoteEntity>
     suspend fun getChatById(chatId: String): ChatRemoteEntity
 
@@ -34,10 +36,10 @@ class ChatsRemoteDataSourceImpl : ChatsRemoteDataSource {
             .await().map(this::convert)
     }
 
-    override suspend fun getChatsUpdatedBefore(limit: Int, date: Long): List<ChatRemoteEntity> {
+    override suspend fun getChats(limit: Int, skip: Int): List<ChatRemoteEntity> {
         val request = RequestGetBuilder().apply {
             this.limit = limit
-            lt("updated_at", date)
+            this.skip = skip
         }
         return ConnectycubeRestChatService.getChatDialogs(null, request)
             .await().map(this::convert)
@@ -46,7 +48,7 @@ class ChatsRemoteDataSourceImpl : ChatsRemoteDataSource {
     override suspend fun getChatsUpdatedAfter(limit: Int, date: Long): List<ChatRemoteEntity> {
         val request = RequestGetBuilder().apply {
             this.limit = limit
-            gt("updated_at", date)
+            gt("last_message_date_sent", date)
         }
         return ConnectycubeRestChatService.getChatDialogs(null, request)
             .await().map(this::convert)

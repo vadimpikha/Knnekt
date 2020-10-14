@@ -4,13 +4,14 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.room.withTransaction
 import knnekt.data.datasource.db.AppDatabase
 import knnekt.data.datasource.db.entity.ChatEntity
 import knnekt.data.datasource.db.entity.ChatWithPrefsEntity
 import knnekt.data.datasource.remote.ChatsRemoteDataSource
 import knnekt.data.datasource.remote.entity.ChatRemoteEntity
 import knnekt.domain.mapper.Mapper
-import java.io.InvalidObjectException
+import timber.log.Timber
 
 @OptIn(ExperimentalPagingApi::class)
 class ChatRemoteMediator(
@@ -18,7 +19,6 @@ class ChatRemoteMediator(
     private val chatsRemoteDataSource: ChatsRemoteDataSource,
     private val remoteToEntityMapper: Mapper<ChatRemoteEntity, ChatEntity>
 ) : RemoteMediator<Int, ChatWithPrefsEntity>() {
-
 
     override suspend fun load(
         loadType: LoadType,
@@ -29,64 +29,29 @@ class ChatRemoteMediator(
 
             val limit = state.config.pageSize
 
-            val chats = when (loadType) {
-                LoadType.REFRESH -> {
-                    val date = getLastMessageDateClosestToCurrentPosition(state)
+            val skip = when (loadType) {
+                LoadType.REFRESH -> 0
+                LoadType.APPEND -> db.chatDao().size()
+                LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+            }
 
-                    if (date == null) {
-                        chatsRemoteDataSource.getRecentChats(state.config.initialLoadSize)
-                    } else {
-                        chatsRemoteDataSource.getChatsUpdatedAfter(limit, date)
-                    }
+            Timber.d("Load chats. Skip $skip")
+            val chats = chatsRemoteDataSource.getChats(limit,  skip)
+                .map(remoteToEntityMapper::convert)
+
+            Timber.d("Loaded chats: ${chats.map { it.lastMessageDate }}")
+
+            db.withTransaction {
+                if (loadType == LoadType.REFRESH) {
+                    db.chatDao().nukeTable()
                 }
-                LoadType.PREPEND -> {
-                    val date = getLastMessageDateOfFirstItem(state)
-                        ?: throw InvalidObjectException("Result is empty")
-
-                    chatsRemoteDataSource.getChatsUpdatedAfter(limit, date)
-                }
-                LoadType.APPEND -> {
-                    val date = getLastMessageDateOfLastItem(state)
-                        ?: throw InvalidObjectException("Result is empty")
-
-                    chatsRemoteDataSource.getChatsUpdatedBefore(limit, date)
-                }
-            }.map(remoteToEntityMapper::convert)
-
-            db.chatDao().insertAll(chats)
+                db.chatDao().insertAll(chats)
+            }
 
             MediatorResult.Success(endOfPaginationReached = chats.isEmpty())
         } catch (exception: Exception) {
+            exception.printStackTrace()
             MediatorResult.Error(exception)
-        }
-    }
-
-    private fun getLastMessageDateOfLastItem(state: PagingState<Int, ChatWithPrefsEntity>): Long? {
-        return state.lastItemOrNull()?.chat?.let { chat ->
-            if (chat.lastMessageDate != 0L)
-                chat.lastMessageDate
-            else
-                chat.createdAt
-        }
-    }
-
-    private fun getLastMessageDateOfFirstItem(state: PagingState<Int, ChatWithPrefsEntity>): Long? {
-        return state.firstItemOrNull()?.chat?.let { chat ->
-            if (chat.lastMessageDate != 0L)
-                chat.lastMessageDate
-            else
-                chat.createdAt
-        }
-    }
-
-    private fun getLastMessageDateClosestToCurrentPosition(state: PagingState<Int, ChatWithPrefsEntity>): Long? {
-        return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.chat?.let { chat ->
-                if (chat.lastMessageDate != 0L)
-                    chat.lastMessageDate
-                else
-                    chat.createdAt
-            }
         }
     }
 

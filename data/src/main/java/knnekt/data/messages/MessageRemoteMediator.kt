@@ -39,6 +39,7 @@ class MessageRemoteMediator(
                 LoadType.REFRESH -> {
                     val date = getSendDateClosestToCurrentPosition(state)
 
+                    Timber.d("REFRESH with date $date")
                     if (date == null) {
                         remoteSource.getRecentMessages(chatId, state.config.initialLoadSize)
                     } else {

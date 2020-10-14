@@ -60,27 +60,18 @@ class MessagesRepositoryImpl(
     }
 
     override suspend fun sendMessage(text: String, chatId: String) {
-        try {
-            val userId = requireNotNull(preferencesDataSource.currentUser?.id)
-            val tmpMessage = createTmpMessage(text, chatId, userId)
+        val userId = requireNotNull(preferencesDataSource.currentUser?.id)
+        val tmpMessage = createTmpMessage(text, chatId, userId)
 
-            db.messageDao().insert(tmpMessage)
-            messagesRemoteDataSource.sendMessage(
-                tmpMessage.id,
-                tmpMessage.body,
-                tmpMessage.chatId,
-                tmpMessage.dateSent,
-                userId
-            )
-//            db.messageDao().updateTemp(tmpMessage.id, false)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        /*db.withTransaction {
-            db.messageDao().insert(remoteToEntityMapper.convert(sentMessage))
-            db.messageDao().deleteByMessageId(tmpMessage.id)
-        }*/
+        db.messageDao().insert(tmpMessage)
+        messagesRemoteDataSource.sendMessage(
+            tmpMessage.id,
+            tmpMessage.body,
+            tmpMessage.chatId,
+            tmpMessage.dateSent,
+            userId
+        )
+        db.messageDao().updateTemp(tmpMessage.id, false)
     }
 
     private fun createTmpMessage(text: String, chatId: String, userId: Int): MessageEntity {

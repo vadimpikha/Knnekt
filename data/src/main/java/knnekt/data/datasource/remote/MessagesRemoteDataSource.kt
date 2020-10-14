@@ -21,7 +21,7 @@ interface MessagesRemoteDataSource {
         chatId: String,
         dateSend: Long,
         userId: Int
-    )//: MessageRemoteEntity
+    )
 
     suspend fun getRecentMessages(chatId: String, limit: Int): List<MessageRemoteEntity>
     suspend fun getMessagesAfter(chatId: String, limit: Int, date: Long): List<MessageRemoteEntity>
@@ -45,7 +45,7 @@ class MessagesRemoteDataSourceImpl(
         chatId: String,
         dateSend: Long,
         userId: Int
-    )/*: MessageRemoteEntity*/ {
+    ) {
 
         val dialog = obtainChat(chatId, userId)
 
@@ -61,15 +61,12 @@ class MessagesRemoteDataSourceImpl(
         }
 
         dialog.sendMessage(connectycubeChatMessage)
-
-
-//        return ConnectycubeRestChatService.createMessage(connectycubeChatMessage, true).await()
-//            .let(::convert)
     }
 
     private suspend fun obtainChat(chatId: String, userId: Int): ConnectycubeChatDialog {
 
         return chatsCache.getOrPut(chatId to userId) {
+
             val chat = db.chatDao().getChat(chatId)
 
             ConnectycubeChatDialog(chatId).apply {
